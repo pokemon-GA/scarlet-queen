@@ -1,4 +1,4 @@
-name: generation-test
+name: generation
 
 on:
   schedule:
@@ -21,3 +21,5 @@ jobs:
           nix_path: nixpkgs=channel:nixpkgs-unstable
       - name: Test
         run: nix develop --command bash -c "cargo test -p generation"
+      - name: Build Check
+        run: nix develop --command bash -c "cargo build -p generation"
