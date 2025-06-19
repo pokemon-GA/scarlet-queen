@@ -8,13 +8,18 @@ The name is inspired by Red Queen's Hypothesis and Pokémon Scarlet and Violet.
 
 Red Queen's Hypothesis is a hypothesis about co-evolution.
 
-## Run Scarlet Queen
+### Run Scarlet Queen
 
 ```sh
 cargo run --bin entrypoint
 ```
-## Run All Tests
+### Run All Tests
 
 ```sh
 cargo test
+```
+### Run Each Test
+
+```sh
+cargo test -p <test_name>
 ```
