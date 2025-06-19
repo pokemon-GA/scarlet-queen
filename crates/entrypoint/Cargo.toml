@@ -1,0 +1,11 @@
+[package]
+name = "entrypoint"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+fitness = { path = "../fitness" }
+generation = { path = "../generation" }
+generator = { path = "../generator" }
+initializer = { path = "../initializer" }
+selector = { path = "../selector" }

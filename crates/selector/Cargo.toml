@@ -1,0 +1,6 @@
+[package]
+name = "selector"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]

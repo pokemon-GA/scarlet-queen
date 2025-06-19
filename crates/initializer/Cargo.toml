@@ -1,0 +1,6 @@
+[package]
+name = "initializer"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
