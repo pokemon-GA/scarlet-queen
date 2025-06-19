@@ -1,4 +1,4 @@
-name: entry-point-test
+name: entrypoint-test
 
 on:
   schedule:
@@ -20,4 +20,4 @@ jobs:
         with:
           nix_path: nixpkgs=channel:nixpkgs-unstable
       - name: Test
-        run: nix develop --command bash -c "cargo test -p entry-point"
+        run: nix develop --command bash -c "cargo test -p entrypoint"
