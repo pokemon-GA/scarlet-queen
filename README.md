@@ -29,11 +29,11 @@ flowchart RL
 
 ```mermaid
 flowchart LR
-    initializer[initialize] --> fitness[fitness]
+    initializer["initialize (initializer)"] --> fitness["arithmetic of fitness (fitness)"]
     subgraph generation
-        fitness[fitness] --> selector[selector]
-        selector[selector] --> generator[generator]
-        generator[generator] --> fitness[fitness]
+        fitness["arithmetic of fitness (fitness)"] --> selector["select (selector)"]
+        selector["select (selector)"] --> generator["generate (generator)"]
+        generator["generate (generator)"] --> fitness["arithmetic of fitness (fitness)"]
     end
 ```
 
