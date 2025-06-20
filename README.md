@@ -15,11 +15,11 @@ flowchart RL
     initializer[initializer] --> core[core]
     fitness[fitness] --> core[core]
     selector[selector] --> core[core]
-    generator[generator] --> core[core]
+    replenisher[replenisher] --> core[core]
 
     generation[generation] --> fitness[fitness]
     generation[generation] --> selector[selector]
-    generation[generation] --> generator[generator]
+    generation[generation] --> replenisher[replenisher]
 
     entrypoint["entrypoint (binary crate)"] --> initializer[initializer]
     entrypoint["entrypoint (binary crate)"] --> generation[generation]
@@ -32,8 +32,8 @@ flowchart LR
     initializer["initialize (initializer)"] --> fitness["arithmetic of fitness (fitness)"]
     subgraph generation
         fitness["arithmetic of fitness (fitness)"] --> selector["select (selector)"]
-        selector["select (selector)"] --> generator["generate (generator)"]
-        generator["generate (generator)"] --> fitness["arithmetic of fitness (fitness)"]
+        selector["select (selector)"] --> replenisher["replenisher (replenisher)"]
+        replenisher["replenisher (replenisher)"] --> fitness["arithmetic of fitness (fitness)"]
     end
 ```
 
@@ -66,9 +66,9 @@ Contains the logic for selecting individuals for the next generation.
   - `roulette`: enables the roulette selection.
   - `tournament`: enables the tournament selection.
 
-### `generator` (library crate)
+### `replenisher` (library crate)
 
-Contains the logic for generating new individuals.
+Contains the logic for replenishing new individuals.
 
 - feature flags
   - `full`: enables the full generation pattern.
