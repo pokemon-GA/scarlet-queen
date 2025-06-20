@@ -1,5 +1,5 @@
 [package]
-name = "generator"
+name = "replenisher"
 version.workspace = true
 edition.workspace = true
 

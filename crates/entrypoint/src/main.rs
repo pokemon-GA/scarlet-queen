@@ -1,10 +1,7 @@
 fn main() {
-    println!("This is entrypoint!!!");
-    generation::dummy();
     initializer::dummy();
-    fitness::dummy();
-    selector::dummy();
-    generator::dummy();
+    generation::dummy();
+    println!("This is entrypoint!!!");
 }
 
 #[cfg(test)]

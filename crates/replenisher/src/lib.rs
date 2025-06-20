@@ -1,6 +1,6 @@
 pub fn dummy() {
     core::dummy();
-    println!("Hello, from generator.");
+    println!("Hello, from replenisher.");
 }
 
 #[cfg(test)]

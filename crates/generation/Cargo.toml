@@ -4,4 +4,6 @@ version.workspace = true
 edition.workspace = true
 
 [dependencies]
-core = { path = "../core" }
+fitness = { path = "../fitness" }
+replenisher = { path = "../replenisher" }
+selector = { path = "../selector" }

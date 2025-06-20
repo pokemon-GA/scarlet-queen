@@ -1,5 +1,7 @@
 pub fn dummy() {
-    core::dummy();
+    fitness::dummy();
+    selector::dummy();
+    replenisher::dummy();
     println!("Hello, from generation.");
 }
 
