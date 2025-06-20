@@ -1,6 +1,5 @@
 pub fn dummy() {
-    core::dummy();
-    println!("Hello, from selector.");
+    println!("Hello, from core.");
 }
 
 #[cfg(test)]

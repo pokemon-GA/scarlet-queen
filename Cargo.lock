@@ -3,6 +3,10 @@
 version = 4
 
 [[package]]
+name = "core"
+version = "0.0.1"
+
+[[package]]
 name = "entrypoint"
 version = "0.0.1"
 dependencies = [
@@ -16,19 +20,34 @@ dependencies = [
 [[package]]
 name = "fitness"
 version = "0.0.1"
+dependencies = [
+ "core",
+]
 
 [[package]]
 name = "generation"
 version = "0.0.1"
+dependencies = [
+ "core",
+]
 
 [[package]]
 name = "generator"
 version = "0.0.1"
+dependencies = [
+ "core",
+]
 
 [[package]]
 name = "initializer"
 version = "0.0.1"
+dependencies = [
+ "core",
+]
 
 [[package]]
 name = "selector"
 version = "0.0.1"
+dependencies = [
+ "core",
+]

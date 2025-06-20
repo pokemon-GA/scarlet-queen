@@ -1,4 +1,5 @@
 pub fn dummy() {
+    core::dummy();
     println!("Hello, from generation.");
 }
 
