@@ -1,3 +1,6 @@
+mod effective;
+mod pokemon_type;
+
 pub fn dummy() {
     core::dummy();
     println!("Hello, from fitness.");
