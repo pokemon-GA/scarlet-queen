@@ -1,3 +1,5 @@
+pub mod group;
+
 pub fn dummy() {
     core::dummy();
     println!("Hello, from initializer.");
