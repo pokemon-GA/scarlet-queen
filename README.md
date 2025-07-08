@@ -47,8 +47,7 @@ Contains the core type definition and logic.
 
 Contains the logic for initializing the group (environment).
 
-- feature flags
-  - `full`: enables the full initialization pattern.
+- modules
   - `random`: enables the random initialization.
   - `weight`: enables the weighted initialization.
 
@@ -60,8 +59,7 @@ Contains the fitness evaluation logic.
 
 Contains the logic for selecting individuals for the next generation.
 
-- feature flags
-  - `full`: enables the full selection pattern.
+- modules
   - `ramdom`: enables the random selection.
   - `roulette`: enables the roulette selection.
   - `tournament`: enables the tournament selection.
@@ -70,8 +68,7 @@ Contains the logic for selecting individuals for the next generation.
 
 Contains the logic for replenishing new individuals.
 
-- feature flags
-  - `full`: enables the full generation pattern.
+- modules
   - `random`: enables the random generation.
   - `novelty`: enables the novelty search algorithm.
 
