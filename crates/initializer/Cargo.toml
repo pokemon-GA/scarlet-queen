@@ -5,3 +5,6 @@ edition.workspace = true
 
 [dependencies]
 core = { path = "../core" }
+
+[dev-dependencies]
+cargo-husky.workspace = true

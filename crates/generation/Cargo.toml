@@ -7,3 +7,7 @@ edition.workspace = true
 fitness = { path = "../fitness" }
 replenisher = { path = "../replenisher" }
 selector = { path = "../selector" }
+
+[dev-dependencies]
+cargo-husky.workspace = true
+
