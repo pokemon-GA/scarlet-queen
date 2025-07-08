@@ -1,6 +1,8 @@
 mod pokemon_type;
 mod error;
 
+pub use pokemon_type::PokemonType;
+
 pub fn dummy() {
     println!("Hello, from core.")
 }
