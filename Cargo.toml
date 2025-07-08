@@ -7,6 +7,3 @@ version = "0.0.1"
 edition = "2021"
 
 [workspace.dependencies]
-
-[workspace.dev-dependencies]
-cargo-husky = {version = "1.5.0", features = ["run-cargo-fmt"]}
