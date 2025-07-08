@@ -17,6 +17,9 @@ checksum = "9555578bc9e57714c812a1f84e4fc5b4d21fcb063490c624de019f7464c91268"
 [[package]]
 name = "core"
 version = "0.0.1"
+dependencies = [
+ "rand",
+]
 
 [[package]]
 name = "entrypoint"

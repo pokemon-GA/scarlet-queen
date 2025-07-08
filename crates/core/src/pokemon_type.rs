@@ -1,5 +1,7 @@
 use std::{fmt::Debug, str::FromStr};
 
+use rand::distr::{Distribution, StandardUniform};
+
 use crate::error::Error;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -37,7 +39,7 @@ impl FromStr for PokemonType {
             "Electric" | "電" | "でんき" => PokemonType::Electric, 
             "Grass" | "草" | "くさ" => PokemonType::Grass, 
             "Ice" | "氷" | "こおり" => PokemonType::Ice, 
-            "Fighting" | "格" | "かくとう"  => PokemonType::Fighting, 
+            "Fighting" | "格" | "かくとう" => PokemonType::Fighting, 
             "Poison" | "毒" | "どく" => PokemonType::Poison, 
             "Ground" | "地" | "じめん" => PokemonType::Ground, 
             "Flying" | "飛" | "ひこう" => PokemonType::Flying, 
@@ -52,5 +54,33 @@ impl FromStr for PokemonType {
             _ => return Err(Error::StringToTypeConvertError)
         };
         Ok(pokemon_type)
+    }
+}
+
+impl Distribution<PokemonType> for StandardUniform {
+    fn sample<R: rand::Rng + ?Sized>(&self, rng: &mut R) -> PokemonType {
+        let rand_int: u8 = rng.random_range(0..19);
+        match rand_int {
+            0 => PokemonType::None, 
+            1 => PokemonType::Normal, 
+            2 => PokemonType::Fire, 
+            3 => PokemonType::Water, 
+            4 => PokemonType::Electric, 
+            5 => PokemonType::Grass, 
+            6 => PokemonType::Ice, 
+            7 => PokemonType::Fighting, 
+            8 => PokemonType::Poison, 
+            9 => PokemonType::Ground, 
+            10 => PokemonType::Flying, 
+            11 => PokemonType::Psychic, 
+            12 => PokemonType::Bug, 
+            13 => PokemonType::Rock, 
+            14 => PokemonType::Ghost, 
+            15 => PokemonType::Dragon, 
+            16 => PokemonType::Dark, 
+            17 => PokemonType::Steel, 
+            18 => PokemonType::Fairy, 
+            _ => unreachable!()
+        }
     }
 }
