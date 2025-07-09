@@ -1,0 +1,8 @@
+[package]
+name = "scarlet-queen-initializer"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+scarlet-queen-core = { path = "../scarlet-queen-core" }
+rand.workspace = true

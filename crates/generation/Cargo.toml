@@ -1,9 +1,0 @@
-[package]
-name = "generation"
-version.workspace = true
-edition.workspace = true
-
-[dependencies]
-fitness = { path = "../fitness" }
-replenisher = { path = "../replenisher" }
-selector = { path = "../selector" }

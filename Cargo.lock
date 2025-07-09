@@ -15,37 +15,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9555578bc9e57714c812a1f84e4fc5b4d21fcb063490c624de019f7464c91268"
 
 [[package]]
-name = "core"
-version = "0.0.1"
-dependencies = [
- "rand",
-]
-
-[[package]]
-name = "entrypoint"
-version = "0.0.1"
-dependencies = [
- "generation",
- "initializer",
-]
-
-[[package]]
-name = "fitness"
-version = "0.0.1"
-dependencies = [
- "core",
-]
-
-[[package]]
-name = "generation"
-version = "0.0.1"
-dependencies = [
- "fitness",
- "replenisher",
- "selector",
-]
-
-[[package]]
 name = "getrandom"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -55,14 +24,6 @@ dependencies = [
  "libc",
  "r-efi",
  "wasi",
-]
-
-[[package]]
-name = "initializer"
-version = "0.0.1"
-dependencies = [
- "core",
- "rand",
 ]
 
 [[package]]
@@ -134,17 +95,59 @@ dependencies = [
 ]
 
 [[package]]
-name = "replenisher"
+name = "scarlet-queen-core"
 version = "0.0.1"
 dependencies = [
- "core",
+ "rand",
+ "thiserror",
 ]
 
 [[package]]
-name = "selector"
+name = "scarlet-queen-entrypoint"
 version = "0.0.1"
 dependencies = [
- "core",
+ "scarlet-queen-generation",
+ "scarlet-queen-initializer",
+]
+
+[[package]]
+name = "scarlet-queen-fitness"
+version = "0.0.1"
+dependencies = [
+ "scarlet-queen-core",
+]
+
+[[package]]
+name = "scarlet-queen-generation"
+version = "0.0.1"
+dependencies = [
+ "scarlet-queen-fitness",
+ "scarlet-queen-replenisher",
+ "scarlet-queen-selector",
+]
+
+[[package]]
+name = "scarlet-queen-initializer"
+version = "0.0.1"
+dependencies = [
+ "rand",
+ "scarlet-queen-core",
+]
+
+[[package]]
+name = "scarlet-queen-replenisher"
+version = "0.0.1"
+dependencies = [
+ "scarlet-queen-core",
+]
+
+[[package]]
+name = "scarlet-queen-selector"
+version = "0.0.1"
+dependencies = [
+ "rand",
+ "scarlet-queen-core",
+ "thiserror",
 ]
 
 [[package]]
@@ -156,6 +159,26 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "thiserror"
+version = "2.0.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "567b8a2dae586314f7be2a752ec7474332959c6460e02bde30d702a66d488708"
+dependencies = [
+ "thiserror-impl",
+]
+
+[[package]]
+name = "thiserror-impl"
+version = "2.0.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f7cf42b4507d8ea322120659672cf1b9dbb93f8f2d4ecfd6e51350ff5b17a1d"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]

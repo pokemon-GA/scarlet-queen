@@ -1,0 +1,9 @@
+[package]
+name = "scarlet-queen-generation"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+scarlet-queen-fitness = { path = "../scarlet-queen-fitness" }
+scarlet-queen-replenisher = { path = "../scarlet-queen-replenisher" }
+scarlet-queen-selector = { path = "../scarlet-queen-selector" }

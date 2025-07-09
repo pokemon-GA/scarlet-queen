@@ -1,8 +1,0 @@
-[package]
-name = "entrypoint"
-version.workspace = true
-edition.workspace = true
-
-[dependencies]
-generation = { path = "../generation" }
-initializer = { path = "../initializer" }
