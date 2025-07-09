@@ -148,7 +148,7 @@ jobs:
         run: nix develop --command bash -c "cargo test --all --verbose"
       - name: Lint
         run: nix develop --command bash -c "cargo clippy --all-targets --all-features --verbose"
-  commit:
+  push-formatted-code:
     needs: "all-tests"
     runs-on: ubuntu-latest
     steps:
