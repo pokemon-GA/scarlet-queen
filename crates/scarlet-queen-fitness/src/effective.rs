@@ -2993,7 +2993,7 @@ mod tests {
             ),
         ];
         for ((arg_1, arg_2), result) in testcases.into_iter() {
-            println!("{:?} -> {:?}", arg_1, arg_2);
+            println!("{arg_1:?} -> {arg_2:?}");
             assert_eq!(
                 TypeEffectiveness::from_effective_array(&arg_1, &arg_2),
                 result
