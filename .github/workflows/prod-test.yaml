@@ -20,7 +20,7 @@ jobs:
           - scarlet-queen-initializer
           - scarlet-queen-replenisher
           - scarlet-queen-selector
-    name: Test ${{ matrix.crate }}
+    name: ${{ matrix.crate }}-test
     steps:
       - name: Checkout
         uses: actions/checkout@v4
