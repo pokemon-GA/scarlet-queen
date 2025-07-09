@@ -137,7 +137,7 @@ dev branch is the development root branch.
 ```mermaid
 flowchart LR
     dev["dev"] -->|merge after strict checks| main["main"]
-    feature["feature/*"] -->|merge after loose checks| dev["dev"]
+    feature["feat/*"] -->|merge after loose checks| dev["dev"]
     chore["chore/*"] -->|merge after loose checks| dev["dev"]
     fix["fix/*"] -->|merge after loose checks| dev["dev"]
     update["update/*"] -->|merge after loose checks| dev["dev"]
