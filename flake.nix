@@ -31,6 +31,7 @@
               pkg-config
               bacon
               (rust-bin.stable.latest.default.override { extensions = [ "rust-src" ]; })
+              nodejs
             ];
             RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
           };

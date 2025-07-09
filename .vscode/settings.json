@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
-        "cachix"
+        "cachix",
+        "thiserror"
     ],
     "nixEnvSelector.nixFile": "${workspaceFolder}/flake.nix"
 }

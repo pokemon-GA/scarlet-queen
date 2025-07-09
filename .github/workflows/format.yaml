@@ -1,0 +1,28 @@
+name: format
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  format-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+      - name: Format Rust Code
+        run: nix develop --command bash -c "cargo fmt --all"
+      - name: Format TOML File
+        run: |
+          npm i
+          npm run fmt
+      - name: Push Formatted Code
+        run: |
+          git config --local user.name "actions-user"
+          git config --local user.email "actions@github.com"
+          git add .
+          git diff --staged --exit-code || (git commit -m 'Release: ${{ github.sha }}' && git push)

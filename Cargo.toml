@@ -1,6 +1,14 @@
 [workspace]
 resolver = "2"
-members = [ "crates/core","crates/entrypoint", "crates/fitness", "crates/generation", "crates/replenisher", "crates/initializer", "crates/selector"]
+members = [
+  "crates/scarlet-queen-core",
+  "crates/scarlet-queen-entrypoint",
+  "crates/scarlet-queen-fitness",
+  "crates/scarlet-queen-generation",
+  "crates/scarlet-queen-replenisher",
+  "crates/scarlet-queen-initializer",
+  "crates/scarlet-queen-selector",
+]
 
 [workspace.package]
 version = "0.0.1"
@@ -8,3 +16,4 @@ edition = "2021"
 
 [workspace.dependencies]
 rand = "0.9.1"
+thiserror = "2.0.12"

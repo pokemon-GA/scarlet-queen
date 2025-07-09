@@ -1,0 +1,113 @@
+name: dev-test
+
+on:
+  pull_request:
+    branches: ["dev"]
+  workflow_dispatch:
+
+jobs:
+  core-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+      - name: Build Check
+        run: nix develop --command bash -c "cargo build --release --verbose -p scarlet-queen-core"
+      - name: Test
+        run: nix develop --command bash -c "cargo test --verbose -p scarlet-queen-core"
+      - name: Lint
+        run: nix develop --command bash -c "cargo clippy -p scarlet-queen-core --all-targets --all-features"
+  entrypoint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+      - name: Build Check
+        run: nix develop --command bash -c "cargo build --release --verbose -p scarlet-queen-entrypoint"
+      - name: Test
+        run: nix develop --command bash -c "cargo test --verbose -p scarlet-queen-entrypoint"
+      - name: Lint
+        run: nix develop --command bash -c "cargo clippy -p scarlet-queen-entrypoint --all-targets --all-features"
+  fitness-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+      - name: Build Check
+        run: nix develop --command bash -c "cargo build --release --verbose -p scarlet-queen-fitness"
+      - name: Test
+        run: nix develop --command bash -c "cargo test --verbose -p scarlet-queen-fitness"
+      - name: Lint
+        run: nix develop --command bash -c "cargo clippy -p scarlet-queen-fitness --all-targets --all-features"
+  generation-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+      - name: Build Check
+        run: nix develop --command bash -c "cargo build --release --verbose -p scarlet-queen-generation"
+      - name: Test
+        run: nix develop --command bash -c "cargo test --verbose -p scarlet-queen-generation"
+      - name: Lint
+        run: nix develop --command bash -c "cargo clippy -p scarlet-queen-generation --all-targets --all-features"
+  initializer-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+      - name: Build Check
+        run: nix develop --command bash -c "cargo build --release --verbose -p scarlet-queen-initializer"
+      - name: Test
+        run: nix develop --command bash -c "cargo test --verbose -p scarlet-queen-initializer"
+      - name: Lint
+        run: nix develop --command bash -c "cargo clippy -p scarlet-queen-initializer --all-targets --all-features"
+  replenisher-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+      - name: Build Check
+        run: nix develop --command bash -c "cargo build --release --verbose -p scarlet-queen-replenisher"
+      - name: Test
+        run: nix develop --command bash -c "cargo test --verbose -p scarlet-queen-replenisher"
+      - name: Lint
+        run: nix develop --command bash -c "cargo clippy -p scarlet-queen-replenisher --all-targets --all-features"
+  selector-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+      - name: Build Check
+        run: nix develop --command bash -c "cargo build --release --verbose -p scarlet-queen-selector"
+      - name: Test
+        run: nix develop --command bash -c "cargo test --verbose -p scarlet-queen-selector"
+      - name: Lint
+        run: nix develop --command bash -c "cargo clippy -p scarlet-queen-selector --all-targets --all-features"
