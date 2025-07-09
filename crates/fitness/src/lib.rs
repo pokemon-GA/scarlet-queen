@@ -1,5 +1,10 @@
-mod effective;
+mod individual;
 mod pokemon_type;
+mod effective;
+
+pub use core::{EachCrateIndividual, PokemonType};
+pub use individual::FitnessIndividualTrait;
+pub use pokemon_type::FitnessPokemonType;
 
 pub fn dummy() {
     core::dummy();

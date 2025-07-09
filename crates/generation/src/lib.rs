@@ -1,3 +1,10 @@
+mod individual;
+mod group;
+mod tmp;
+
+pub use individual::{GenerationIndividualTrait, GenerationIndividual};
+pub use group::{GroupTrait, Group};
+
 pub fn dummy() {
     fitness::dummy();
     selector::dummy();

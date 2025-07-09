@@ -454,7 +454,7 @@ impl TypeEffectiveness {
 #[cfg(test)]
 mod tests {
     use std::rc::Rc;
-    use core::PokemonType;
+    use core::{EachCrateIndividual, PokemonType};
     use crate::{effective::TypeEffectiveness, pokemon_type::FitnessPokemonType};
 
     #[test]

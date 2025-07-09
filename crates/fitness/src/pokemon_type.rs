@@ -1,7 +1,8 @@
-use core::PokemonType;
+use core::{EachCrateIndividual, PokemonType};
 use std::{ops::Deref, rc::Rc};
 
-use crate::effective::TypeEffectiveness;
+use crate::{effective::TypeEffectiveness, FitnessIndividualTrait};
+
 
 #[derive(Debug)]
 pub struct FitnessPokemonType {
@@ -9,17 +10,21 @@ pub struct FitnessPokemonType {
 }
 
 impl FitnessPokemonType {
-    pub fn new(pokemon_type: &Rc<PokemonType>) -> FitnessPokemonType {
+    fn attack_effectiveness(&self, defense: &FitnessPokemonType) -> TypeEffectiveness {
+        TypeEffectiveness::from_effective_array(self, defense)
+    }
+}
+
+impl EachCrateIndividual<PokemonType> for FitnessPokemonType {
+    fn new(pokemon_type: &Rc<PokemonType>) -> FitnessPokemonType {
         FitnessPokemonType {
             pokemon_type: Rc::clone(pokemon_type)
         }
     }
+}
 
-    fn attack_effectiveness(&self, defense: &FitnessPokemonType) -> TypeEffectiveness {
-        TypeEffectiveness::from_effective_array(self, defense)
-    }
-
-    pub fn fitness(&self, other: &FitnessPokemonType) -> usize {
+impl FitnessIndividualTrait<PokemonType> for FitnessPokemonType {
+    fn fitness(&self, other: &FitnessPokemonType) -> usize {
         self.attack_effectiveness(other).point()
     }
 }
