@@ -1,5 +1,8 @@
 use core::PokemonType;
-use rand::{rng, Rng};
+use rand::{
+    distr::{Distribution, StandardUniform},
+    rng,
+};
 
 #[derive(Debug, Clone, Default)]
 pub struct Init {
@@ -7,8 +10,11 @@ pub struct Init {
 }
 
 impl Init {
-    pub fn gen_random(self, size: u64) {
+    pub fn gen_random(&mut self, size: u64) {
         let mut rng = rng();
-        let a = rng.random::<PokemonType>();
+        self.group = StandardUniform
+            .sample_iter(&mut rng)
+            .take(size as usize)
+            .collect();
     }
 }
