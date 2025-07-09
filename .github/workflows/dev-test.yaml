@@ -1,4 +1,4 @@
-name: dev
+name: dev-test
 
 on:
   pull_request:
@@ -22,7 +22,7 @@ jobs:
       - name: Test
         run: nix develop --command bash -c "cargo test --verbose -p core"
       - name: Lint
-        run: nix develop --command bash -c "cargo clippy --all-targets --all-features -p core"
+        run: nix develop --command bash -c "cargo clippy --all-targets --all-features -- --deny warnings -p core"
   entrypoint-test:
     runs-on: ubuntu-latest
     steps:
@@ -37,7 +37,7 @@ jobs:
       - name: Test
         run: nix develop --command bash -c "cargo test --verbose -p entrypoint"
       - name: Lint
-        run: nix develop --command bash -c "cargo clippy --all-targets --all-features -p core"
+        run: nix develop --command bash -c "cargo clippy --all-targets --all-features -- --deny warnings -p entrypoint"
   fitness-test:
     runs-on: ubuntu-latest
     steps:
@@ -52,7 +52,7 @@ jobs:
       - name: Test
         run: nix develop --command bash -c "cargo test --verbose -p fitness"
       - name: Lint
-        run: nix develop --command bash -c "cargo clippy --all-targets --all-features -p core"
+        run: nix develop --command bash -c "cargo clippy --all-targets --all-features -- --deny warnings -p fitness"
   generation-test:
     runs-on: ubuntu-latest
     steps:
@@ -67,7 +67,7 @@ jobs:
       - name: Test
         run: nix develop --command bash -c "cargo test --verbose -p generation"
       - name: Lint
-        run: nix develop --command bash -c "cargo clippy --all-targets --all-features -p generation"
+        run: nix develop --command bash -c "cargo clippy --all-targets --all-features -- --deny warnings -p generation"
   initializer-test:
     runs-on: ubuntu-latest
     steps:
@@ -82,7 +82,7 @@ jobs:
       - name: Test
         run: nix develop --command bash -c "cargo test --verbose -p initializer"
       - name: Lint
-        run: nix develop --command bash -c "cargo clippy --all-targets --all-features -p initializer"
+        run: nix develop --command bash -c "cargo clippy --all-targets --all-features -- --deny warnings -p initializer"
   replenisher-test:
     runs-on: ubuntu-latest
     steps:
@@ -97,7 +97,7 @@ jobs:
       - name: Test
         run: nix develop --command bash -c "cargo test --verbose -p replenisher"
       - name: Lint
-        run: nix develop --command bash -c "cargo clippy --all-targets --all-features -p replenisher"
+        run: nix develop --command bash -c "cargo clippy --all-targets --all-features -- --deny warnings -p replenisher"
   selector-test:
     runs-on: ubuntu-latest
     steps:
@@ -112,4 +112,4 @@ jobs:
       - name: Test
         run: nix develop --command bash -c "cargo test --verbose -p selector"
       - name: Lint
-        run: nix develop --command bash -c "cargo clippy --all-targets --all-features -p selector"
+        run: nix develop --command bash -c "cargo clippy --all-targets --all-features -- --deny warnings -p selector"
