@@ -21,7 +21,7 @@ jobs:
           - scarlet-queen-initializer
           - scarlet-queen-replenisher
           - scarlet-queen-selector
-    name: Test ${{ matrix.crate }}
+    name: ${{ matrix.crate }}-test
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,6 +36,7 @@ jobs:
       - name: Lint (${{ matrix.crate }})
         run: nix develop --command bash -c "cargo clippy -p ${{ matrix.crate }} --all-targets --all-features -- --deny warnings"
   format-and-push:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
