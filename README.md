@@ -12,38 +12,38 @@ Red Queen's Hypothesis is a hypothesis about co-evolution.
 
 ```mermaid
 flowchart RL
-    initializer[initializer] --> core[core]
-    fitness[fitness] --> core[core]
-    selector[selector] --> core[core]
-    replenisher[replenisher] --> core[core]
+    initializer[scarlet-queen-initializer] --> core[scarlet-queen-core]
+    fitness[scarlet-queen-fitness] --> core[scarlet-queen-core]
+    selector[scarlet-queen-selector] --> core[scarlet-queen-core]
+    replenisher[scarlet-queen-replenisher] --> core[scarlet-queen-core]
 
-    generation[generation] --> fitness[fitness]
-    generation[generation] --> selector[selector]
-    generation[generation] --> replenisher[replenisher]
+    generation[scarlet-queen-generation] --> fitness[scarlet-queen-fitness]
+    generation[scarlet-queen-generation] --> selector[scarlet-queen-selector]
+    generation[scarlet-queen-generation] --> replenisher[scarlet-queen-replenisher]
 
-    entrypoint["entrypoint (binary crate)"] --> initializer[initializer]
-    entrypoint["entrypoint (binary crate)"] --> generation[generation]
+    entrypoint["scarlet-queen-entrypoint (binary crate)"] --> initializer[scarlet-queen-initializer]
+    entrypoint["scarlet-queen-entrypoint (binary crate)"] --> generation[scarlet-queen-generation]
 ```
 
 ## Life Cycle
 
 ```mermaid
 flowchart LR
-    initializer["initialize (initializer)"] --> fitness["arithmetic of fitness (fitness)"]
+    initializer["scarlet-queen-initialize (initializer)"] --> fitness["scarlet-queen-arithmetic of fitness (fitness)"]
     subgraph generation
-        fitness["arithmetic of fitness (fitness)"] --> selector["select (selector)"]
-        selector["select (selector)"] --> replenisher["replenisher (replenisher)"]
-        replenisher["replenisher (replenisher)"] --> fitness["arithmetic of fitness (fitness)"]
+        fitness["scarlet-queen-arithmetic of fitness (fitness)"] --> selector["scarlet-queen-select (selector)"]
+        selector["scarlet-queen-select (selector)"] --> replenisher["scarlet-queen-replenisher (replenisher)"]
+        replenisher["scarlet-queen-replenisher (replenisher)"] --> fitness["scarlet-queen-arithmetic of fitness (fitness)"]
     end
 ```
 
 ## Project Structure
 
-### `core` (library crate)
+### `scarlet-queen-core` (library crate)
 
 Contains the core type definition and logic.
 
-### `initializer` (library crate)
+### `scarlet-queen-initializer` (library crate)
 
 Contains the logic for initializing the group (environment).
 
@@ -51,11 +51,11 @@ Contains the logic for initializing the group (environment).
   - `random`: enables the random initialization.
   - `weight`: enables the weighted initialization.
 
-### `fitness` (library crate)
+### `scarlet-queen-fitness` (library crate)
 
 Contains the fitness evaluation logic.
 
-### `selector` (library crate)
+### `scarlet-queen-selector` (library crate)
 
 Contains the logic for selecting individuals for the next generation.
 
@@ -64,7 +64,7 @@ Contains the logic for selecting individuals for the next generation.
   - `roulette`: enables the roulette selection.
   - `tournament`: enables the tournament selection.
 
-### `replenisher` (library crate)
+### `scarlet-queen-replenisher` (library crate)
 
 Contains the logic for replenishing new individuals.
 
@@ -72,18 +72,18 @@ Contains the logic for replenishing new individuals.
   - `random`: enables the random generation.
   - `novelty`: enables the novelty search algorithm.
 
-### `generation` (library crate)
+### `scarlet-queen-generation` (library crate)
 
 Contains the logic for managing the generation process.
 
-### `entrypoint` (binary crate)
+### `scarlet-queen-entrypoint` (binary crate)
 
 The binary crate that runs the Scarlet Queen framework.
 
 ## Get Started
 
 ```sh
-cargo run --bin entrypoint
+cargo run --bin scarlet-queen-entrypoint
 ```
 
 ## Tests
