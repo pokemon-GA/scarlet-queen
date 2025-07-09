@@ -1,10 +1,10 @@
+mod effective;
 mod individual;
 mod pokemon_type;
-mod effective;
 
-pub use scarlet_queen_core::{EachCrateIndividual, PokemonType};
 pub use individual::FitnessIndividualTrait;
 pub use pokemon_type::FitnessPokemonType;
+pub use scarlet_queen_core::{EachCrateIndividual, PokemonType};
 
 pub fn dummy() {
     scarlet_queen_core::dummy();

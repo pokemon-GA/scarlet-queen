@@ -1,9 +1,9 @@
+mod each_crate_individual;
 mod error;
 mod pokemon_type;
-mod each_crate_individual;
 
-pub use pokemon_type::PokemonType;
 pub use each_crate_individual::EachCrateIndividual;
+pub use pokemon_type::PokemonType;
 
 pub fn dummy() {
     println!("Hello, from core.")

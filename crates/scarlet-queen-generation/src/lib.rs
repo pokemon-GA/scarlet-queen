@@ -1,9 +1,9 @@
-mod individual;
 mod group;
+mod individual;
 mod tmp;
 
-pub use individual::{GenerationIndividualTrait, GenerationIndividual};
-pub use group::{GroupTrait, Group};
+pub use group::{Group, GroupTrait};
+pub use individual::{GenerationIndividual, GenerationIndividualTrait};
 
 pub fn dummy() {
     scarlet_queen_fitness::dummy();
