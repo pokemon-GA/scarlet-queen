@@ -1,6 +1,6 @@
 use std::{mem::swap, rc::Rc};
 
-use fitness::{EachCrateIndividual, FitnessIndividualTrait};
+use scarlet_queen_fitness::{EachCrateIndividual, FitnessIndividualTrait};
 
 use crate::{individual::{GenerationIndividual, GenerationSelector}, tmp::{ReplenisherIndividualTrait, SelectorIndividualTrait}};
 

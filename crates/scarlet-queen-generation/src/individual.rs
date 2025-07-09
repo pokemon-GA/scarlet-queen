@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use fitness::{EachCrateIndividual, FitnessIndividualTrait};
+use scarlet_queen_fitness::{EachCrateIndividual, FitnessIndividualTrait};
 
 use crate::tmp::{ReplenisherIndividualTrait, SelectorIndividualTrait};
 

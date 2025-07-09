@@ -1,4 +1,4 @@
-use core::EachCrateIndividual;
+use scarlet_queen_core::EachCrateIndividual;
 
 pub trait FitnessIndividualTrait<T>: EachCrateIndividual<T> {
     fn fitness(&self, other: &Self) -> usize;

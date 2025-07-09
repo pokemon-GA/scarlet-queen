@@ -1,4 +1,4 @@
-use fitness::EachCrateIndividual;
+use scarlet_queen_fitness::EachCrateIndividual;
 
 // TODO: move selector crate
 pub trait SelectorIndividualTrait<T>: EachCrateIndividual<T> {
