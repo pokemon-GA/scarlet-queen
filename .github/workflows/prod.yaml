@@ -112,7 +112,7 @@ jobs:
         run: nix develop --command bash -c "cargo test --verbose -p selector"
       - name: Lint
         run: nix develop --command bash -c "cargo clippy --all-targets --all-features -p selector"
-  format:
+  format-and-push:
     needs: [
       "core-test",
       "entrypoint-test",
@@ -130,30 +130,22 @@ jobs:
         uses: cachix/install-nix-action@v31
         with:
           nix_path: nixpkgs=channel:nixpkgs-unstable
-      - name: Format Check
-        run: nix develop --command bash -c "cargo fmt --all -- --check"
-  all-tests:
-    needs: "format"
-    runs-on: ubuntu-latest
-    steps:
+      - name: Format
+        run: nix develop --command bash -c "cargo fmt --all"
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install Nix
         uses: cachix/install-nix-action@v31
         with:
           nix_path: nixpkgs=channel:nixpkgs-unstable
-      - name: Build Check
+      - name: Build Check (aLl create)
         run: nix develop --command bash -c "cargo build --all --release --verbose
-      - name: Test
+      - name: Test (aLl create)
         run: nix develop --command bash -c "cargo test --all --verbose"
-      - name: Lint
+      - name: Lint (aLl create)
         run: nix develop --command bash -c "cargo clippy --all-targets --all-features --verbose"
-  push-formatted-code:
-    needs: "all-tests"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Format Check (aLl create)
+        run: nix develop --command bash -c "cargo fmt --all --check"
       - name: Push Formatted Code
         run: |
           git config --local user.name "actions-user "
