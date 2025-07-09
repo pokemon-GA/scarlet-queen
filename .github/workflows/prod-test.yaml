@@ -5,6 +5,7 @@ on:
     - cron: "0 0 * * 0"
   pull_request:
     branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   core-test:
