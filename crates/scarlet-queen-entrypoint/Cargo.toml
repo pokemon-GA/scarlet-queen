@@ -1,0 +1,8 @@
+[package]
+name = "scarlet-queen-entrypoint"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+scarlet-queen-generation = { path = "../scarlet-queen-generation" }
+scarlet-queen-initializer = { path = "../scarlet-queen-initializer" }

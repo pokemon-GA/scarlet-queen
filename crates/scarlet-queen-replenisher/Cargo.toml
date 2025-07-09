@@ -1,0 +1,7 @@
+[package]
+name = "scarlet-queen-replenisher"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+scarlet-queen-core = { path = "../scarlet-queen-core" }
