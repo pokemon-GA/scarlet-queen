@@ -98,3 +98,47 @@ cargo test
 ```sh
 cargo test -p <test_name>
 ```
+
+## Branch Strategy
+
+### main
+
+main branch is the release branch.
+
+### dev
+
+dev branch is the development root branch.
+
+
+### feature
+
+- feat/#[issue-number]-[issue-summary]
+
+  example) feat/#12-add-card-button-component
+
+### chore
+
+- chore/#[issue-number]-[issue-summary]
+
+  example) chore/#12-add-prettier-config
+
+### fix
+
+- fix/#[issue-number]-[issue-summary]
+
+  example) fix/#12-change-title
+
+### update
+
+- update/#[issue-number]-[issue-summary]
+
+  example) update/#12-update-dependencies
+
+```mermaid
+flowchart LR
+    dev["dev"] -->|merge| main["main"]
+    feature["feature/*"] -->|merge| dev["dev"]
+    chore["chore/*"] -->|merge| dev["dev"]
+    fix["fix/*"] -->|merge| dev["dev"]
+    update["update/*"] -->|merge| dev["dev"]
+```

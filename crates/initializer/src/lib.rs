@@ -9,7 +9,9 @@ pub fn dummy() {
 mod tests {
     use super::*;
     #[test]
-    fn test_dummy() {
-        dummy();
+    fn test_initializer() {
+        let mut init = group::Init::default();
+        init.gen_random(10);
+        assert_eq!(init.group.len(), 10);
     }
 }
