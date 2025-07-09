@@ -132,8 +132,6 @@ jobs:
           nix_path: nixpkgs=channel:nixpkgs-unstable
       - name: Format
         run: nix develop --command bash -c "cargo fmt --all"
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Build Check (all create)
         run: nix develop --command bash -c "cargo build --all --release --verbose"
       - name: Test (all create)
