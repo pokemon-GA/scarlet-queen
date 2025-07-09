@@ -99,6 +99,18 @@ cargo test
 cargo test -p <test_name>
 ```
 
+## Setup Project
+
+1. npm install
+
+To format toml file, you have to run `npm i`
+
+```sh
+npm i
+```
+
+2. finish!
+
 ## Branch Strategy
 
 ### main

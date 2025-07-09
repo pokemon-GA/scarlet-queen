@@ -1,0 +1,9 @@
+[package]
+name = "scarlet-queen-selector"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+scarlet-queen-core = { path = "../scarlet-queen-core" }
+thiserror.workspace = true
+rand.workspace = true

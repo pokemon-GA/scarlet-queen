@@ -1,7 +1,0 @@
-[package]
-name = "fitness"
-version.workspace = true
-edition.workspace = true
-
-[dependencies]
-core = { path = "../core" }
