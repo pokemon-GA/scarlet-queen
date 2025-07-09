@@ -21,51 +21,51 @@ jobs:
         run: nix develop --command bash -c "cargo test --verbose -p core"
       - name: Lint
         run: nix develop --command bash -c "cargo clippy -p core --all-targets --all-features"
-  # entrypoint-test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #     - name: Install Nix
-  #       uses: cachix/install-nix-action@v31
-  #       with:
-  #         nix_path: nixpkgs=channel:nixpkgs-unstable
-  #     - name: Build Check
-  #       run: nix develop --command bash -c "cargo build --release --verbose -p entrypoint"
-  #     - name: Test
-  #       run: nix develop --command bash -c "cargo test --verbose -p entrypoint"
-  #     - name: Lint
-  #       run: nix develop --command bash -c "cargo clippy -p entrypoint --all-targets --all-features"
-  # fitness-test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #     - name: Install Nix
-  #       uses: cachix/install-nix-action@v31
-  #       with:
-  #         nix_path: nixpkgs=channel:nixpkgs-unstable
-  #     - name: Build Check
-  #       run: nix develop --command bash -c "cargo build --release --verbose -p fitness"
-  #     - name: Test
-  #       run: nix develop --command bash -c "cargo test --verbose -p fitness"
-  #     - name: Lint
-  #       run: nix develop --command bash -c "cargo clippy -p fitness --all-targets --all-features"
-  # generation-test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #     - name: Install Nix
-  #       uses: cachix/install-nix-action@v31
-  #       with:
-  #         nix_path: nixpkgs=channel:nixpkgs-unstable
-  #     - name: Build Check
-  #       run: nix develop --command bash -c "cargo build --release --verbose -p generation"
-  #     - name: Test
-  #       run: nix develop --command bash -c "cargo test --verbose -p generation"
-  #     - name: Lint
-  #       run: nix develop --command bash -c "cargo clippy -p generation --all-targets --all-features"
+  entrypoint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+      - name: Build Check
+        run: nix develop --command bash -c "cargo build --release --verbose -p entrypoint"
+      - name: Test
+        run: nix develop --command bash -c "cargo test --verbose -p entrypoint"
+      - name: Lint
+        run: nix develop --command bash -c "cargo clippy -p entrypoint --all-targets --all-features"
+  fitness-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+      - name: Build Check
+        run: nix develop --command bash -c "cargo build --release --verbose -p fitness"
+      - name: Test
+        run: nix develop --command bash -c "cargo test --verbose -p fitness"
+      - name: Lint
+        run: nix develop --command bash -c "cargo clippy -p fitness --all-targets --all-features"
+  generation-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+      - name: Build Check
+        run: nix develop --command bash -c "cargo build --release --verbose -p generation"
+      - name: Test
+        run: nix develop --command bash -c "cargo test --verbose -p generation"
+      - name: Lint
+        run: nix develop --command bash -c "cargo clippy -p generation --all-targets --all-features"
   initializer-test:
     runs-on: ubuntu-latest
     steps:
