@@ -128,24 +128,6 @@ dev branch is the development root branch.
 
   example) fix/#12-change-title
 
-### bugfix
-
-- bugfix/#[issue-number]-[issue-summary]
-
-  example) bugfix/#12-fix-button-color
-
-### hotfix
-
-- hotfix/#[issue-number]-[issue-summary]
-
-  example) hotfix/#12-fix-critical-bug
-
-### bugfix
-
-- bugfix/#[issue-number]-[issue-summary]
-
-  example) bugfix/#12-fix-button-color
-
 ### update
 
 - update/#[issue-number]-[issue-summary]
@@ -158,7 +140,5 @@ flowchart LR
     feature["feature/*"] -->|merge| dev["dev"]
     chore["chore/*"] -->|merge| dev["dev"]
     fix["fix/*"] -->|merge| dev["dev"]
-    bugfix["bugfix/*"] -->|merge| dev["dev"]
-    hotfix["hotfix/*"] -->|merge| dev["dev"]
     update["update/*"] -->|merge| dev["dev"]
 ```
