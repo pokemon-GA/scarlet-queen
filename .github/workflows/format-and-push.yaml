@@ -36,6 +36,7 @@ jobs:
       - name: Lint (${{ matrix.crate }})
         run: nix develop --command bash -c "cargo clippy -p ${{ matrix.crate }} --all-targets --all-features -- --deny warnings"
   format-and-push:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
