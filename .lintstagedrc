@@ -1,3 +1,4 @@
 {
-  "*": ["cargo fmt --all", "npm run fmt"]
+  "*.rs": ["cargo fmt"],
+  "*.toml": ["npm run fmt"]
 }
