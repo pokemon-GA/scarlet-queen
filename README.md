@@ -106,7 +106,7 @@ cargo test -p <test_name>
 To format toml file, you have to run `npm i`
 
 ```sh
-npm i
+npm i && npm exec husky-init -y &&  npm exec husky set .husky/pre-commit "npm exec lint-staged"
 ```
 
 2. finish!
