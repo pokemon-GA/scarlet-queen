@@ -6,6 +6,7 @@ pub mod random;
 #[derive(Debug, Clone, Default)]
 pub struct Selector {
     pub group: Vec<PokemonType>,
+    pub size: usize,
 }
 
 pub fn dummy() {

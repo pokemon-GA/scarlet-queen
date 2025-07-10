@@ -101,15 +101,13 @@ cargo test -p <test_name>
 
 ## Setup Project
 
-1. npm install
+To format toml file and rust code, when you  commit, you need to install `husky` and `lint-staged`.
 
-To format toml file, you have to run `npm i`
+Under the commands is setup commands for `husky`, `lint-staged` and `prettier`.
 
 ```sh
-npm i
+npm i && npm exec husky-init -y &&  npm exec husky set .husky/pre-commit "npm exec lint-staged"
 ```
-
-2. finish!
 
 ## Branch Strategy
 

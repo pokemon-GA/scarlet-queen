@@ -9,14 +9,25 @@
   "author": "Myxogastria0808 (Yuki Osada)",
   "license": "Apache-2.0",
   "scripts": {
-    "fmt": "prettier --write '**/*.toml' && prettier --check '**/*.toml'"
+    "fmt": "prettier --write '**/*.toml' && prettier --check '**/*.toml'",
+    "prepare": "husky install"
   },
   "bugs": {
     "url": "https://github.com/pokemon-GA/scarlet-queen/issues"
   },
   "homepage": "https://github.com/pokemon-GA/scarlet-queen#readme",
   "devDependencies": {
+    "husky": "^8.0.0",
+    "lint-staged": "^16.1.2",
     "prettier": "3.6.2",
     "prettier-plugin-toml": "2.0.5"
+  },
+  "lint-staged": {
+    "*.rs": [
+      "rustfmt"
+    ],
+    "*.toml": [
+      "npm run fmt"
+    ]
   }
 }
