@@ -457,10 +457,11 @@ impl TypeEffectiveness {
 
 #[cfg(test)]
 mod tests {
-    use crate::{effective::TypeEffectiveness, pokemon_type::FitnessPokemonType};
-    use scarlet_queen_core::PokemonType;
     use std::rc::Rc;
+    use scarlet_queen_core::{PokemonType, EachCrateIndividual};
+    use crate::{effective::TypeEffectiveness, pokemon_type::FitnessPokemonType};
 
+    // タイプ相性のチェック
     #[test]
     fn test_typeeffectiveness_fromeffectivearray() {
         let testcases: Vec<((FitnessPokemonType, FitnessPokemonType), TypeEffectiveness)> = vec![
@@ -2993,7 +2994,6 @@ mod tests {
             ),
         ];
         for ((arg_1, arg_2), result) in testcases.into_iter() {
-            println!("{arg_1:?} -> {arg_2:?}");
             assert_eq!(
                 TypeEffectiveness::from_effective_array(&arg_1, &arg_2),
                 result
@@ -3001,6 +3001,9 @@ mod tests {
         }
     }
 
+    // タイプ相性の得点
+    // 具体的な得点に対するテスト
+    // タイプ相性に割り当てる得点を変更したら変更する
     #[test]
     fn test_typeeffectiveness_point_strong() {
         let testcases: Vec<(TypeEffectiveness, usize)> = vec![
@@ -3014,6 +3017,9 @@ mod tests {
         }
     }
 
+    // タイプ相性の得点
+    // 明らかに満たすべき条件についてのテスト
+    // タイプ相性に割り当てる得点を変更しても変更しない
     #[test]
     fn test_typeeffectiveness_point_weak() {
         assert!(TypeEffectiveness::SuperEffective.point() > TypeEffectiveness::Normal.point());
