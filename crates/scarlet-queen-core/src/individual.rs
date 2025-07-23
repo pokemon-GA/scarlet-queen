@@ -2,15 +2,15 @@ use std::{cell::RefCell, rc::Rc};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Individual<T> {
-    id: RefCell<usize>, 
-    value: T
+    id: RefCell<usize>,
+    value: T,
 }
 
 impl<T> Individual<T> {
     pub fn new(id: usize, value: T) -> Individual<T> {
-        Individual { 
-            id: RefCell::new(id), 
-            value
+        Individual {
+            id: RefCell::new(id),
+            value,
         }
     }
 
