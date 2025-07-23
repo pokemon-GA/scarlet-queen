@@ -1,7 +1,5 @@
 fn main() {
-    scarlet_queen_initializer::dummy();
-    scarlet_queen_generation::dummy();
-    println!("This is entrypoint!!!");
+    
 }
 
 #[cfg(test)]

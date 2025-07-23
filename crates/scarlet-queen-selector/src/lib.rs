@@ -1,24 +1,11 @@
-use scarlet_queen_core::PokemonType;
+use scarlet_queen_core::pokemon_type::PokemonType;
 
 pub mod error;
 pub mod random;
+pub mod individual;
 
 #[derive(Debug, Clone, Default)]
 pub struct Selector {
     pub group: Vec<PokemonType>,
     pub size: usize,
-}
-
-pub fn dummy() {
-    scarlet_queen_core::dummy();
-    println!("Hello, from selector.");
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn test_dummy() {
-        dummy();
-    }
 }

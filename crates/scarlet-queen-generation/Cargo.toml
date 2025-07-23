@@ -7,3 +7,4 @@ edition.workspace = true
 scarlet-queen-fitness = { path = "../scarlet-queen-fitness" }
 scarlet-queen-replenisher = { path = "../scarlet-queen-replenisher" }
 scarlet-queen-selector = { path = "../scarlet-queen-selector" }
+thiserror.workspace = true

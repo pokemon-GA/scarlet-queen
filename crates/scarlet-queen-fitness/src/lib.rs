@@ -1,21 +1,5 @@
-mod effective;
-mod individual;
-mod pokemon_type;
+pub mod effective;
+pub mod individual;
+pub mod pokemon_type;
 
-pub use individual::FitnessIndividualTrait;
-pub use pokemon_type::FitnessPokemonType;
-pub use scarlet_queen_core::{EachCrateIndividual, PokemonType};
-
-pub fn dummy() {
-    scarlet_queen_core::dummy();
-    println!("Hello, from fitness.");
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn test_dummy() {
-        dummy();
-    }
-}
+pub use scarlet_queen_core::{individual::{Individual, EachCrateIndividual}, pokemon_type::PokemonType};

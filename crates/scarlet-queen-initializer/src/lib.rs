@@ -1,10 +1,5 @@
 pub mod group;
 
-pub fn dummy() {
-    scarlet_queen_core::dummy();
-    println!("Hello, from initializer.");
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;

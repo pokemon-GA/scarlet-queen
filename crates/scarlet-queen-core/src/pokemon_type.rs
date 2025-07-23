@@ -3,7 +3,7 @@ use rand::distr::{Distribution, StandardUniform};
 use std::{fmt::Debug, str::FromStr};
 
 // ポケモンのタイプ
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum PokemonType {
     // なし
     None,
@@ -70,7 +70,7 @@ impl FromStr for PokemonType {
             "Dark" | "悪" | "あく" => PokemonType::Dark,
             "Steel" | "鋼" | "はがね" => PokemonType::Steel,
             "Fairy" | "妖" | "フェアリー" => PokemonType::Fairy,
-            _ => return Err(CoreError::StringToTypeConvertError),
+            _ => return Err(CoreError::StringToPokemonTypeConvertError),
         };
         Ok(pokemon_type)
     }
@@ -169,8 +169,8 @@ mod tests {
             ("Fairy", Ok(PokemonType::Fairy)),
             ("妖", Ok(PokemonType::Fairy)),
             ("フェアリー", Ok(PokemonType::Fairy)),
-            ("Dummy", Err(CoreError::StringToTypeConvertError)),
-            ("ダミー", Err(CoreError::StringToTypeConvertError)),
+            ("Dummy", Err(CoreError::StringToPokemonTypeConvertError)),
+            ("ダミー", Err(CoreError::StringToPokemonTypeConvertError)),
         ];
         for (arg, result) in testcases {
             assert_eq!(PokemonType::from_str(arg), result)
