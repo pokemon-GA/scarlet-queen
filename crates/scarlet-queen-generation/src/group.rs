@@ -1,14 +1,13 @@
-use std::{mem::swap, rc::Rc};
+use std::{collections::{HashMap, HashSet}, mem::swap, rc::Rc, slice::{Iter, IterMut}};
 
-use scarlet_queen_fitness::{EachCrateIndividual, FitnessIndividualTrait};
+use scarlet_queen_fitness::{individual::FitnessIndividualTrait, EachCrateIndividual, Individual};
 
-use crate::{
-    individual::{GenerationIndividual, GenerationSelector},
-    tmp::{ReplenisherIndividualTrait, SelectorIndividualTrait},
-};
+use scarlet_queen_selector::individual::SelectorIndividualTrait;
+use scarlet_queen_replenisher::individual::ReplenisherIndividualTrait;
+use crate::{error::GenerationError, individual::GenerationIndividual};
 
 pub trait GroupTrait {
-    fn one_loop(&mut self);
+    fn one_loop(&mut self) -> Result<(), GenerationError>;
 }
 
 pub struct Group<F, S, R, T>
@@ -26,14 +25,13 @@ where
     S: SelectorIndividualTrait<T>,
     R: ReplenisherIndividualTrait<T>,
 {
-    fn one_loop(&mut self) {
+    fn one_loop(&mut self) -> Result<(), GenerationError> {
         let n: usize = self.data.len();
-        let scores: Vec<usize> = GenerationIndividual::fitness_group(&*self);
+        let scores: HashMap<usize, usize> = GenerationIndividual::fitness_group(&*self);
         let select_result: Vec<bool> = {
-            let selector: GenerationSelector<'_, S, T> =
-                GenerationIndividual::make_selector(&*self, scores);
+            let selector: HashSet<usize> = GenerationIndividual::make_selector(&*self, scores)?;
             self.into_iter()
-                .map(|v| v.select(&selector))
+                .map(|v| selector.contains(&v.get_id()))
                 .collect::<Vec<bool>>()
         };
         let mut data_for_edit: Vec<GenerationIndividual<F, S, R, T>> = Vec::new();
@@ -47,8 +45,10 @@ where
         self.data.extend(
             new_individuals
                 .into_iter()
-                .map(|v| GenerationIndividual::new(&Rc::new(v))),
+                .map(|v| GenerationIndividual::new(&Rc::new(Individual::new(0, v)))),
         );
+        self.data.iter().enumerate().for_each(|(i, v)| v.get_individual().set_id(i));
+        Ok(())
     }
 }
 
@@ -58,41 +58,32 @@ where
     S: SelectorIndividualTrait<T>,
     R: ReplenisherIndividualTrait<T>,
 {
-    type IntoIter = GroupIterator<'a, F, S, R, T>;
+    type IntoIter = Iter<'a, GenerationIndividual<F, S, R, T>>;
     type Item = &'a GenerationIndividual<F, S, R, T>;
 
     fn into_iter(self) -> Self::IntoIter {
-        GroupIterator {
-            next_index: Some(0),
-            data: &self.data,
-        }
+        self.data.iter()
     }
 }
 
-pub struct GroupIterator<'a, F, S, R, T>
+impl<'a, F, S, R, T> IntoIterator for &'a mut Group<F, S, R, T>
 where
     F: FitnessIndividualTrait<T>,
     S: SelectorIndividualTrait<T>,
     R: ReplenisherIndividualTrait<T>,
 {
-    next_index: Option<usize>,
-    data: &'a Vec<GenerationIndividual<F, S, R, T>>,
+    type IntoIter = IterMut<'a, GenerationIndividual<F, S, R, T>>;
+    type Item = &'a mut GenerationIndividual<F, S, R, T>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.data.iter_mut()
+    }
 }
 
-impl<'a, F, S, R, T> Iterator for GroupIterator<'a, F, S, R, T>
-where
-    F: FitnessIndividualTrait<T>,
-    S: SelectorIndividualTrait<T>,
-    R: ReplenisherIndividualTrait<T>,
-{
-    type Item = &'a GenerationIndividual<F, S, R, T>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let now_index: Option<usize> = self.next_index;
-        self.next_index = self
-            .next_index
-            .map(|v| v + 1)
-            .filter(|&v| v < self.data.len());
-        now_index.and_then(|i| self.data.get(i))
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_group_grouptrait_oneloop() {
+        
     }
 }

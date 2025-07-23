@@ -2,7 +2,7 @@ use rand::{
     distr::{Distribution, StandardUniform},
     rng,
 };
-use scarlet_queen_core::PokemonType;
+use scarlet_queen_core::pokemon_type::PokemonType;
 
 #[derive(Debug, Clone, Default)]
 pub struct Initializer {

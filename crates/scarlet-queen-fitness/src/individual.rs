@@ -1,8 +1,10 @@
-use scarlet_queen_core::EachCrateIndividual;
+use std::collections::HashMap;
+
+use scarlet_queen_core::individual::EachCrateIndividual;
 
 pub trait FitnessIndividualTrait<T>: EachCrateIndividual<T> {
     fn fitness(&self, other: &Self) -> usize;
-    fn fitness_group<'a, U>(into_iter: U) -> Vec<usize>
+    fn fitness_group<'a, U>(into_iter: U) -> HashMap<usize, usize>
     where
         U: IntoIterator<Item = &'a Self>,
         Self: 'a,
@@ -10,100 +12,110 @@ pub trait FitnessIndividualTrait<T>: EachCrateIndividual<T> {
         let group_vec: Vec<&Self> = into_iter.into_iter().collect::<Vec<&Self>>();
         group_vec
             .iter()
-            .map(|v| group_vec.iter().map(|u| v.fitness(u)).sum::<usize>() - v.fitness(v))
+            .map(|v| (v.get_id(), group_vec.iter().map(|u| v.fitness(u)).sum::<usize>() - v.fitness(v)))
             .collect()
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use std::ops::Deref;
-    use scarlet_queen_core::EachCrateIndividual;
-    use crate::FitnessIndividualTrait;
+    use std::{collections::HashMap, ops::Deref};
+    use scarlet_queen_core::individual::{EachCrateIndividual, Individual};
+    use crate::individual::FitnessIndividualTrait;
+
+    struct FITraitSample {
+        id: usize, 
+        value: u8
+    }
+    impl EachCrateIndividual<u8> for FITraitSample {
+        fn new(individual: &std::rc::Rc<Individual<u8>>) -> Self {
+            FITraitSample { 
+                id: individual.deref().get_id(), 
+                value: *individual.deref().get_value() 
+            }
+        }
+        fn get_id(&self) -> usize {
+            self.id
+        }
+        fn get_value(&self) -> &u8 {
+            &self.value
+        }
+    }
+    impl FitnessIndividualTrait<u8> for FITraitSample {
+        fn fitness(&self, other: &Self) -> usize {
+            if self.value >= other.value {
+                1
+            } else {
+                0
+            }
+        }
+    }
 
     #[test]
     fn test_fitnessindividualtrait_fitnessgroup() {
-        struct FitnessIndividualTraitSample {
-            value: u8
-        }
-        impl EachCrateIndividual<FitnessIndividualTraitSample> for FitnessIndividualTraitSample {
-            fn new(individual: &std::rc::Rc<FitnessIndividualTraitSample>) -> Self {
-                FitnessIndividualTraitSample { value: individual.deref().value }
-            }
-        }
-        impl FitnessIndividualTrait<FitnessIndividualTraitSample> for FitnessIndividualTraitSample {
-            fn fitness(&self, other: &Self) -> usize {
-                if self.value >= other.value {
-                    1
-                } else {
-                    0
-                }
-            }
-        }
-
-        let testcases: Vec<(Vec<FitnessIndividualTraitSample>, Vec<usize>)> = vec![
+        let testcases: Vec<(Vec<FITraitSample>, HashMap<usize, usize>)> = vec![
             (
                 vec![
-                    FitnessIndividualTraitSample { value: 10 }, 
-                    FitnessIndividualTraitSample { value: 10 }, 
-                    FitnessIndividualTraitSample { value: 7 }, 
-                    FitnessIndividualTraitSample { value: 7 }, 
-                    FitnessIndividualTraitSample { value: 7 }, 
-                    FitnessIndividualTraitSample { value: 4 }, 
-                    FitnessIndividualTraitSample { value: 3 }, 
-                    FitnessIndividualTraitSample { value: 2 }, 
-                    FitnessIndividualTraitSample { value: 2 }, 
-                    FitnessIndividualTraitSample { value: 1 }, 
+                    FITraitSample { id: 0, value: 10 }, 
+                    FITraitSample { id: 1, value: 10 }, 
+                    FITraitSample { id: 2, value: 7 }, 
+                    FITraitSample { id: 3, value: 7 }, 
+                    FITraitSample { id: 4, value: 7 }, 
+                    FITraitSample { id: 5, value: 4 }, 
+                    FITraitSample { id: 6, value: 3 }, 
+                    FITraitSample { id: 7, value: 2 }, 
+                    FITraitSample { id: 8, value: 2 }, 
+                    FITraitSample { id: 9, value: 1 }, 
                 ], 
-                vec![9, 9, 7, 7, 7, 4, 3, 2, 2, 0]
+                vec![(0, 9), (1, 9), (2, 7), (3, 7), (4, 7), (5, 4), (6, 3), (7, 2), (8, 2), (9, 0)].into_iter().collect::<HashMap<usize, usize>>()
             ), 
             (
                 vec![
-                    FitnessIndividualTraitSample { value: 3 }, 
-                    FitnessIndividualTraitSample { value: 1 }, 
-                    FitnessIndividualTraitSample { value: 1 }, 
-                    FitnessIndividualTraitSample { value: 1 }
+                    FITraitSample { id: 0, value: 3 }, 
+                    FITraitSample { id: 1, value: 1 }, 
+                    FITraitSample { id: 2, value: 1 }, 
+                    FITraitSample { id: 3, value: 1 }
                 ], 
-                vec![3, 2, 2, 2]
+                vec![(0, 3), (1, 2), (2, 2), (3, 2)].into_iter().collect::<HashMap<usize, usize>>()
             ), 
             (
                 vec![
-                    FitnessIndividualTraitSample { value: 1 }
+                    FITraitSample { id: 0, value: 1 }
                 ], 
-                vec![0]
+                vec![(0, 0)].into_iter().collect::<HashMap<usize, usize>>()
             ), 
             (
                 vec![], 
-                vec![]
+                vec![].into_iter().collect::<HashMap<usize, usize>>()
             ), 
             (
                 vec![
-                    FitnessIndividualTraitSample { value: 17 }, 
-                    FitnessIndividualTraitSample { value: 2 }, 
-                    FitnessIndividualTraitSample { value: 20 }, 
-                    FitnessIndividualTraitSample { value: 20 }, 
-                    FitnessIndividualTraitSample { value: 16 }, 
-                    FitnessIndividualTraitSample { value: 16 }, 
-                    FitnessIndividualTraitSample { value: 12 }, 
-                    FitnessIndividualTraitSample { value: 19 }, 
-                    FitnessIndividualTraitSample { value: 1 }, 
-                    FitnessIndividualTraitSample { value: 4 }, 
-                    FitnessIndividualTraitSample { value: 14 }, 
-                    FitnessIndividualTraitSample { value: 10 }, 
-                    FitnessIndividualTraitSample { value: 8 }, 
-                    FitnessIndividualTraitSample { value: 2 }, 
-                    FitnessIndividualTraitSample { value: 8 }, 
-                    FitnessIndividualTraitSample { value: 16 }, 
-                    FitnessIndividualTraitSample { value: 16 }, 
-                    FitnessIndividualTraitSample { value: 10 }, 
-                    FitnessIndividualTraitSample { value: 4 }, 
-                    FitnessIndividualTraitSample { value: 1 }
+                    FITraitSample { id: 0, value: 17 }, 
+                    FITraitSample { id: 1, value: 2 }, 
+                    FITraitSample { id: 2, value: 20 }, 
+                    FITraitSample { id: 3, value: 20 }, 
+                    FITraitSample { id: 4, value: 16 }, 
+                    FITraitSample { id: 5, value: 16 }, 
+                    FITraitSample { id: 6, value: 12 }, 
+                    FITraitSample { id: 7, value: 19 }, 
+                    FITraitSample { id: 8, value: 1 }, 
+                    FITraitSample { id: 9, value: 4 }, 
+                    FITraitSample { id: 10, value: 14 }, 
+                    FITraitSample { id: 11, value: 10 }, 
+                    FITraitSample { id: 12, value: 8 }, 
+                    FITraitSample { id: 13, value: 2 }, 
+                    FITraitSample { id: 14, value: 8 }, 
+                    FITraitSample { id: 15, value: 16 }, 
+                    FITraitSample { id: 16, value: 16 }, 
+                    FITraitSample { id: 17, value: 10 }, 
+                    FITraitSample { id: 18, value: 4 }, 
+                    FITraitSample { id: 19, value: 1 }
                 ], 
-                vec![16, 3, 19, 19, 15, 15, 10, 17, 1, 5, 11, 9, 7, 3, 7, 15, 15, 9, 5, 1]
+                vec![(0, 16), (1, 3), (2, 19), (3, 19), (4, 15), (5, 15), (6, 10), (7, 17), (8, 1), (9, 5), (10, 11), (11, 9), (12, 7), (13, 3), (14, 7), (15, 15), (16, 15), (17, 9), (18, 5), (19, 1)].into_iter().collect::<HashMap<usize, usize>>()
             ), 
         ];
         for (arg, result) in testcases.into_iter() {
-            assert_eq!(FitnessIndividualTraitSample::fitness_group(&arg), result);
+            assert_eq!(FITraitSample::fitness_group(&arg), result);
         }
     }
 }

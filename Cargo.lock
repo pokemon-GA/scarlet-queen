@@ -124,6 +124,7 @@ dependencies = [
  "scarlet-queen-fitness",
  "scarlet-queen-replenisher",
  "scarlet-queen-selector",
+ "thiserror",
 ]
 
 [[package]]
