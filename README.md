@@ -16,6 +16,8 @@ flowchart RL
     fitness[scarlet-queen-fitness] --> core[scarlet-queen-core]
     selector[scarlet-queen-selector] --> core[scarlet-queen-core]
     replenisher[scarlet-queen-replenisher] --> core[scarlet-queen-core]
+    generation[scarlet-queen-generation] --> core[scarlet-queen-core]
+    entrypoint["scarlet-queen-entrypoint (binary crate)"] --> core[scarlet-queen-core]
 
     generation[scarlet-queen-generation] --> fitness[scarlet-queen-fitness]
     generation[scarlet-queen-generation] --> selector[scarlet-queen-selector]
