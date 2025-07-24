@@ -1,4 +1,9 @@
-use std::{collections::{HashMap, HashSet}, mem::swap, rc::Rc, slice::{Iter, IterMut}};
+use std::{
+    collections::{HashMap, HashSet}, 
+    mem::swap, 
+    rc::Rc, 
+    slice::{Iter, IterMut}
+};
 use scarlet_queen_core::{error::CoreError, group::GroupTrait, individual::{EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait, SelectorIndividualTrait}};
 use crate::individual::GenerationIndividual;
 

@@ -311,8 +311,8 @@ mod tests {
                 }
             ), 
         ];
-        for (arg, reuslt) in testcases.into_iter() {
-            assert_eq!(GenerationIndividualSample::new(&arg), reuslt);
+        for (arg, result) in testcases.into_iter() {
+            assert_eq!(GenerationIndividualSample::new(&arg), result);
         }
     }
 
@@ -332,8 +332,8 @@ mod tests {
                 1
             ), 
         ];
-        for (arg, reuslt) in testcases.into_iter() {
-            assert_eq!(arg.get_id(), reuslt);
+        for (arg, result) in testcases.into_iter() {
+            assert_eq!(arg.get_id(), result);
         }
     }
 
@@ -353,8 +353,8 @@ mod tests {
                 12
             ), 
         ];
-        for (arg, reuslt) in testcases.into_iter() {
-            assert_eq!(arg.get_value(), &reuslt);
+        for (arg, result) in testcases.into_iter() {
+            assert_eq!(arg.get_value(), &result);
         }
     }
 
