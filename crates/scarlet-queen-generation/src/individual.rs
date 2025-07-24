@@ -1,7 +1,5 @@
 use std::{collections::{HashMap, HashSet}, rc::Rc};
-use scarlet_queen_fitness::{individual::FitnessIndividualTrait, EachCrateIndividual, Individual};
-    use scarlet_queen_selector::{error::SelectorError, individual::SelectorIndividualTrait};
-    use scarlet_queen_replenisher::individual::ReplenisherIndividualTrait;
+use scarlet_queen_core::{error::CoreError, individual::{EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait, SelectorIndividualTrait}};
 
 pub trait GenerationIndividualTrait<T>: EachCrateIndividual<T> + FitnessIndividualTrait<T> + SelectorIndividualTrait<T> + ReplenisherIndividualTrait<T> {}
 
@@ -83,7 +81,7 @@ where
     S: SelectorIndividualTrait<T>,
     R: ReplenisherIndividualTrait<T>,
 {
-    fn make_selector<'a, U>(group: U, score: HashMap<usize, usize>) -> Result<HashSet<usize>, SelectorError>
+    fn make_selector<'a, U>(group: U, score: HashMap<usize, usize>) -> Result<HashSet<usize>, CoreError>
     where
         U: IntoIterator<Item = &'a Self>,
         Self: 'a,
@@ -118,10 +116,8 @@ where
 #[cfg(test)]
 mod tests {
     use std::{collections::{HashMap, HashSet}, ops::Deref, rc::Rc};
-    use scarlet_queen_fitness::{EachCrateIndividual, Individual, individual::FitnessIndividualTrait};
-    use scarlet_queen_selector::{error::SelectorError, individual::SelectorIndividualTrait};
-    use scarlet_queen_replenisher::individual::ReplenisherIndividualTrait;
-    use crate::GenerationIndividual;
+    use scarlet_queen_core::{error::CoreError, individual::{EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait, SelectorIndividualTrait}};
+    use crate::individual::GenerationIndividual;
 
     #[derive(PartialEq, Eq, Debug)]
     struct FITraitSample {
@@ -167,7 +163,7 @@ mod tests {
         }
     }
     impl SelectorIndividualTrait<u8> for SITraitSample {
-        fn make_selector<'a, U>(group: U, scores: HashMap<usize, usize>) -> Result<HashSet<usize>, SelectorError>
+        fn make_selector<'a, U>(group: U, scores: HashMap<usize, usize>) -> Result<HashSet<usize>, CoreError>
             where
                 U: IntoIterator<Item = &'a Self>,
                 Self: 'a 
@@ -177,9 +173,9 @@ mod tests {
                 .into_iter()
                 .map(|v| {
                     let id: usize = v.get_id();
-                    scores.get(&id).map_or(Err(SelectorError::BadScoreData), |v| Ok((id, *v)))
+                    scores.get(&id).map_or(Err(CoreError::SelectorError(String::from("BadScoreData"))), |v| Ok((id, *v)))
                 })
-                .collect::<Result<Vec<(usize, usize)>, SelectorError>>()?;
+                .collect::<Result<Vec<(usize, usize)>, CoreError>>()?;
             group_and_scores.sort_by_key(|&(_, v)| -(v as isize));
             for i in 0..(group_and_scores.len() / 2) {
                 set.insert(group_and_scores[i].0);

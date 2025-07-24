@@ -4,5 +4,7 @@ version.workspace = true
 edition.workspace = true
 
 [dependencies]
+scarlet-queen-core = { path = "../scarlet-queen-core" }
 scarlet-queen-generation = { path = "../scarlet-queen-generation" }
 scarlet-queen-initializer = { path = "../scarlet-queen-initializer" }
+plotters.workspace = true

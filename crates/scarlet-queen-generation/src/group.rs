@@ -1,15 +1,8 @@
 use std::{collections::{HashMap, HashSet}, mem::swap, rc::Rc, slice::{Iter, IterMut}};
+use scarlet_queen_core::{error::CoreError, group::GroupTrait, individual::{EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait, SelectorIndividualTrait}};
+use crate::individual::GenerationIndividual;
 
-use scarlet_queen_fitness::{individual::FitnessIndividualTrait, EachCrateIndividual, Individual};
-
-use scarlet_queen_selector::individual::SelectorIndividualTrait;
-use scarlet_queen_replenisher::individual::ReplenisherIndividualTrait;
-use crate::{error::GenerationError, individual::GenerationIndividual};
-
-pub trait GroupTrait {
-    fn one_loop(&mut self) -> Result<(), GenerationError>;
-}
-
+#[derive(Clone)]
 pub struct Group<F, S, R, T>
 where
     F: FitnessIndividualTrait<T>,
@@ -19,13 +12,24 @@ where
     data: Vec<GenerationIndividual<F, S, R, T>>,
 }
 
-impl<F, S, R, T> GroupTrait for Group<F, S, R, T>
+impl<F, S, R, T> GroupTrait<T> for Group<F, S, R, T>
 where
-    F: FitnessIndividualTrait<T>,
-    S: SelectorIndividualTrait<T>,
-    R: ReplenisherIndividualTrait<T>,
+    T: Clone, 
+    F: FitnessIndividualTrait<T> + Clone,
+    S: SelectorIndividualTrait<T> + Clone,
+    R: ReplenisherIndividualTrait<T> + Clone,
 {
-    fn one_loop(&mut self) -> Result<(), GenerationError> {
+    fn new(data: Vec<T>) -> Self {
+        Group { 
+            data: data
+                .into_iter()
+                .enumerate()
+                .map(|(i, v)| GenerationIndividual::new(&Rc::new(Individual::new(i, v))))
+                .collect::<Vec<GenerationIndividual<F, S, R, T>>>()
+        }
+    }
+
+    fn one_loop(&mut self) -> Result<(), CoreError> {
         let n: usize = self.data.len();
         let scores: HashMap<usize, usize> = GenerationIndividual::fitness_group(&*self);
         let select_result: Vec<bool> = {
@@ -49,6 +53,13 @@ where
         );
         self.data.iter().enumerate().for_each(|(i, v)| v.get_individual().set_id(i));
         Ok(())
+    }
+
+    fn iter<'a>(&'a self) -> impl Iterator<Item=&'a T> 
+        where 
+            T: 'a
+    {
+        self.data.iter().map(|v| v.get_value())
     }
 }
 

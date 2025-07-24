@@ -1,7 +1,6 @@
-mod group;
-mod individual;
-mod tmp;
-mod error;
+pub mod group;
+pub mod individual;
+pub mod tmp;
+pub mod error;
 
-pub use group::{Group, GroupTrait};
-pub use individual::{GenerationIndividual, GenerationIndividualTrait};
+pub use scarlet_queen_fitness::{EachCrateIndividual, Individual};
