@@ -125,12 +125,12 @@ mod tests {
 
     #[derive(PartialEq, Eq, Debug)]
     struct FITraitSample {
-        value: Rc<Individual<u8>>
+        value: Rc<Individual<u8>>,
     }
     impl EachCrateIndividual<u8> for FITraitSample {
         fn new(individual: &Rc<Individual<u8>>) -> Self {
-            FITraitSample { 
-                value: Rc::clone(individual) 
+            FITraitSample {
+                value: Rc::clone(individual),
             }
         }
         fn get_id(&self) -> usize {
@@ -155,8 +155,8 @@ mod tests {
     }
     impl<const R: usize> EachCrateIndividual<u8> for SITraitSample<R> {
         fn new(individual: &Rc<Individual<u8>>) -> Self {
-            SITraitSample { 
-                value: Rc::clone(individual)
+            SITraitSample {
+                value: Rc::clone(individual),
             }
         }
         fn get_id(&self) -> usize {
@@ -183,8 +183,8 @@ mod tests {
                 })
                 .collect::<Result<Vec<(usize, usize)>, SelectorError>>()?;
             group_and_scores.sort_by_key(|&(_, v)| -(v as isize));
-            for i in 0..(group_and_scores.len() / 2) {
-                set.insert(group_and_scores[i].0);
+            for (id, _) in group_and_scores.iter().take(group_and_scores.len() / 2) {
+                set.insert(*id);
             }
             Ok(set)
         }
@@ -196,7 +196,7 @@ mod tests {
     impl<const N: usize, const R: usize> EachCrateIndividual<u8> for RITraitSample<N, R> {
         fn new(individual: &Rc<Individual<u8>>) -> Self {
             RITraitSample {
-                value: Rc::clone(individual)
+                value: Rc::clone(individual),
             }
         }
         fn get_id(&self) -> usize {
@@ -212,9 +212,7 @@ mod tests {
                 U: IntoIterator<Item = &'a Self>,
                 Self: 'a 
         {
-            let mut group: Vec<u8> = group.into_iter().map(|v| *v.get_value()).collect::<Vec<u8>>();
-            group.sort();
-            group
+            let mut group: Vec<u8> = group
                 .into_iter()
                 .cycle()
                 .take(N - R)
@@ -227,17 +225,17 @@ mod tests {
     fn test_generationindividual_getfitnessindividual() {
         let testcases: Vec<(GenerationIndividualSample<10, 8>, FITraitSample)> = vec![
             (
-                GenerationIndividual::new(&Rc::new(Individual::new(0, 8))), 
-                FITraitSample::new(&Rc::new(Individual::new(0, 8)))
-            ), 
+                GenerationIndividual::new(&Rc::new(Individual::new(0, 8))),
+                FITraitSample::new(&Rc::new(Individual::new(0, 8))),
+            ),
             (
-                GenerationIndividual::new(&Rc::new(Individual::new(0, 0))), 
-                FITraitSample::new(&Rc::new(Individual::new(0, 0)))
-            ), 
+                GenerationIndividual::new(&Rc::new(Individual::new(0, 0))),
+                FITraitSample::new(&Rc::new(Individual::new(0, 0))),
+            ),
             (
-                GenerationIndividual::new(&Rc::new(Individual::new(1, 12))), 
-                FITraitSample::new(&Rc::new(Individual::new(1, 12)))
-            ), 
+                GenerationIndividual::new(&Rc::new(Individual::new(1, 12))),
+                FITraitSample::new(&Rc::new(Individual::new(1, 12))),
+            ),
         ];
         for (arg, result) in testcases.into_iter() {
             assert_eq!(arg.get_fitness_individual(), &result);
@@ -248,17 +246,17 @@ mod tests {
     fn test_generationindividual_getselectorindividual() {
         let testcases: Vec<(GenerationIndividualSample<10, 8>, SITraitSample<8>)> = vec![
             (
-                GenerationIndividual::new(&Rc::new(Individual::new(0, 8))), 
-                SITraitSample::new(&Rc::new(Individual::new(0, 8)))
-            ), 
+                GenerationIndividual::new(&Rc::new(Individual::new(0, 8))),
+                SITraitSample::new(&Rc::new(Individual::new(0, 8))),
+            ),
             (
-                GenerationIndividual::new(&Rc::new(Individual::new(0, 0))), 
-                SITraitSample::new(&Rc::new(Individual::new(0, 0)))
-            ), 
+                GenerationIndividual::new(&Rc::new(Individual::new(0, 0))),
+                SITraitSample::new(&Rc::new(Individual::new(0, 0))),
+            ),
             (
-                GenerationIndividual::new(&Rc::new(Individual::new(1, 12))), 
-                SITraitSample::new(&Rc::new(Individual::new(1, 12)))
-            ), 
+                GenerationIndividual::new(&Rc::new(Individual::new(1, 12))),
+                SITraitSample::new(&Rc::new(Individual::new(1, 12))),
+            ),
         ];
         for (arg, result) in testcases.into_iter() {
             assert_eq!(arg.get_selector_individual(), &result);
@@ -269,17 +267,17 @@ mod tests {
     fn test_generationindividual_getreplenisherindividual() {
         let testcases: Vec<(GenerationIndividualSample<10, 8>, RITraitSample<10, 8>)> = vec![
             (
-                GenerationIndividual::new(&Rc::new(Individual::new(0, 8))), 
-                RITraitSample::new(&Rc::new(Individual::new(0, 8)))
-            ), 
+                GenerationIndividual::new(&Rc::new(Individual::new(0, 8))),
+                RITraitSample::new(&Rc::new(Individual::new(0, 8))),
+            ),
             (
-                GenerationIndividual::new(&Rc::new(Individual::new(0, 0))), 
-                RITraitSample::new(&Rc::new(Individual::new(0, 0)))
-            ), 
+                GenerationIndividual::new(&Rc::new(Individual::new(0, 0))),
+                RITraitSample::new(&Rc::new(Individual::new(0, 0))),
+            ),
             (
-                GenerationIndividual::new(&Rc::new(Individual::new(1, 12))), 
-                RITraitSample::new(&Rc::new(Individual::new(1, 12)))
-            ), 
+                GenerationIndividual::new(&Rc::new(Individual::new(1, 12))),
+                RITraitSample::new(&Rc::new(Individual::new(1, 12))),
+            ),
         ];
         for (arg, result) in testcases.into_iter() {
             assert_eq!(arg.get_replenisher_individual(), &result);
@@ -290,32 +288,32 @@ mod tests {
     fn test_generationindividual_eachcrateindividual_new() {
         let testcases: Vec<(Rc<Individual<u8>>, GenerationIndividualSample<10, 8>)> = vec![
             (
-                Rc::new(Individual::new(0, 8)), 
-                GenerationIndividualSample { 
-                    individual: Rc::new(Individual::new(0, 8)), 
-                    fitness_individual: FITraitSample::new(&Rc::new(Individual::new(0, 8))), 
-                    selector_individual: SITraitSample::new(&Rc::new(Individual::new(0, 8))), 
-                    replenisher_individual: RITraitSample::new(&Rc::new(Individual::new(0, 8))), 
-                }
-            ), 
+                Rc::new(Individual::new(0, 8)),
+                GenerationIndividualSample {
+                    individual: Rc::new(Individual::new(0, 8)),
+                    fitness_individual: FITraitSample::new(&Rc::new(Individual::new(0, 8))),
+                    selector_individual: SITraitSample::new(&Rc::new(Individual::new(0, 8))),
+                    replenisher_individual: RITraitSample::new(&Rc::new(Individual::new(0, 8))),
+                },
+            ),
             (
-                Rc::new(Individual::new(0, 0)), 
-                GenerationIndividualSample { 
-                    individual: Rc::new(Individual::new(0, 0)), 
-                    fitness_individual: FITraitSample::new(&Rc::new(Individual::new(0, 0))), 
-                    selector_individual: SITraitSample::new(&Rc::new(Individual::new(0, 0))), 
-                    replenisher_individual: RITraitSample::new(&Rc::new(Individual::new(0, 0))), 
-                }
-            ), 
+                Rc::new(Individual::new(0, 0)),
+                GenerationIndividualSample {
+                    individual: Rc::new(Individual::new(0, 0)),
+                    fitness_individual: FITraitSample::new(&Rc::new(Individual::new(0, 0))),
+                    selector_individual: SITraitSample::new(&Rc::new(Individual::new(0, 0))),
+                    replenisher_individual: RITraitSample::new(&Rc::new(Individual::new(0, 0))),
+                },
+            ),
             (
-                Rc::new(Individual::new(1, 12)), 
-                GenerationIndividualSample { 
-                    individual: Rc::new(Individual::new(1, 12)), 
-                    fitness_individual: FITraitSample::new(&Rc::new(Individual::new(1, 12))), 
-                    selector_individual: SITraitSample::new(&Rc::new(Individual::new(1, 12))), 
-                    replenisher_individual: RITraitSample::new(&Rc::new(Individual::new(1, 12))), 
-                }
-            ), 
+                Rc::new(Individual::new(1, 12)),
+                GenerationIndividualSample {
+                    individual: Rc::new(Individual::new(1, 12)),
+                    fitness_individual: FITraitSample::new(&Rc::new(Individual::new(1, 12))),
+                    selector_individual: SITraitSample::new(&Rc::new(Individual::new(1, 12))),
+                    replenisher_individual: RITraitSample::new(&Rc::new(Individual::new(1, 12))),
+                },
+            ),
         ];
         for (arg, result) in testcases.into_iter() {
             assert_eq!(GenerationIndividualSample::new(&arg), result);
@@ -326,17 +324,17 @@ mod tests {
     fn test_generationindividual_eachcrateindividual_getid() {
         let testcases: Vec<(GenerationIndividualSample<10, 8>, usize)> = vec![
             (
-                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 8))), 
-                0
-            ), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 8))),
+                0,
+            ),
             (
-                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 0))), 
-                0
-            ), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 0))),
+                0,
+            ),
             (
-                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 12))), 
-                1
-            ), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 12))),
+                1,
+            ),
         ];
         for (arg, result) in testcases.into_iter() {
             assert_eq!(arg.get_id(), result);
@@ -347,17 +345,17 @@ mod tests {
     fn test_generationindividual_eachcrateindividual_getvalue() {
         let testcases: Vec<(GenerationIndividualSample<10, 8>, u8)> = vec![
             (
-                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 8))), 
-                8
-            ), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 8))),
+                8,
+            ),
             (
-                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 0))), 
-                0
-            ), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 0))),
+                0,
+            ),
             (
-                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 12))), 
-                12
-            ), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 12))),
+                12,
+            ),
         ];
         for (arg, result) in testcases.into_iter() {
             assert_eq!(arg.get_value(), &result);
@@ -368,25 +366,25 @@ mod tests {
     fn test_generationindividual_fitnessindividual_fitness() {
         let testcases: Vec<(GenerationIndividualSample<10, 8>, GenerationIndividualSample<10, 8>)> = vec![
             (
-                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 8))), 
-                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 6)))
-            ), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 8))),
+                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 6))),
+            ),
             (
-                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 8))), 
-                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 10)))
-            ), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 8))),
+                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 10))),
+            ),
             (
-                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 6))), 
-                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 6)))
-            ), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 6))),
+                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 6))),
+            ),
             (
-                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 0))), 
-                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 0)))
-            ), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 0))),
+                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 0))),
+            ),
             (
-                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 13))), 
-                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 19)))
-            ), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 13))),
+                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 19))),
+            ),
         ];
         for (arg_1, arg_2) in testcases.into_iter() {
             assert_eq!(

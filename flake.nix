@@ -29,6 +29,7 @@
             buildInputs = [
               openssl
               pkg-config
+              fontconfig
               bacon
               (rust-bin.stable.latest.default.override { extensions = [ "rust-src" ]; })
               nodejs

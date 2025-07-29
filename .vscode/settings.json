@@ -3,5 +3,8 @@
         "cachix",
         "thiserror"
     ],
-    "nixEnvSelector.nixFile": "${workspaceFolder}/flake.nix"
+    "nixEnvSelector.nixFile": "${workspaceFolder}/flake.nix",
+    "files.watcherExclude": {
+        "**/target": true
+    }
 }
