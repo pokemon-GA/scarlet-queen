@@ -212,7 +212,11 @@ mod tests {
                 U: IntoIterator<Item = &'a Self>,
                 Self: 'a 
         {
-            let mut group: Vec<u8> = group
+            let group: Vec<u8> = group
+                .into_iter()
+                .map(|v| *v.get_value())
+                .collect();
+            group
                 .into_iter()
                 .cycle()
                 .take(N - R)
