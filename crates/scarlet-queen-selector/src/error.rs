@@ -5,5 +5,7 @@ pub enum SelectorError {
     #[error("OverflowGroupError: requested size exceeds group size.")]
     OverflowGroupError,
     #[error("BadScoreData: The score data is not enough")]
-    BadScoreData,
+    BadScoreDataError,
+    #[error("TooFewGroupError: The len of group is less than R")]
+    TooFewGroupError,
 }

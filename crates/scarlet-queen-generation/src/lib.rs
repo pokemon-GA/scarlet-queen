@@ -1,7 +1,3 @@
-mod group;
-mod individual;
-mod tmp;
-mod error;
-
-pub use group::{Group, GroupTrait};
-pub use individual::{GenerationIndividual, GenerationIndividualTrait};
+pub mod group;
+pub mod individual;
+pub mod error;

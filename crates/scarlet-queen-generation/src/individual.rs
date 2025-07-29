@@ -1,68 +1,58 @@
-use scarlet_queen_fitness::{individual::FitnessIndividualTrait, EachCrateIndividual, Individual};
-use scarlet_queen_replenisher::individual::ReplenisherIndividualTrait;
-use scarlet_queen_selector::{error::SelectorError, individual::SelectorIndividualTrait};
-use std::{
-    collections::{HashMap, HashSet},
-    rc::Rc,
-};
+use std::{collections::{HashMap, HashSet}, rc::Rc};
+use scarlet_queen_core::{individual::{EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait, SelectorIndividualTrait}};
 
-pub trait GenerationIndividualTrait<T>:
-    EachCrateIndividual<T>
-    + FitnessIndividualTrait<T>
-    + SelectorIndividualTrait<T>
-    + ReplenisherIndividualTrait<T>
-{
-}
+pub trait GenerationIndividualTrait<T, const N: usize, const R: usize>: 
+    EachCrateIndividual<T> + FitnessIndividualTrait<T> + SelectorIndividualTrait<T, R> + ReplenisherIndividualTrait<T, N, R> {}
 
 #[derive(Clone, PartialEq, Eq, Debug)]
-pub struct GenerationIndividual<F, S, R, T>
+pub struct GenerationIndividual<T, FI, SI, RI, const N: usize, const R: usize>
 where
-    F: FitnessIndividualTrait<T>,
-    S: SelectorIndividualTrait<T>,
-    R: ReplenisherIndividualTrait<T>,
+    FI: FitnessIndividualTrait<T>,
+    SI: SelectorIndividualTrait<T, R>,
+    RI: ReplenisherIndividualTrait<T, N, R>
 {
     #[allow(dead_code)]
     individual: Rc<Individual<T>>,
-    fitness_individual: F,
-    selector_individual: S,
-    replenisher_individual: R,
+    fitness_individual: FI,
+    selector_individual: SI,
+    replenisher_individual: RI,
 }
 
-impl<F, S, R, T> GenerationIndividual<F, S, R, T>
+impl<T, FI, SI, RI, const N: usize, const R: usize> GenerationIndividual<T, FI, SI, RI, N, R>
 where
-    F: FitnessIndividualTrait<T>,
-    S: SelectorIndividualTrait<T>,
-    R: ReplenisherIndividualTrait<T>,
+    FI: FitnessIndividualTrait<T>,
+    SI: SelectorIndividualTrait<T, R>,
+    RI: ReplenisherIndividualTrait<T, N, R>,
 {
     pub fn get_individual(&self) -> &Individual<T> {
         &self.individual
     }
 
-    pub fn get_fitness_individual(&self) -> &F {
+    pub fn get_fitness_individual(&self) -> &FI {
         &self.fitness_individual
     }
 
-    pub fn get_selector_individual(&self) -> &S {
+    pub fn get_selector_individual(&self) -> &SI {
         &self.selector_individual
     }
 
-    pub fn get_replenisher_individual(&self) -> &R {
+    pub fn get_replenisher_individual(&self) -> &RI {
         &self.replenisher_individual
     }
 }
 
-impl<F, S, R, T> EachCrateIndividual<T> for GenerationIndividual<F, S, R, T>
+impl<T, FI, SI, RI, const N: usize, const R: usize> EachCrateIndividual<T> for GenerationIndividual<T, FI, SI, RI, N, R>
 where
-    F: FitnessIndividualTrait<T>,
-    S: SelectorIndividualTrait<T>,
-    R: ReplenisherIndividualTrait<T>,
+    FI: FitnessIndividualTrait<T>,
+    SI: SelectorIndividualTrait<T, R>,
+    RI: ReplenisherIndividualTrait<T, N, R>,
 {
     fn new(individual: &Rc<Individual<T>>) -> Self {
         GenerationIndividual {
             individual: Rc::clone(individual),
-            fitness_individual: F::new(individual),
-            selector_individual: S::new(individual),
-            replenisher_individual: R::new(individual),
+            fitness_individual: FI::new(individual),
+            selector_individual: SI::new(individual),
+            replenisher_individual: RI::new(individual),
         }
     }
 
@@ -75,71 +65,63 @@ where
     }
 }
 
-impl<F, R, S, T> FitnessIndividualTrait<T> for GenerationIndividual<F, S, R, T>
+impl<T, FI, SI, RI, const N: usize, const R: usize> FitnessIndividualTrait<T> for GenerationIndividual<T, FI, SI, RI, N, R>
 where
-    F: FitnessIndividualTrait<T>,
-    S: SelectorIndividualTrait<T>,
-    R: ReplenisherIndividualTrait<T>,
+    FI: FitnessIndividualTrait<T>,
+    SI: SelectorIndividualTrait<T, R>,
+    RI: ReplenisherIndividualTrait<T, N, R>,
 {
     fn fitness(&self, other: &Self) -> usize {
         self.fitness_individual.fitness(&other.fitness_individual)
     }
 }
 
-impl<F, R, S, T> SelectorIndividualTrait<T> for GenerationIndividual<F, S, R, T>
+impl<T, FI, SI, RI, const N: usize, const R: usize> SelectorIndividualTrait<T, R> for GenerationIndividual<T, FI, SI, RI, N, R>
 where
-    F: FitnessIndividualTrait<T>,
-    S: SelectorIndividualTrait<T>,
-    R: ReplenisherIndividualTrait<T>,
+    FI: FitnessIndividualTrait<T>,
+    SI: SelectorIndividualTrait<T, R>,
+    RI: ReplenisherIndividualTrait<T, N, R>,
 {
-    fn make_selector<'a, U>(
-        group: U,
-        score: HashMap<usize, usize>,
-    ) -> Result<HashSet<usize>, SelectorError>
+    type Err = <SI as SelectorIndividualTrait<T, R>>::Err;
+
+    fn make_selector<'a, U>(group: U, score: HashMap<usize, usize>) -> Result<HashSet<usize>, Self::Err>
     where
         U: IntoIterator<Item = &'a Self>,
         Self: 'a,
     {
-        S::make_selector(group.into_iter().map(|v| &v.selector_individual), score)
+        SI::make_selector(group.into_iter().map(|v| &v.selector_individual), score)
     }
 }
 
-impl<F, R, S, T> ReplenisherIndividualTrait<T> for GenerationIndividual<F, S, R, T>
+impl<T, FI, SI, RI, const N: usize, const R: usize> ReplenisherIndividualTrait<T, N, R> for GenerationIndividual<T, FI, SI, RI, N, R>
 where
-    F: FitnessIndividualTrait<T>,
-    S: SelectorIndividualTrait<T>,
-    R: ReplenisherIndividualTrait<T>,
+    FI: FitnessIndividualTrait<T>,
+    SI: SelectorIndividualTrait<T, R>,
+    RI: ReplenisherIndividualTrait<T, N, R>,
 {
-    fn replenisher<'a, U>(group: U, n: usize) -> Vec<T>
+    fn replenisher<'a, U>(group: U) -> Vec<T>
     where
         U: IntoIterator<Item = &'a Self>,
         Self: 'a,
     {
-        R::replenisher(group.into_iter().map(|v| &v.replenisher_individual), n)
+        RI::replenisher(group.into_iter().map(|v| &v.replenisher_individual))
     }
 }
 
-impl<F, R, S, T> GenerationIndividualTrait<T> for GenerationIndividual<F, S, R, T>
+impl<T, FI, SI, RI, const N: usize, const R: usize> GenerationIndividualTrait<T, N, R> for GenerationIndividual<T, FI, SI, RI, N, R>
 where
-    F: FitnessIndividualTrait<T>,
-    S: SelectorIndividualTrait<T>,
-    R: ReplenisherIndividualTrait<T>,
+    FI: FitnessIndividualTrait<T>,
+    SI: SelectorIndividualTrait<T, R>,
+    RI: ReplenisherIndividualTrait<T, N, R>,
 {
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::GenerationIndividual;
-    use scarlet_queen_fitness::{
-        individual::FitnessIndividualTrait, EachCrateIndividual, Individual,
-    };
-    use scarlet_queen_replenisher::individual::ReplenisherIndividualTrait;
-    use scarlet_queen_selector::{error::SelectorError, individual::SelectorIndividualTrait};
-    use std::{
-        collections::{HashMap, HashSet},
-        ops::Deref,
-        rc::Rc,
-    };
+    use std::{collections::{HashMap, HashSet}, ops::Deref, rc::Rc};
+    use scarlet_queen_core::{individual::{EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait, SelectorIndividualTrait}};
+    use scarlet_queen_selector::error::SelectorError;
+    use crate::individual::GenerationIndividual;
 
     #[derive(PartialEq, Eq, Debug)]
     struct FITraitSample {
@@ -168,10 +150,10 @@ mod tests {
         }
     }
     #[derive(PartialEq, Eq, Debug)]
-    struct SITraitSample {
-        value: Rc<Individual<u8>>,
+    struct SITraitSample<const R: usize> {
+        value: Rc<Individual<u8>>
     }
-    impl EachCrateIndividual<u8> for SITraitSample {
+    impl<const R: usize> EachCrateIndividual<u8> for SITraitSample<R> {
         fn new(individual: &Rc<Individual<u8>>) -> Self {
             SITraitSample {
                 value: Rc::clone(individual),
@@ -184,23 +166,20 @@ mod tests {
             self.value.deref().get_value()
         }
     }
-    impl SelectorIndividualTrait<u8> for SITraitSample {
-        fn make_selector<'a, U>(
-            group: U,
-            scores: HashMap<usize, usize>,
-        ) -> Result<HashSet<usize>, SelectorError>
-        where
-            U: IntoIterator<Item = &'a Self>,
-            Self: 'a,
+    impl<const R: usize> SelectorIndividualTrait<u8, R> for SITraitSample<R> {
+        type Err = SelectorError;
+
+        fn make_selector<'a, U>(group: U, scores: HashMap<usize, usize>) -> Result<HashSet<usize>, Self::Err>
+            where
+                U: IntoIterator<Item = &'a Self>,
+                Self: 'a 
         {
             let mut set: HashSet<usize> = HashSet::new();
             let mut group_and_scores: Vec<(usize, usize)> = group
                 .into_iter()
                 .map(|v| {
                     let id: usize = v.get_id();
-                    scores
-                        .get(&id)
-                        .map_or(Err(SelectorError::BadScoreData), |v| Ok((id, *v)))
+                    scores.get(&id).map_or(Err(SelectorError::BadScoreDataError), |v| Ok((id, *v)))
                 })
                 .collect::<Result<Vec<(usize, usize)>, SelectorError>>()?;
             group_and_scores.sort_by_key(|&(_, v)| -(v as isize));
@@ -211,10 +190,10 @@ mod tests {
         }
     }
     #[derive(PartialEq, Eq, Debug)]
-    struct RITraitSample {
-        value: Rc<Individual<u8>>,
+    struct RITraitSample<const N: usize, const R: usize> {
+        value: Rc<Individual<u8>>
     }
-    impl EachCrateIndividual<u8> for RITraitSample {
+    impl<const N: usize, const R: usize> EachCrateIndividual<u8> for RITraitSample<N, R> {
         fn new(individual: &Rc<Individual<u8>>) -> Self {
             RITraitSample {
                 value: Rc::clone(individual),
@@ -227,26 +206,28 @@ mod tests {
             self.value.deref().get_value()
         }
     }
-    impl ReplenisherIndividualTrait<u8> for RITraitSample {
-        fn replenisher<'a, U>(group: U, k: usize) -> Vec<u8>
-        where
-            U: IntoIterator<Item = &'a Self>,
-            Self: 'a,
+    impl<const N: usize, const R: usize> ReplenisherIndividualTrait<u8, N, R> for RITraitSample<N, R> {
+        fn replenisher<'a, U>(group: U) -> Vec<u8>
+            where
+                U: IntoIterator<Item = &'a Self>,
+                Self: 'a 
         {
-            let mut group: Vec<u8> = group
+            let group: Vec<u8> = group
                 .into_iter()
                 .map(|v| *v.get_value())
-                .collect::<Vec<u8>>();
-            group.sort();
-            group.into_iter().cycle().take(k).collect::<Vec<u8>>()
+                .collect();
+            group
+                .into_iter()
+                .cycle()
+                .take(N - R)
+                .collect::<Vec<u8>>()
         }
     }
-    type GenerationIndividualSample =
-        GenerationIndividual<FITraitSample, SITraitSample, RITraitSample, u8>;
+    type GenerationIndividualSample<const N: usize, const R: usize> = GenerationIndividual<u8, FITraitSample, SITraitSample<R>, RITraitSample<N, R>, N, R>;
 
     #[test]
     fn test_generationindividual_getfitnessindividual() {
-        let testcases: Vec<(GenerationIndividualSample, FITraitSample)> = vec![
+        let testcases: Vec<(GenerationIndividualSample<10, 8>, FITraitSample)> = vec![
             (
                 GenerationIndividual::new(&Rc::new(Individual::new(0, 8))),
                 FITraitSample::new(&Rc::new(Individual::new(0, 8))),
@@ -267,7 +248,7 @@ mod tests {
 
     #[test]
     fn test_generationindividual_getselectorindividual() {
-        let testcases: Vec<(GenerationIndividualSample, SITraitSample)> = vec![
+        let testcases: Vec<(GenerationIndividualSample<10, 8>, SITraitSample<8>)> = vec![
             (
                 GenerationIndividual::new(&Rc::new(Individual::new(0, 8))),
                 SITraitSample::new(&Rc::new(Individual::new(0, 8))),
@@ -288,7 +269,7 @@ mod tests {
 
     #[test]
     fn test_generationindividual_getreplenisherindividual() {
-        let testcases: Vec<(GenerationIndividualSample, RITraitSample)> = vec![
+        let testcases: Vec<(GenerationIndividualSample<10, 8>, RITraitSample<10, 8>)> = vec![
             (
                 GenerationIndividual::new(&Rc::new(Individual::new(0, 8))),
                 RITraitSample::new(&Rc::new(Individual::new(0, 8))),
@@ -309,7 +290,7 @@ mod tests {
 
     #[test]
     fn test_generationindividual_eachcrateindividual_new() {
-        let testcases: Vec<(Rc<Individual<u8>>, GenerationIndividualSample)> = vec![
+        let testcases: Vec<(Rc<Individual<u8>>, GenerationIndividualSample<10, 8>)> = vec![
             (
                 Rc::new(Individual::new(0, 8)),
                 GenerationIndividualSample {
@@ -338,14 +319,14 @@ mod tests {
                 },
             ),
         ];
-        for (arg, reuslt) in testcases.into_iter() {
-            assert_eq!(GenerationIndividualSample::new(&arg), reuslt);
+        for (arg, result) in testcases.into_iter() {
+            assert_eq!(GenerationIndividualSample::new(&arg), result);
         }
     }
 
     #[test]
     fn test_generationindividual_eachcrateindividual_getid() {
-        let testcases: Vec<(GenerationIndividualSample, usize)> = vec![
+        let testcases: Vec<(GenerationIndividualSample<10, 8>, usize)> = vec![
             (
                 GenerationIndividualSample::new(&Rc::new(Individual::new(0, 8))),
                 0,
@@ -359,14 +340,14 @@ mod tests {
                 1,
             ),
         ];
-        for (arg, reuslt) in testcases.into_iter() {
-            assert_eq!(arg.get_id(), reuslt);
+        for (arg, result) in testcases.into_iter() {
+            assert_eq!(arg.get_id(), result);
         }
     }
 
     #[test]
     fn test_generationindividual_eachcrateindividual_getvalue() {
-        let testcases: Vec<(GenerationIndividualSample, u8)> = vec![
+        let testcases: Vec<(GenerationIndividualSample<10, 8>, u8)> = vec![
             (
                 GenerationIndividualSample::new(&Rc::new(Individual::new(0, 8))),
                 8,
@@ -380,14 +361,14 @@ mod tests {
                 12,
             ),
         ];
-        for (arg, reuslt) in testcases.into_iter() {
-            assert_eq!(arg.get_value(), &reuslt);
+        for (arg, result) in testcases.into_iter() {
+            assert_eq!(arg.get_value(), &result);
         }
     }
 
     #[test]
     fn test_generationindividual_fitnessindividual_fitness() {
-        let testcases: Vec<(GenerationIndividualSample, GenerationIndividualSample)> = vec![
+        let testcases: Vec<(GenerationIndividualSample<10, 8>, GenerationIndividualSample<10, 8>)> = vec![
             (
                 GenerationIndividualSample::new(&Rc::new(Individual::new(0, 8))),
                 GenerationIndividualSample::new(&Rc::new(Individual::new(1, 6))),
@@ -411,85 +392,90 @@ mod tests {
         ];
         for (arg_1, arg_2) in testcases.into_iter() {
             assert_eq!(
-                <GenerationIndividualSample as FitnessIndividualTrait<u8>>::fitness(&arg_1, &arg_2),
-                <FITraitSample as FitnessIndividualTrait<u8>>::fitness(
-                    arg_1.get_fitness_individual(),
-                    arg_2.get_fitness_individual()
-                )
+                <GenerationIndividualSample<10, 8> as FitnessIndividualTrait<u8>>::fitness(&arg_1, &arg_2), 
+                <FITraitSample as FitnessIndividualTrait<u8>>::fitness(arg_1.get_fitness_individual(), arg_2.get_fitness_individual())
             )
         }
     }
 
     #[test]
     fn test_generationindividual_selectorindividual_makeselector() {
-        let testcases: Vec<Vec<GenerationIndividualSample>> = vec![
-            vec![
-                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 6))),
-                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 12))),
-                GenerationIndividualSample::new(&Rc::new(Individual::new(2, 8))),
-                GenerationIndividualSample::new(&Rc::new(Individual::new(3, 8))),
-                GenerationIndividualSample::new(&Rc::new(Individual::new(4, 2))),
-            ],
-            vec![],
-            vec![
-                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 7))),
-                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 12))),
-                GenerationIndividualSample::new(&Rc::new(Individual::new(2, 4))),
-                GenerationIndividualSample::new(&Rc::new(Individual::new(3, 6))),
-                GenerationIndividualSample::new(&Rc::new(Individual::new(4, 3))),
-                GenerationIndividualSample::new(&Rc::new(Individual::new(5, 10))),
-                GenerationIndividualSample::new(&Rc::new(Individual::new(6, 6))),
-                GenerationIndividualSample::new(&Rc::new(Individual::new(7, 8))),
-                GenerationIndividualSample::new(&Rc::new(Individual::new(8, 19))),
-                GenerationIndividualSample::new(&Rc::new(Individual::new(9, 7))),
-            ],
-        ];
-        for mut arg in testcases.into_iter() {
-            let score: HashMap<usize, usize> = GenerationIndividualSample::fitness_group(&arg);
+        {
+            let mut testcase: Vec<GenerationIndividualSample<5, 4>> = vec![
+                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 6))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 12))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(2, 8))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(3, 8))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(4, 2))), 
+            ];
+            let score: HashMap<usize, usize> = GenerationIndividualSample::fitness_group(&testcase);
             assert_eq!(
-                <GenerationIndividualSample as SelectorIndividualTrait<u8>>::make_selector(
-                    &arg,
-                    score.clone()
-                ),
-                <SITraitSample as SelectorIndividualTrait<u8>>::make_selector(
-                    arg.iter_mut().map(|v| &v.selector_individual),
-                    score
-                )
+                <GenerationIndividualSample<5, 4> as SelectorIndividualTrait<u8, 4>>::make_selector(&testcase, score.clone()), 
+                <SITraitSample<4> as SelectorIndividualTrait<u8, 4>>::make_selector(testcase.iter_mut().map(|v| &v.selector_individual), score)
+            )
+        }
+        {
+            let mut testcase: Vec<GenerationIndividualSample<0, 0>> = vec![];
+            let score: HashMap<usize, usize> = GenerationIndividualSample::fitness_group(&testcase);
+            assert_eq!(
+                <GenerationIndividualSample<0, 0> as SelectorIndividualTrait<u8, 0>>::make_selector(&testcase, score.clone()), 
+                <SITraitSample<0> as SelectorIndividualTrait<u8, 0>>::make_selector(testcase.iter_mut().map(|v| &v.selector_individual), score)
+            )
+        }
+        {
+            let mut testcase: Vec<GenerationIndividualSample<10, 8>> = vec![
+                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 7))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 12))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(2, 4))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(3, 6))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(4, 3))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(5, 10))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(6, 6))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(7, 8))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(8, 19))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(9, 7))), 
+            ];
+            let score: HashMap<usize, usize> = GenerationIndividualSample::fitness_group(&testcase);
+            assert_eq!(
+                <GenerationIndividualSample<10, 8> as SelectorIndividualTrait<u8, 8>>::make_selector(&testcase, score.clone()), 
+                <SITraitSample<8> as SelectorIndividualTrait<u8, 8>>::make_selector(testcase.iter_mut().map(|v| &v.selector_individual), score)
             )
         }
     }
 
     #[test]
     fn test_generationindividual_replenisherindividual_replenisher() {
-        let testcases: Vec<(Vec<GenerationIndividualSample>, usize)> = vec![
-            (
-                vec![
-                    GenerationIndividualSample::new(&Rc::new(Individual::new(0, 12))),
-                    GenerationIndividualSample::new(&Rc::new(Individual::new(1, 8))),
-                ],
-                3,
-            ),
-            (vec![], 0),
-            (
-                vec![
-                    GenerationIndividualSample::new(&Rc::new(Individual::new(0, 7))),
-                    GenerationIndividualSample::new(&Rc::new(Individual::new(1, 12))),
-                    GenerationIndividualSample::new(&Rc::new(Individual::new(2, 10))),
-                    GenerationIndividualSample::new(&Rc::new(Individual::new(3, 8))),
-                    GenerationIndividualSample::new(&Rc::new(Individual::new(4, 19))),
-                ],
-                5,
-            ),
-        ];
-        for (arg_1, arg_2) in testcases.into_iter() {
+        {
+            let testcase: Vec<GenerationIndividualSample<5, 2>> = vec![
+                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 12))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 8))), 
+            ];
             assert_eq!(
-                <GenerationIndividualSample as ReplenisherIndividualTrait<u8>>::replenisher(
-                    &arg_1, arg_2
-                ),
-                <RITraitSample as ReplenisherIndividualTrait<u8>>::replenisher(
-                    arg_1.iter().map(|v| v.get_replenisher_individual()),
-                    arg_2
-                )
+                <GenerationIndividualSample<5, 2> as ReplenisherIndividualTrait<u8, 5, 2>>::replenisher(&testcase), 
+                <RITraitSample<5, 2> as ReplenisherIndividualTrait<u8, 5, 2>>::replenisher(testcase.iter().map(|v| v.get_replenisher_individual()))
+            )
+        }
+        {
+            let testcase: Vec<GenerationIndividualSample<0, 0>> = vec![];
+            assert_eq!(
+                <GenerationIndividualSample<0, 0> as ReplenisherIndividualTrait<u8, 0, 0>>::replenisher(&testcase), 
+                <RITraitSample<0, 0> as ReplenisherIndividualTrait<u8, 0, 0>>::replenisher(testcase.iter().map(|v| v.get_replenisher_individual()))
+            )
+        }
+        {
+            let testcase: Vec<GenerationIndividualSample<10, 8>> = vec![
+                GenerationIndividualSample::new(&Rc::new(Individual::new(0, 7))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(1, 12))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(2, 10))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(3, 8))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(4, 19))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(5, 3))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(6, 8))), 
+                GenerationIndividualSample::new(&Rc::new(Individual::new(7, 12))), 
+            ];
+            assert_eq!(
+                <GenerationIndividualSample<10, 8> as ReplenisherIndividualTrait<u8, 10, 8>>::replenisher(&testcase), 
+                <RITraitSample<10, 8> as ReplenisherIndividualTrait<u8, 10, 8>>::replenisher(testcase.iter().map(|v| v.get_replenisher_individual()))
             )
         }
     }

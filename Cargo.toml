@@ -17,3 +17,4 @@ edition = "2021"
 [workspace.dependencies]
 rand = "0.9.1"
 thiserror = "2.0.12"
+plotters = "0.3.1"
