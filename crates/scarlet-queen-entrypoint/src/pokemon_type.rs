@@ -1,23 +1,31 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, fmt::Debug, fs::File, io::BufWriter};
 
 use plotters::{chart::{ChartBuilder, ChartContext}, prelude::{BitMapBackend, Cartesian2d, Circle, DrawingArea, IntoDrawingArea}, series::LineSeries, style::{Color, IntoFont, ShapeStyle, WHITE}};
-use scarlet_queen_core::{group::GroupTrait, pokemon_type::PokemonType};
+use scarlet_queen_core::pokemon_type::PokemonType;
+use scarlet_queen_generation::group::PokemonTypeGroup;
+use scarlet_queen_initializer::group::InitializerSample;
 
-use crate::function::MAIN_LOOP;
+use crate::function::{main_loop, MAIN_LOOP};
 
-pub fn count<G>(loop_result: Vec<G>) -> Vec<HashMap<PokemonType, usize>> 
+pub fn count<P>(loop_result: Vec<Vec<P>>) -> Vec<HashMap<P, usize>> 
     where 
-        G: GroupTrait<PokemonType>
+        P: PokemonType
 {
-    loop_result.into_iter().map(|v| {
-        v.iter().fold(HashMap::new(), |mut state, u| {
-            *state.entry(u.clone()).or_insert(0) += 1;
-            state
+    loop_result
+        .into_iter()
+        .map(|v| {
+            v.iter().fold(HashMap::new(), |mut state, u| {
+                *state.entry(u.clone()).or_insert(0) += 1;
+                state
+            })
         })
-    }).collect::<Vec<HashMap<PokemonType, usize>>>()
+        .collect::<Vec<HashMap<P, usize>>>()
 }
 
-pub fn draw_graph(loop_result_count: Vec<HashMap<PokemonType, usize>>, pokemon_types: Vec<(PokemonType, impl Color)>) {
+pub fn draw_graph<P>(loop_result_count: Vec<HashMap<P, usize>>, pokemon_types: Vec<(P, impl Color)>, img_name: &str) 
+    where 
+        P: PokemonType
+{
     let graph_data: Vec<Vec<(i32, i32)>> = pokemon_types
         .iter()
         .map(|(v, _)| loop_result_count
@@ -28,8 +36,8 @@ pub fn draw_graph(loop_result_count: Vec<HashMap<PokemonType, usize>>, pokemon_t
         )
         .collect::<Vec<Vec<(i32, i32)>>>();
 
-    let y_max: i32 = graph_data.iter().map(|row| row.iter().max_by_key(|v| v.1).unwrap().1).max().unwrap();
-    let root: DrawingArea<BitMapBackend<'_>, plotters::coord::Shift> = BitMapBackend::new("img.png", (1080, 720)).into_drawing_area();
+    let y_max: i32 = 100;
+    let root: DrawingArea<BitMapBackend<'_>, plotters::coord::Shift> = BitMapBackend::new(img_name, (1080, 720)).into_drawing_area();
     root.fill(&WHITE).unwrap();
     let mut chart: ChartContext<'_, BitMapBackend<'_>, Cartesian2d<plotters::coord::types::RangedCoordi32, plotters::coord::types::RangedCoordi32>> = ChartBuilder::on(&root)
         .caption("Sample", ("sans-serif", 20).into_font())
@@ -44,4 +52,24 @@ pub fn draw_graph(loop_result_count: Vec<HashMap<PokemonType, usize>>, pokemon_t
         let point_1 = graph_data.get(i).unwrap().iter().map(|&(x, y)| Circle::new((x, y), 4, ShapeStyle::from(&pokemon_types[i].1).filled()));
         chart.draw_series(point_1).unwrap();
     }
+}
+
+pub fn test_and_draw<P, const N: usize, const R: usize>(test_name: &str, types: Vec<(P, impl Color)>) 
+    where 
+        P: PokemonType + Debug
+{
+    let file: BufWriter<File> = BufWriter::new(
+        File::open(format!("./res_{}.txt", test_name))
+            .unwrap_or_else(|_| File::create(format!("./res_{}.txt", test_name)).unwrap())
+    );
+    let result: Vec<Vec<P>> = main_loop::<
+        P, 
+        InitializerSample<N>, 
+        PokemonTypeGroup<P, N, R>, 
+        BufWriter<File>, 
+        N, 
+        R
+    >(file).unwrap();
+    let count: Vec<std::collections::HashMap<P, usize>> = count(result);
+    draw_graph(count, types, &format!("./img_{}.png", test_name));
 }

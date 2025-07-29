@@ -8,3 +8,5 @@ scarlet-queen-core = { path = "../scarlet-queen-core" }
 scarlet-queen-generation = { path = "../scarlet-queen-generation" }
 scarlet-queen-initializer = { path = "../scarlet-queen-initializer" }
 plotters.workspace = true
+rand.workspace = true
+thiserror.workspace = true

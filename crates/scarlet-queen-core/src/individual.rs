@@ -1,6 +1,4 @@
-use std::{cell::RefCell, collections::{HashMap, HashSet}, rc::Rc};
-
-use crate::error::CoreError;
+use std::{cell::RefCell, collections::{HashMap, HashSet}, fmt::Debug, rc::Rc};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Individual<T> {
@@ -50,22 +48,20 @@ pub trait FitnessIndividualTrait<T>: EachCrateIndividual<T> {
     }
 }
 
-pub trait SelectorIndividualTrait<T>: EachCrateIndividual<T> {
-    fn make_selector<'a, U>(group: U, scores: HashMap<usize, usize>) -> Result<HashSet<usize>, CoreError>
+pub trait SelectorIndividualTrait<T, const R: usize>: EachCrateIndividual<T> {
+    type Err: Debug;
+
+    fn make_selector<'a, U>(group: U, scores: HashMap<usize, usize>) -> Result<HashSet<usize>, Self::Err>
     where
         U: IntoIterator<Item = &'a Self>,
         Self: 'a;
 }
 
-pub trait ReplenisherIndividualTrait<T>: EachCrateIndividual<T> {
-    fn replenisher<'a, U>(group: U, k: usize) -> Vec<T>
+pub trait ReplenisherIndividualTrait<T, const N: usize, const R: usize>: EachCrateIndividual<T> {
+    fn replenisher<'a, U>(group: U) -> Vec<T>
     where
         U: IntoIterator<Item = &'a Self>,
         Self: 'a;
-}
-
-pub trait InitializerTrait<T> {
-    fn initializer() -> Vec<T>;
 }
 
 #[cfg(test)]

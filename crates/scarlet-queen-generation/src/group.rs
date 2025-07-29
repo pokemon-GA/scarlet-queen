@@ -1,62 +1,108 @@
 use std::{
-    collections::{HashMap, HashSet}, 
-    mem::swap, 
-    rc::Rc, 
-    slice::{Iter, IterMut}
+    collections::{HashMap, HashSet}, fmt::Debug, io, mem::swap, rc::Rc, slice::Iter
 };
-use scarlet_queen_core::{error::CoreError, group::GroupTrait, individual::{EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait, SelectorIndividualTrait}};
-use crate::individual::GenerationIndividual;
+use scarlet_queen_core::{
+    group::GroupTrait, 
+    individual::{EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait, SelectorIndividualTrait}
+};
+use scarlet_queen_fitness::pokemon_type::FitnessPokemonType;
+use scarlet_queen_replenisher::from_top::FromTopReplenisherIndividual;
+use scarlet_queen_selector::rank::RankSelectorIndividual;
+use crate::{error::GenerationError, individual::GenerationIndividual};
 
-#[derive(Clone)]
-pub struct Group<F, S, R, T>
-where
-    F: FitnessIndividualTrait<T>,
-    S: SelectorIndividualTrait<T>,
-    R: ReplenisherIndividualTrait<T>,
-{
-    data: Vec<GenerationIndividual<F, S, R, T>>,
-}
-
-impl<F, S, R, T> GroupTrait<T> for Group<F, S, R, T>
+pub struct Group<T, FI, SI, RI, const N: usize, const R: usize>
 where
     T: Clone, 
-    F: FitnessIndividualTrait<T> + Clone,
-    S: SelectorIndividualTrait<T> + Clone,
-    R: ReplenisherIndividualTrait<T> + Clone,
+    FI: FitnessIndividualTrait<T>,
+    SI: SelectorIndividualTrait<T, R>,
+    RI: ReplenisherIndividualTrait<T, N, R>,
 {
-    fn new(data: Vec<T>) -> Self {
+    data: Vec<GenerationIndividual<T, FI, SI, RI, N, R>>,
+}
+
+impl<T, FI, SI, RI, const N: usize, const R: usize> GroupTrait<T, N, R> for Group<T, FI, SI, RI, N, R>
+where
+    T: Clone + Debug, 
+    FI: FitnessIndividualTrait<T>,
+    SI: SelectorIndividualTrait<T, R>,
+    RI: ReplenisherIndividualTrait<T, N, R>,
+{
+    type Err = GenerationError;
+
+    fn new(data: [T; N]) -> Self {
         Group { 
             data: data
                 .into_iter()
                 .enumerate()
                 .map(|(i, v)| GenerationIndividual::new(&Rc::new(Individual::new(i, v))))
-                .collect::<Vec<GenerationIndividual<F, S, R, T>>>()
+                .collect::<Vec<GenerationIndividual<T, FI, SI, RI, N, R>>>()
         }
     }
 
-    fn one_loop(&mut self) -> Result<(), CoreError> {
-        let n: usize = self.data.len();
+    fn one_loop(&mut self) -> Result<(), Self::Err> {
         let scores: HashMap<usize, usize> = GenerationIndividual::fitness_group(&*self);
-        let select_result: Vec<bool> = {
-            let selector: HashSet<usize> = GenerationIndividual::make_selector(&*self, scores)?;
-            self.into_iter()
-                .map(|v| selector.contains(&v.get_id()))
-                .collect::<Vec<bool>>()
-        };
-        let mut data_for_edit: Vec<GenerationIndividual<F, S, R, T>> = Vec::new();
+        let selector: HashSet<usize> = GenerationIndividual::make_selector(&*self, scores)
+            .map_err(|v| GenerationError::SelectorError(format!("{:?}", v)))?;
+        let mut data_for_edit: Vec<GenerationIndividual<T, FI, SI, RI, N, R>> = Vec::new();
         swap(&mut data_for_edit, &mut self.data);
         self.data = data_for_edit
             .into_iter()
-            .zip(select_result)
-            .filter_map(|(v, r)| if r { Some(v) } else { None })
-            .collect::<Vec<GenerationIndividual<F, S, R, T>>>();
-        let new_individuals: Vec<T> = GenerationIndividual::replenisher(&*self, n);
-        self.data.extend(
+            .filter_map(|v| if selector.contains(&v.get_id()) { Some(v) } else { None })
+            .collect::<Vec<GenerationIndividual<T, FI, SI, RI, N, R>>>();
+        let new_individuals: Vec<T> = GenerationIndividual::replenisher(&*self);
+        self.data
+            .extend(
             new_individuals
                 .into_iter()
                 .map(|v| GenerationIndividual::new(&Rc::new(Individual::new(0, v)))),
-        );
-        self.data.iter().enumerate().for_each(|(i, v)| v.get_individual().set_id(i));
+            );
+        self.data
+            .iter()
+            .enumerate()
+            .for_each(|(i, v)| v.get_individual().set_id(i));
+        Ok(())
+    }
+
+    fn one_loop_out<W>(&mut self, mut out: W) -> Result<(), Self::Err> 
+            where 
+                W: std::io::Write {
+        writeln!(out, "=== GROUP ===")?;
+        self.data
+            .iter()
+            .map(|v| writeln!(out, "id: {}, value: {:?}", v.get_id(), v.get_value()))
+            .collect::<Result<(), io::Error>>()?;
+        let scores: HashMap<usize, usize> = GenerationIndividual::fitness_group(&*self);
+
+        let scores_vec: Vec<usize> = (0..N)
+            .map(|i| *scores.get(&i).unwrap())
+            .collect::<Vec<usize>>();
+        writeln!(out, "=== SCORE ===")?;
+        scores_vec
+            .iter()
+            .enumerate()
+            .map(|(i, v)| writeln!(out, "id: {}, value: {:?}", i, v))
+            .collect::<Result<(), io::Error>>()?;
+
+        let selector: HashSet<usize> = GenerationIndividual::make_selector(&*self, scores)
+            .map_err(|v| GenerationError::SelectorError(format!("{:?}", v)))?;
+        let mut data_for_edit: Vec<GenerationIndividual<T, FI, SI, RI, N, R>> = Vec::new();
+        swap(&mut data_for_edit, &mut self.data);
+        self.data = data_for_edit
+            .into_iter()
+            .filter_map(|v| if selector.contains(&v.get_id()) { Some(v) } else { None })
+            .collect::<Vec<GenerationIndividual<T, FI, SI, RI, N, R>>>();
+        let new_individuals: Vec<T> = GenerationIndividual::replenisher(&*self);
+        self.data
+            .extend(
+            new_individuals
+                .into_iter()
+                .map(|v| GenerationIndividual::new(&Rc::new(Individual::new(0, v)))),
+            );
+        self.data
+            .iter()
+            .enumerate()
+            .for_each(|(i, v)| v.get_individual().set_id(i));
+        writeln!(out)?;
         Ok(())
     }
 
@@ -68,33 +114,29 @@ where
     }
 }
 
-impl<'a, F, S, R, T> IntoIterator for &'a Group<F, S, R, T>
+impl<'a, T, FI, SI, RI, const N: usize, const R: usize> IntoIterator for &'a Group<T, FI, SI, RI, N, R>
 where
-    F: FitnessIndividualTrait<T>,
-    S: SelectorIndividualTrait<T>,
-    R: ReplenisherIndividualTrait<T>,
+    T: Clone, 
+    FI: FitnessIndividualTrait<T>,
+    SI: SelectorIndividualTrait<T, R>,
+    RI: ReplenisherIndividualTrait<T, N, R>,
 {
-    type IntoIter = Iter<'a, GenerationIndividual<F, S, R, T>>;
-    type Item = &'a GenerationIndividual<F, S, R, T>;
+    type IntoIter = Iter<'a, GenerationIndividual<T, FI, SI, RI, N, R>>;
+    type Item = &'a GenerationIndividual<T, FI, SI, RI, N, R>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.data.iter()
     }
 }
 
-impl<'a, F, S, R, T> IntoIterator for &'a mut Group<F, S, R, T>
-where
-    F: FitnessIndividualTrait<T>,
-    S: SelectorIndividualTrait<T>,
-    R: ReplenisherIndividualTrait<T>,
-{
-    type IntoIter = IterMut<'a, GenerationIndividual<F, S, R, T>>;
-    type Item = &'a mut GenerationIndividual<F, S, R, T>;
-
-    fn into_iter(self) -> Self::IntoIter {
-        self.data.iter_mut()
-    }
-}
+pub type PokemonTypeGroup<P, const N: usize, const R: usize> = Group<
+    P, 
+    FitnessPokemonType<P>, 
+    RankSelectorIndividual<P, R>, 
+    FromTopReplenisherIndividual<P, N, R>, 
+    N, 
+    R
+>;
 
 #[cfg(test)]
 mod tests {

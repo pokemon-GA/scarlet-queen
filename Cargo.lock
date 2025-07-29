@@ -635,9 +635,11 @@ name = "scarlet-queen-entrypoint"
 version = "0.0.1"
 dependencies = [
  "plotters",
+ "rand",
  "scarlet-queen-core",
  "scarlet-queen-generation",
  "scarlet-queen-initializer",
+ "thiserror",
 ]
 
 [[package]]
