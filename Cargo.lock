@@ -626,6 +626,7 @@ dependencies = [
 name = "scarlet-queen-core"
 version = "0.0.1"
 dependencies = [
+ "plotters",
  "rand",
  "thiserror",
 ]
