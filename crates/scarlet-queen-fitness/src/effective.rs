@@ -439,9 +439,12 @@ impl TypeEffectiveness {
     ];
 
     // 攻撃側のタイプと防御側のタイプからタイプ相性を返す
-    pub fn from_effective_array<P>(attack: &FitnessPokemonType<P>, defense: &FitnessPokemonType<P>) -> TypeEffectiveness 
-        where 
-            P: PokemonType
+    pub fn from_effective_array<P>(
+        attack: &FitnessPokemonType<P>,
+        defense: &FitnessPokemonType<P>,
+    ) -> TypeEffectiveness
+    where
+        P: PokemonType,
     {
         TypeEffectiveness::EFFECTIVE_ARRAY[<&FitnessPokemonType<P> as Into<usize>>::into(attack)]
             [<&FitnessPokemonType<P> as Into<usize>>::into(defense)]
@@ -459,14 +462,23 @@ impl TypeEffectiveness {
 
 #[cfg(test)]
 mod tests {
-    use std::rc::Rc;
-    use scarlet_queen_core::{individual::{EachCrateIndividual, Individual}, pokemon_type::PokemonTypeAll};
     use crate::{effective::TypeEffectiveness, pokemon_type::FitnessPokemonType};
+    use scarlet_queen_core::{
+        individual::{EachCrateIndividual, Individual},
+        pokemon_type::PokemonTypeAll,
+    };
+    use std::rc::Rc;
 
     // タイプ相性のチェック
     #[test]
     fn test_typeeffectiveness_fromeffectivearray() {
-        let testcases: Vec<((FitnessPokemonType<PokemonTypeAll>, FitnessPokemonType<PokemonTypeAll>), TypeEffectiveness)> = vec![
+        let testcases: Vec<(
+            (
+                FitnessPokemonType<PokemonTypeAll>,
+                FitnessPokemonType<PokemonTypeAll>,
+            ),
+            TypeEffectiveness,
+        )> = vec![
             (
                 (
                     FitnessPokemonType::new(&Rc::new(Individual::new(0, PokemonTypeAll::None))),

@@ -1,27 +1,30 @@
-use std::{ops::Deref, rc::Rc};
-use scarlet_queen_core::{individual::{EachCrateIndividual, FitnessIndividualTrait, Individual}, pokemon_type::{PokemonType, PokemonTypeAll}};
 use crate::effective::TypeEffectiveness;
+use scarlet_queen_core::{
+    individual::{EachCrateIndividual, FitnessIndividualTrait, Individual},
+    pokemon_type::{PokemonType, PokemonTypeAll},
+};
+use std::{ops::Deref, rc::Rc};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct FitnessPokemonType<P> 
-    where 
-        P: PokemonType, 
+pub struct FitnessPokemonType<P>
+where
+    P: PokemonType,
 {
     pokemon_type: Rc<Individual<P>>,
 }
 
-impl<P> FitnessPokemonType<P> 
-    where 
-        P: PokemonType
+impl<P> FitnessPokemonType<P>
+where
+    P: PokemonType,
 {
     fn attack_effectiveness(&self, defense: &Self) -> TypeEffectiveness {
         TypeEffectiveness::from_effective_array(self, defense)
     }
 }
 
-impl<P> EachCrateIndividual<P> for FitnessPokemonType<P> 
-    where 
-        P: PokemonType
+impl<P> EachCrateIndividual<P> for FitnessPokemonType<P>
+where
+    P: PokemonType,
 {
     fn new(pokemon_type: &Rc<Individual<P>>) -> FitnessPokemonType<P> {
         FitnessPokemonType {
@@ -38,30 +41,30 @@ impl<P> EachCrateIndividual<P> for FitnessPokemonType<P>
     }
 }
 
-impl<P> FitnessIndividualTrait<P> for FitnessPokemonType<P> 
-    where 
-        P: PokemonType
+impl<P> FitnessIndividualTrait<P> for FitnessPokemonType<P>
+where
+    P: PokemonType,
 {
     fn fitness(&self, other: &Self) -> usize {
         self.attack_effectiveness(other).point()
     }
 }
 
-impl<P> Into<usize> for FitnessPokemonType<P> 
-    where 
-        P: PokemonType
+impl<P> From<FitnessPokemonType<P>> for usize
+where
+    P: PokemonType,
 {
-    fn into(self) -> usize {
-        <&Self as Into<usize>>::into(&self)
+    fn from(val: FitnessPokemonType<P>) -> Self {
+        <&FitnessPokemonType<P> as Into<usize>>::into(&val)
     }
 }
 
-impl<P> Into<usize> for &FitnessPokemonType<P> 
-    where 
-        P: PokemonType
+impl<P> From<&FitnessPokemonType<P>> for usize
+where
+    P: PokemonType,
 {
-    fn into(self) -> usize {
-        match <P as Into<PokemonTypeAll>>::into(self.pokemon_type.deref().get_value().clone()) {
+    fn from(val: &FitnessPokemonType<P>) -> Self {
+        match <P as Into<PokemonTypeAll>>::into(val.pokemon_type.deref().get_value().clone()) {
             PokemonTypeAll::None => 0,
             PokemonTypeAll::Normal => 1,
             PokemonTypeAll::Fire => 2,
@@ -89,76 +92,121 @@ impl<P> Into<usize> for &FitnessPokemonType<P>
 mod tests {
     use std::rc::Rc;
 
-    use scarlet_queen_core::{individual::{EachCrateIndividual, Individual, FitnessIndividualTrait}, pokemon_type::PokemonTypeAll};
+    use scarlet_queen_core::{
+        individual::{EachCrateIndividual, FitnessIndividualTrait, Individual},
+        pokemon_type::PokemonTypeAll,
+    };
 
     use crate::{effective::TypeEffectiveness, pokemon_type::FitnessPokemonType};
 
     #[test]
     fn test_fitnesspokemontype_attackeffectiveness() {
-        let testcases: Vec<((FitnessPokemonType<PokemonTypeAll>, FitnessPokemonType<PokemonTypeAll>), TypeEffectiveness)> = vec![
+        let testcases: Vec<(
+            (
+                FitnessPokemonType<PokemonTypeAll>,
+                FitnessPokemonType<PokemonTypeAll>,
+            ),
+            TypeEffectiveness,
+        )> = vec![
             (
                 (
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::None)) }, 
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Dragon)) }, 
-                ), 
-                TypeEffectiveness::Normal
-            ), 
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::None)),
+                    },
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Dragon)),
+                    },
+                ),
+                TypeEffectiveness::Normal,
+            ),
             (
                 (
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Steel)) }, 
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::None)) }, 
-                ), 
-                TypeEffectiveness::Normal
-            ), 
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Steel)),
+                    },
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::None)),
+                    },
+                ),
+                TypeEffectiveness::Normal,
+            ),
             (
                 (
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fire)) }, 
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Grass)) }, 
-                ), 
-                TypeEffectiveness::SuperEffective
-            ), 
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fire)),
+                    },
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Grass)),
+                    },
+                ),
+                TypeEffectiveness::SuperEffective,
+            ),
             (
                 (
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fire)) }, 
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Water)) }, 
-                ), 
-                TypeEffectiveness::NotVeryEffective
-            ), 
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fire)),
+                    },
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Water)),
+                    },
+                ),
+                TypeEffectiveness::NotVeryEffective,
+            ),
             (
                 (
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Rock)) }, 
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Rock)) }, 
-                ), 
-                TypeEffectiveness::Normal
-            ), 
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Rock)),
+                    },
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Rock)),
+                    },
+                ),
+                TypeEffectiveness::Normal,
+            ),
             (
                 (
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fighting)) }, 
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Ghost)) }, 
-                ), 
-                TypeEffectiveness::NoEffect
-            ), 
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fighting)),
+                    },
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Ghost)),
+                    },
+                ),
+                TypeEffectiveness::NoEffect,
+            ),
         ];
         for ((arg_1, arg_2), result) in testcases.into_iter() {
-            assert_eq!(FitnessPokemonType::<PokemonTypeAll>::attack_effectiveness(&arg_1, &arg_2), result);
+            assert_eq!(
+                FitnessPokemonType::<PokemonTypeAll>::attack_effectiveness(&arg_1, &arg_2),
+                result
+            );
         }
     }
 
     #[test]
     fn test_fitnesspokemontype_eachcrateindividual_new() {
-        let testcases: Vec<(Rc<Individual<PokemonTypeAll>>, FitnessPokemonType<PokemonTypeAll>)> = vec![
+        let testcases: Vec<(
+            Rc<Individual<PokemonTypeAll>>,
+            FitnessPokemonType<PokemonTypeAll>,
+        )> = vec![
             (
-                Rc::new(Individual::new(0, PokemonTypeAll::None)), 
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::None)) }
-            ), 
+                Rc::new(Individual::new(0, PokemonTypeAll::None)),
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::None)),
+                },
+            ),
             (
-                Rc::new(Individual::new(1, PokemonTypeAll::Fire)), 
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Fire)) }
-            ), 
+                Rc::new(Individual::new(1, PokemonTypeAll::Fire)),
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Fire)),
+                },
+            ),
             (
-                Rc::new(Individual::new(0, PokemonTypeAll::Dragon)), 
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Dragon)) }
-            ), 
+                Rc::new(Individual::new(0, PokemonTypeAll::Dragon)),
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Dragon)),
+                },
+            ),
         ];
         for (arg, result) in testcases.into_iter() {
             assert_eq!(FitnessPokemonType::<PokemonTypeAll>::new(&arg), result);
@@ -167,52 +215,85 @@ mod tests {
 
     #[test]
     fn test_fitnesspokemontype_fitnessindividual_fitness() {
-        let testcases: Vec<((FitnessPokemonType<PokemonTypeAll>, FitnessPokemonType<PokemonTypeAll>), usize)> = vec![
+        let testcases: Vec<(
+            (
+                FitnessPokemonType<PokemonTypeAll>,
+                FitnessPokemonType<PokemonTypeAll>,
+            ),
+            usize,
+        )> = vec![
             (
                 (
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::None)) }, 
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Dragon)) }, 
-                ), 
-                2
-            ), 
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::None)),
+                    },
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Dragon)),
+                    },
+                ),
+                2,
+            ),
             (
                 (
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Steel)) }, 
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::None)) }, 
-                ), 
-                2
-            ), 
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Steel)),
+                    },
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::None)),
+                    },
+                ),
+                2,
+            ),
             (
                 (
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fire)) }, 
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Grass)) }, 
-                ), 
-                3
-            ), 
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fire)),
+                    },
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Grass)),
+                    },
+                ),
+                3,
+            ),
             (
                 (
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fire)) }, 
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Water)) }, 
-                ), 
-                1
-            ), 
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fire)),
+                    },
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Water)),
+                    },
+                ),
+                1,
+            ),
             (
                 (
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Rock)) }, 
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Rock)) }, 
-                ), 
-                2
-            ), 
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Rock)),
+                    },
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Rock)),
+                    },
+                ),
+                2,
+            ),
             (
                 (
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fighting)) }, 
-                    FitnessPokemonType { pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Ghost)) }, 
-                ), 
-                0
-            ), 
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fighting)),
+                    },
+                    FitnessPokemonType {
+                        pokemon_type: Rc::new(Individual::new(1, PokemonTypeAll::Ghost)),
+                    },
+                ),
+                0,
+            ),
         ];
         for ((arg_1, arg_2), result) in testcases.into_iter() {
-            assert_eq!(FitnessPokemonType::<PokemonTypeAll>::fitness(&arg_1, &arg_2), result);
+            assert_eq!(
+                FitnessPokemonType::<PokemonTypeAll>::fitness(&arg_1, &arg_2),
+                result
+            );
         }
     }
 
@@ -220,85 +301,129 @@ mod tests {
     fn test_fitnesspokemontype_intousize_into() {
         let testcases: Vec<(FitnessPokemonType<PokemonTypeAll>, usize)> = vec![
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::None)) }, 
-                0
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::None)),
+                },
+                0,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Normal)) }, 
-                1
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Normal)),
+                },
+                1,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fire)) }, 
-                2
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fire)),
+                },
+                2,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Water)) }, 
-                3
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Water)),
+                },
+                3,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Electric)) }, 
-                4
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Electric)),
+                },
+                4,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Grass)) }, 
-                5
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Grass)),
+                },
+                5,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Ice)) }, 
-                6
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Ice)),
+                },
+                6,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fighting)) }, 
-                7
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fighting)),
+                },
+                7,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Poison)) }, 
-                8
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Poison)),
+                },
+                8,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Ground)) }, 
-                9
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Ground)),
+                },
+                9,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Flying)) }, 
-                10
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Flying)),
+                },
+                10,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Psychic)) }, 
-                11
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Psychic)),
+                },
+                11,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Bug)) }, 
-                12
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Bug)),
+                },
+                12,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Rock)) }, 
-                13
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Rock)),
+                },
+                13,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Ghost)) }, 
-                14
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Ghost)),
+                },
+                14,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Dragon)) }, 
-                15
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Dragon)),
+                },
+                15,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Dark)) }, 
-                16
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Dark)),
+                },
+                16,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Steel)) }, 
-                17
-            ), 
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Steel)),
+                },
+                17,
+            ),
             (
-                FitnessPokemonType { pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fairy)) }, 
-                18
-            )
+                FitnessPokemonType {
+                    pokemon_type: Rc::new(Individual::new(0, PokemonTypeAll::Fairy)),
+                },
+                18,
+            ),
         ];
         for (arg, result) in testcases.into_iter() {
-            assert_eq!(<&FitnessPokemonType<PokemonTypeAll> as Into<usize>>::into(&arg), result);
-            assert_eq!(<FitnessPokemonType<PokemonTypeAll> as Into<usize>>::into(arg), result);
+            assert_eq!(
+                <&FitnessPokemonType<PokemonTypeAll> as Into<usize>>::into(&arg),
+                result
+            );
+            assert_eq!(
+                <FitnessPokemonType<PokemonTypeAll> as Into<usize>>::into(arg),
+                result
+            );
         }
     }
 }
