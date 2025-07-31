@@ -1,7 +1,12 @@
 use rand::{
-    distr::{Distribution, StandardUniform}, rng, rngs::ThreadRng
+    distr::{Distribution, StandardUniform},
+    rng,
+    rngs::ThreadRng,
 };
-use scarlet_queen_core::{group::InitializerTrait, pokemon_type::{PokemonType, PokemonTypeAll}};
+use scarlet_queen_core::{
+    group::InitializerTrait,
+    pokemon_type::{PokemonType, PokemonTypeAll},
+};
 
 #[derive(Debug, Clone, Default)]
 pub struct Initializer {
@@ -17,9 +22,9 @@ impl Initializer {
 
 pub struct InitializerSample<const N: usize> {}
 
-impl<P, const N: usize> InitializerTrait<P, N> for InitializerSample<N> 
-    where 
-        P: PokemonType
+impl<P, const N: usize> InitializerTrait<P, N> for InitializerSample<N>
+where
+    P: PokemonType,
 {
     fn initializer() -> [P; N] {
         let mut rng: ThreadRng = rng();
