@@ -446,8 +446,7 @@ impl TypeEffectiveness {
     where
         P: PokemonType,
     {
-        TypeEffectiveness::EFFECTIVE_ARRAY[<&FitnessPokemonType<P> as Into<usize>>::into(attack)]
-            [<&FitnessPokemonType<P> as Into<usize>>::into(defense)]
+        TypeEffectiveness::EFFECTIVE_ARRAY[usize::from(attack)][usize::from(defense)]
     }
 
     pub fn point(&self) -> usize {
