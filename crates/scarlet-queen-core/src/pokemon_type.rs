@@ -1,21 +1,20 @@
-use std::{fmt::Debug, hash::Hash, str::FromStr};
+use crate::error::CoreError;
 use plotters::style::{Color, RGBColor};
 use rand::distr::{Distribution, StandardUniform};
-use crate::error::CoreError;
+use std::{fmt::Debug, hash::Hash, str::FromStr};
 
-pub trait PokemonType: Into<PokemonTypeAll> + TryFrom<PokemonTypeAll> + Clone + Eq + Hash
-{
+pub trait PokemonType: Into<PokemonTypeAll> + TryFrom<PokemonTypeAll> + Clone + Eq + Hash {
     const ALL_LEN: usize;
     const ALL: [Option<Self>; 19];
 
     fn sample<R>(rng: &mut R) -> Self
-        where 
-            R: rand::Rng + Sized 
+    where
+        R: rand::Rng + Sized,
     {
         let rand_int: usize = rng.random_range(0..Self::ALL_LEN);
         match Self::ALL.get(rand_int).cloned().flatten() {
-            Some(v) => v, 
-            None => panic!("Error: PokemonType trait is implmented in bad way.")
+            Some(v) => v,
+            None => panic!("Error: PokemonType trait is implmented in bad way."),
         }
     }
 
@@ -70,25 +69,25 @@ pub enum PokemonTypeAll {
 impl PokemonTypeAll {
     fn color_map(&self) -> impl Color {
         match self {
-            PokemonTypeAll::None => RGBColor(255, 255, 255), 
-            PokemonTypeAll::Normal => RGBColor(153, 153, 153), 
-            PokemonTypeAll::Fire => RGBColor(254, 97, 44), 
-            PokemonTypeAll::Water => RGBColor(41, 146, 255), 
-            PokemonTypeAll::Electric => RGBColor(255, 219, 0), 
-            PokemonTypeAll::Grass => RGBColor(66, 191, 37), 
-            PokemonTypeAll::Ice => RGBColor(67, 216, 255), 
-            PokemonTypeAll::Fighting => RGBColor(255, 162, 2), 
-            PokemonTypeAll::Poison => RGBColor(153, 78, 207), 
-            PokemonTypeAll::Ground => RGBColor(171, 121, 58), 
+            PokemonTypeAll::None => RGBColor(255, 255, 255),
+            PokemonTypeAll::Normal => RGBColor(153, 153, 153),
+            PokemonTypeAll::Fire => RGBColor(254, 97, 44),
+            PokemonTypeAll::Water => RGBColor(41, 146, 255),
+            PokemonTypeAll::Electric => RGBColor(255, 219, 0),
+            PokemonTypeAll::Grass => RGBColor(66, 191, 37),
+            PokemonTypeAll::Ice => RGBColor(67, 216, 255),
+            PokemonTypeAll::Fighting => RGBColor(255, 162, 2),
+            PokemonTypeAll::Poison => RGBColor(153, 78, 207),
+            PokemonTypeAll::Ground => RGBColor(171, 121, 58),
             PokemonTypeAll::Flying => RGBColor(151, 199, 255),
-            PokemonTypeAll::Psychic => RGBColor(255, 99, 128), 
-            PokemonTypeAll::Bug => RGBColor(159, 164, 36), 
-            PokemonTypeAll::Rock => RGBColor(188, 184, 137), 
-            PokemonTypeAll::Ghost => RGBColor(110, 69, 113), 
-            PokemonTypeAll::Dragon => RGBColor(85, 98, 213), 
-            PokemonTypeAll::Dark => RGBColor(79, 70, 71), 
-            PokemonTypeAll::Steel => RGBColor(106, 174, 211), 
-            PokemonTypeAll::Fairy => RGBColor(255, 176, 255), 
+            PokemonTypeAll::Psychic => RGBColor(255, 99, 128),
+            PokemonTypeAll::Bug => RGBColor(159, 164, 36),
+            PokemonTypeAll::Rock => RGBColor(188, 184, 137),
+            PokemonTypeAll::Ghost => RGBColor(110, 69, 113),
+            PokemonTypeAll::Dragon => RGBColor(85, 98, 213),
+            PokemonTypeAll::Dark => RGBColor(79, 70, 71),
+            PokemonTypeAll::Steel => RGBColor(106, 174, 211),
+            PokemonTypeAll::Fairy => RGBColor(255, 176, 255),
         }
     }
 }
@@ -180,17 +179,17 @@ impl Distribution<PokemonTypeAll> for StandardUniform {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum PokemonTypeFWG {
-    Fire, 
-    Water, 
-    Grass
+    Fire,
+    Water,
+    Grass,
 }
 
-impl Into<PokemonTypeAll> for PokemonTypeFWG {
-    fn into(self) -> PokemonTypeAll {
-        match self {
-            PokemonTypeFWG::Fire => PokemonTypeAll::Fire, 
-            PokemonTypeFWG::Water => PokemonTypeAll::Water, 
-            PokemonTypeFWG::Grass => PokemonTypeAll::Grass, 
+impl From<PokemonTypeFWG> for PokemonTypeAll {
+    fn from(val: PokemonTypeFWG) -> Self {
+        match val {
+            PokemonTypeFWG::Fire => PokemonTypeAll::Fire,
+            PokemonTypeFWG::Water => PokemonTypeAll::Water,
+            PokemonTypeFWG::Grass => PokemonTypeAll::Grass,
         }
     }
 }
@@ -200,10 +199,10 @@ impl TryFrom<PokemonTypeAll> for PokemonTypeFWG {
 
     fn try_from(value: PokemonTypeAll) -> Result<Self, Self::Error> {
         match value {
-            PokemonTypeAll::Fire => Ok(PokemonTypeFWG::Fire), 
-            PokemonTypeAll::Water => Ok(PokemonTypeFWG::Water), 
-            PokemonTypeAll::Grass => Ok(PokemonTypeFWG::Grass), 
-            _ => Err(CoreError::PokemonTypeConvertError)
+            PokemonTypeAll::Fire => Ok(PokemonTypeFWG::Fire),
+            PokemonTypeAll::Water => Ok(PokemonTypeFWG::Water),
+            PokemonTypeAll::Grass => Ok(PokemonTypeFWG::Grass),
+            _ => Err(CoreError::PokemonTypeConvertError),
         }
     }
 }
@@ -211,25 +210,25 @@ impl TryFrom<PokemonTypeAll> for PokemonTypeFWG {
 impl PokemonType for PokemonTypeFWG {
     const ALL_LEN: usize = 3;
     const ALL: [Option<Self>; 19] = [
-        Some(PokemonTypeFWG::Fire), 
-        Some(PokemonTypeFWG::Water), 
-        Some(PokemonTypeFWG::Grass), 
-        None, 
-        None, 
-        None, 
-        None, 
-        None, 
-        None, 
-        None, 
-        None, 
-        None, 
-        None, 
-        None, 
-        None, 
-        None, 
-        None, 
-        None, 
-        None, 
+        Some(PokemonTypeFWG::Fire),
+        Some(PokemonTypeFWG::Water),
+        Some(PokemonTypeFWG::Grass),
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
     ];
 
     fn sample<R: rand::Rng + ?Sized>(rng: &mut R) -> PokemonTypeFWG {
