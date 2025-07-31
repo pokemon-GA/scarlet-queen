@@ -1,4 +1,6 @@
 {
+    "editor.renderWhitespace": "boundary",
+    "files.trimTrailingWhitespace": true,
     "cSpell.words": [
         "cachix",
         "thiserror"
