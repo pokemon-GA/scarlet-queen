@@ -55,7 +55,7 @@ where
     P: PokemonType,
 {
     fn from(val: FitnessPokemonType<P>) -> Self {
-        <&FitnessPokemonType<P> as Into<usize>>::into(&val)
+        usize::from(&val)
     }
 }
 
@@ -416,14 +416,8 @@ mod tests {
             ),
         ];
         for (arg, result) in testcases.into_iter() {
-            assert_eq!(
-                <&FitnessPokemonType<PokemonTypeAll> as Into<usize>>::into(&arg),
-                result
-            );
-            assert_eq!(
-                <FitnessPokemonType<PokemonTypeAll> as Into<usize>>::into(arg),
-                result
-            );
+            assert_eq!(usize::from(&arg), result);
+            assert_eq!(usize::from(arg), result);
         }
     }
 }
