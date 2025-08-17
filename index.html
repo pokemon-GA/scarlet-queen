@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Chapter 1 - scarlet-queen</title>
+        <title>Scarlet Queen - scarlet-queen</title>
 
 
         <!-- Custom HTML head -->
@@ -149,7 +149,7 @@
                         <a href="https://github.com/pokemon-GA/scarlet-queen/" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/pokemon-GA/scarlet-queen/edit/main/docs/src/src/chapter_1.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                        <a href="https://github.com/pokemon-GA/scarlet-queen/edit/dev/docs/src/../../README.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -183,7 +183,201 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="解析結果"><a class="header" href="#解析結果">解析結果</a></h1>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="scarlet-queen"><a class="header" href="#scarlet-queen">Scarlet Queen</a></h1>
+<p>Scarlet Queen is a Rust framework for co-evolution.</p>
+<h2 id="what-mean-scarlet-queen"><a class="header" href="#what-mean-scarlet-queen">What mean Scarlet Queen?</a></h2>
+<p>The name is inspired by Red Queen’s Hypothesis and Pokémon Scarlet and Violet.</p>
+<p>Red Queen’s Hypothesis is a hypothesis about co-evolution.</p>
+<h2 id="project-dependencies"><a class="header" href="#project-dependencies">Project Dependencies</a></h2>
+<pre class="mermaid">flowchart RL
+    initializer[scarlet-queen-initializer] --&gt; core[scarlet-queen-core]
+    fitness[scarlet-queen-fitness] --&gt; core[scarlet-queen-core]
+    selector[scarlet-queen-selector] --&gt; core[scarlet-queen-core]
+    replenisher[scarlet-queen-replenisher] --&gt; core[scarlet-queen-core]
+    generation[scarlet-queen-generation] --&gt; core[scarlet-queen-core]
+    entrypoint[&quot;scarlet-queen-entrypoint (binary crate)&quot;] --&gt; core[scarlet-queen-core]
+
+    generation[scarlet-queen-generation] --&gt; fitness[scarlet-queen-fitness]
+    generation[scarlet-queen-generation] --&gt; selector[scarlet-queen-selector]
+    generation[scarlet-queen-generation] --&gt; replenisher[scarlet-queen-replenisher]
+
+    entrypoint[&quot;scarlet-queen-entrypoint (binary crate)&quot;] --&gt; initializer[scarlet-queen-initializer]
+    entrypoint[&quot;scarlet-queen-entrypoint (binary crate)&quot;] --&gt; generation[scarlet-queen-generation]
+</pre>
+<h2 id="life-cycle"><a class="header" href="#life-cycle">Life Cycle</a></h2>
+<pre class="mermaid">flowchart LR
+    initializer[&quot;scarlet-queen-initialize (initializer)&quot;] --&gt; fitness[&quot;scarlet-queen-arithmetic of fitness (fitness)&quot;]
+    subgraph generation
+        fitness[&quot;scarlet-queen-arithmetic of fitness (fitness)&quot;] --&gt; selector[&quot;scarlet-queen-select (selector)&quot;]
+        selector[&quot;scarlet-queen-select (selector)&quot;] --&gt; replenisher[&quot;scarlet-queen-replenisher (replenisher)&quot;]
+        replenisher[&quot;scarlet-queen-replenisher (replenisher)&quot;] --&gt; fitness[&quot;scarlet-queen-arithmetic of fitness (fitness)&quot;]
+    end
+</pre>
+<h2 id="project-structure"><a class="header" href="#project-structure">Project Structure</a></h2>
+<h3 id="scarlet-queen-core-library-crate"><a class="header" href="#scarlet-queen-core-library-crate"><code>scarlet-queen-core</code> (library crate)</a></h3>
+<p>Contains the core type definition and logic.</p>
+<h3 id="scarlet-queen-initializer-library-crate"><a class="header" href="#scarlet-queen-initializer-library-crate"><code>scarlet-queen-initializer</code> (library crate)</a></h3>
+<p>Contains the logic for initializing the group (environment).</p>
+<ul>
+<li>modules
+<ul>
+<li><code>random</code>: enables the random initialization.</li>
+<li><code>weight</code>: enables the weighted initialization.</li>
+</ul>
+</li>
+</ul>
+<h3 id="scarlet-queen-fitness-library-crate"><a class="header" href="#scarlet-queen-fitness-library-crate"><code>scarlet-queen-fitness</code> (library crate)</a></h3>
+<p>Contains the fitness evaluation logic.</p>
+<h3 id="scarlet-queen-selector-library-crate"><a class="header" href="#scarlet-queen-selector-library-crate"><code>scarlet-queen-selector</code> (library crate)</a></h3>
+<p>Contains the logic for selecting individuals for the next generation.</p>
+<ul>
+<li>modules
+<ul>
+<li><code>random</code>: enables the random selection.</li>
+<li><code>roulette</code>: enables the roulette selection.</li>
+<li><code>tournament</code>: enables the tournament selection.</li>
+</ul>
+</li>
+</ul>
+<h3 id="scarlet-queen-replenisher-library-crate"><a class="header" href="#scarlet-queen-replenisher-library-crate"><code>scarlet-queen-replenisher</code> (library crate)</a></h3>
+<p>Contains the logic for replenishing new individuals.</p>
+<ul>
+<li>modules
+<ul>
+<li><code>random</code>: enables the random generation.</li>
+<li><code>novelty</code>: enables the novelty search algorithm.</li>
+</ul>
+</li>
+</ul>
+<h3 id="scarlet-queen-generation-library-crate"><a class="header" href="#scarlet-queen-generation-library-crate"><code>scarlet-queen-generation</code> (library crate)</a></h3>
+<p>Contains the logic for managing the generation process.</p>
+<h3 id="scarlet-queen-entrypoint-binary-crate"><a class="header" href="#scarlet-queen-entrypoint-binary-crate"><code>scarlet-queen-entrypoint</code> (binary crate)</a></h3>
+<p>The binary crate that runs the Scarlet Queen framework.</p>
+<h2 id="get-started"><a class="header" href="#get-started">Get Started</a></h2>
+<pre><code class="language-sh">cargo run --bin scarlet-queen-entrypoint
+</code></pre>
+<h2 id="tests"><a class="header" href="#tests">Tests</a></h2>
+<ul>
+<li>run all tests</li>
+</ul>
+<pre><code class="language-sh">cargo test
+</code></pre>
+<ul>
+<li>run tests for a specific package</li>
+</ul>
+<pre><code class="language-sh">cargo test -p &lt;test_name&gt;
+</code></pre>
+<h2 id="docs"><a class="header" href="#docs">Docs</a></h2>
+<blockquote>
+<p>[!WARNING]
+When editing docs for the first time, let it add <code>mdbook</code></p>
+</blockquote>
+<p>install command is under the command</p>
+<pre><code class="language-sh">cargo install mdbook
+</code></pre>
+<ul>
+<li>watch docs</li>
+</ul>
+<pre><code class="language-sh">mdbook watch -o ./docs
+</code></pre>
+<ul>
+<li>build docs</li>
+</ul>
+<pre><code class="language-sh">mdbook build ./docs
+</code></pre>
+<h3 id="docs-plugins"><a class="header" href="#docs-plugins">Docs plugins</a></h3>
+<ul>
+<li>mdbook-mermaid</li>
+</ul>
+<p>You can use mermaid diagrams in this docs.</p>
+<p>example</p>
+<pre><code class="language-md">\`\`\`mermaid
+graph TD;
+    A--&gt;B;
+    A--&gt;C;
+    B--&gt;D;
+    C--&gt;D;
+\`\`\`
+</code></pre>
+<ul>
+<li>mdbook-katex</li>
+</ul>
+<p>You can use KaTeX for rendering math in this docs.</p>
+<ul>
+<li>inline expression</li>
+</ul>
+<pre><code class="language-md">\$ \pi(\theta) \$
+</code></pre>
+<ul>
+<li>display math expression</li>
+</ul>
+<pre><code class="language-md">\$\$
+
+\$\$
+</code></pre>
+<h2 id="setup-project"><a class="header" href="#setup-project">Setup Project</a></h2>
+<p>To format toml file and rust code, when you  commit, you need to install <code>husky</code> and <code>lint-staged</code>.</p>
+<p>Under the commands is setup commands for <code>husky</code>, <code>lint-staged</code> and <code>prettier</code>.</p>
+<pre><code class="language-sh">npm i &amp;&amp; npm exec husky-init -y &amp;&amp;  npm exec husky set .husky/pre-commit "npm exec lint-staged --allow-empty"
+</code></pre>
+<h2 id="branch-strategy"><a class="header" href="#branch-strategy">Branch Strategy</a></h2>
+<h3 id="main"><a class="header" href="#main">main</a></h3>
+<p>main branch is the release branch.</p>
+<h3 id="dev"><a class="header" href="#dev">dev</a></h3>
+<p>dev branch is the development root branch.</p>
+<h3 id="feature"><a class="header" href="#feature">feature</a></h3>
+<ul>
+<li>
+<p>feat/#[issue-number]-[issue-summary]</p>
+<p>example) feat/#12-add-card-button-component</p>
+</li>
+</ul>
+<h3 id="chore"><a class="header" href="#chore">chore</a></h3>
+<ul>
+<li>
+<p>chore/#[issue-number]-[issue-summary]</p>
+<p>example) chore/#12-add-prettier-config</p>
+</li>
+</ul>
+<h3 id="fix"><a class="header" href="#fix">fix</a></h3>
+<ul>
+<li>
+<p>fix/#[issue-number]-[issue-summary]</p>
+<p>example) fix/#12-change-title</p>
+</li>
+</ul>
+<h3 id="update"><a class="header" href="#update">update</a></h3>
+<ul>
+<li>
+<p>update/#[issue-number]-[issue-summary]</p>
+<p>example) update/#12-update-dependencies</p>
+</li>
+</ul>
+<pre class="mermaid">flowchart LR
+    dev[&quot;dev&quot;] --&gt;|with strict checks| main[&quot;main&quot;]
+    feature[&quot;feat/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
+    chore[&quot;chore/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
+    fix[&quot;fix/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
+    update[&quot;update/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
+    main[&quot;main&quot;] --&gt;|&quot;with strict checks (cron)&quot;| main[&quot;main&quot;]
+</pre>
+<h4 id="with-loose-checks-dev-branch"><a class="header" href="#with-loose-checks-dev-branch">with loose checks (<code>dev branch</code>)</a></h4>
+<ul>
+<li>dev-test (<code>push</code> and <code>pull requests</code>)</li>
+<li>docs-test (<code>push</code> and <code>pull requests</code>)</li>
+<li>docs (<code>push</code>)</li>
+</ul>
+<h4 id="with-strict-checks-main-branch"><a class="header" href="#with-strict-checks-main-branch">with strict checks (<code>main branch</code>)</a></h4>
+<ul>
+<li>prod-test (<code>pull requests</code>)</li>
+<li>docs-test (<code>pull requests</code>)</li>
+</ul>
+<h4 id="with-strict-checks-main-branch-1"><a class="header" href="#with-strict-checks-main-branch-1">with strict checks (<code>main branch</code>)</a></h4>
+<ul>
+<li>prod-test (<code>cron</code>)</li>
+<li>docs-test (<code>cron</code>)</li>
+</ul>
 
                     </main>
 
@@ -219,6 +413,8 @@
         <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
 
 
 
