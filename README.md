@@ -62,7 +62,7 @@ Contains the fitness evaluation logic.
 Contains the logic for selecting individuals for the next generation.
 
 - modules
-  - `ramdom`: enables the random selection.
+  - `random`: enables the random selection.
   - `roulette`: enables the roulette selection.
   - `tournament`: enables the tournament selection.
 
