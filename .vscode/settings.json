@@ -2,8 +2,15 @@
     "editor.renderWhitespace": "boundary",
     "files.trimTrailingWhitespace": true,
     "cSpell.words": [
+        "attackeffectiveness",
         "cachix",
-        "thiserror"
+        "eachcrateindividual",
+        "fitnessindividual",
+        "fitnesspokemontype",
+        "fromeffectivearray",
+        "intousize",
+        "thiserror",
+        "typeeffectiveness"
     ],
     "nixEnvSelector.nixFile": "${workspaceFolder}/flake.nix",
     "files.watcherExclude": {
