@@ -132,7 +132,7 @@ You can use mermaid diagrams in this docs.
 
 example
 
-```md
+~~~md
 ```mermaid
 graph TD;
     A-->B;
@@ -140,7 +140,7 @@ graph TD;
     B-->D;
     C-->D;
 ```
-```
+~~~
 
 - mdbook-katex
 
