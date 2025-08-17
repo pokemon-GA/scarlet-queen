@@ -7,13 +7,16 @@ title = "scarlet-queen"
 [rust]
 edition = "2021"
 
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
 [output.html]
 default-theme = "system"
 preferred-dark-theme = "navy"
 smart-punctuation = true
 mathjax-support = true
 additional-css = []
-additional-js = []
+additional-js = ["mermaid.min.js", "mermaid-init.js"]
 no-section-label = false
 git-repository-url = "https://github.com/pokemon-GA/scarlet-queen/"
 git-repository-icon = "fa-github"

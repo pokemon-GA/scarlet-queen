@@ -35,6 +35,7 @@
               (rust-bin.stable.latest.default.override { extensions = [ "rust-src" ]; })
               # mdbook (Rust)
               mdbook
+              mdbook-mermaid
               # JavaScript
               nodejs
             ];
