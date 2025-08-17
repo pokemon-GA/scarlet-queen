@@ -62,7 +62,7 @@ Contains the fitness evaluation logic.
 Contains the logic for selecting individuals for the next generation.
 
 - modules
-  - `ramdom`: enables the random selection.
+  - `random`: enables the random selection.
   - `roulette`: enables the roulette selection.
   - `tournament`: enables the tournament selection.
 
@@ -103,6 +103,15 @@ cargo test -p <test_name>
 
 ## Docs
 
+> [!WARNING]
+> When editing docs for the first time, let it add `mdbook`
+
+install command is under the command
+
+```sh
+cargo install mdbook
+```
+
 - watch docs
 
 ```sh
@@ -113,6 +122,42 @@ mdbook watch -o ./docs
 
 ```sh
 mdbook build ./docs
+```
+
+### Docs plugins
+
+- mdbook-mermaid
+
+You can use mermaid diagrams in this docs.
+
+example
+
+```md
+\`\`\`mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+\`\`\`
+```
+
+- mdbook-katex
+
+You can use KaTeX for rendering math in this docs.
+
+- inline expression
+
+```md
+\$ \pi(\theta) \$
+```
+
+- display math expression
+
+```md
+\$\$
+
+\$\$
 ```
 
 ## Setup Project
