@@ -10,6 +10,9 @@ edition = "2021"
 [preprocessor.mermaid]
 command = "mdbook-mermaid"
 
+[preprocessor.katex]
+after = ["links"]
+
 [output.html]
 default-theme = "system"
 preferred-dark-theme = "navy"

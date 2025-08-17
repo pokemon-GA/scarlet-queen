@@ -36,6 +36,7 @@
               # mdbook (Rust)
               mdbook
               mdbook-mermaid
+              mdbook-katex
               # JavaScript
               nodejs
             ];

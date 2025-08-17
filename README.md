@@ -103,6 +103,15 @@ cargo test -p <test_name>
 
 ## Docs
 
+> [!WARNING]
+> When editing docs for the first time, let it add `mdbook`
+
+install command is under the command
+
+```sh
+cargo install mdbook
+```
+
 - watch docs
 
 ```sh
