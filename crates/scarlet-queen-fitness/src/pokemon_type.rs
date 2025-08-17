@@ -101,13 +101,7 @@ mod tests {
 
     #[test]
     fn test_fitnesspokemontype_attackeffectiveness() {
-        let testcases: Vec<(
-            (
-                FitnessPokemonType<PokemonTypeAll>,
-                FitnessPokemonType<PokemonTypeAll>,
-            ),
-            TypeEffectiveness,
-        )> = vec![
+        let testcases = vec![
             (
                 (
                     FitnessPokemonType {
@@ -215,13 +209,7 @@ mod tests {
 
     #[test]
     fn test_fitnesspokemontype_fitnessindividual_fitness() {
-        let testcases: Vec<(
-            (
-                FitnessPokemonType<PokemonTypeAll>,
-                FitnessPokemonType<PokemonTypeAll>,
-            ),
-            usize,
-        )> = vec![
+        let testcases = vec![
             (
                 (
                     FitnessPokemonType {
