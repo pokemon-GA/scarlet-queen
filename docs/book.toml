@@ -1,0 +1,23 @@
+[book]
+authors = ["Myxogastria0808", "Redaction-F"]
+language = "en"
+src = "src"
+title = "scarlet-queen"
+
+[rust]
+edition = "2021"
+
+[output.html]
+default-theme = "system"
+preferred-dark-theme = "navy"
+smart-punctuation = true
+mathjax-support = true
+additional-css = []
+additional-js = []
+no-section-label = false
+git-repository-url = "https://github.com/pokemon-GA/scarlet-queen/"
+git-repository-icon = "fa-github"
+edit-url-template = "https://github.com/pokemon-GA/scarlet-queen/edit/master/guide/{path}"
+site-url = "/"
+cname = ""
+input-404 = "404.md"
