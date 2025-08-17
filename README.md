@@ -101,6 +101,20 @@ cargo test
 cargo test -p <test_name>
 ```
 
+## Docs
+
+- watch docs
+
+```sh
+mdbook watch -o ./docs
+```
+
+- build docs
+
+```sh
+mdbook build ./docs
+```
+
 ## Setup Project
 
 To format toml file and rust code, when you  commit, you need to install `husky` and `lint-staged`.
