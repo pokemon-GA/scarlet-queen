@@ -1,0 +1,25 @@
+name: docs-test
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  pull_request:
+    branches: ["dev", "main"]
+  push:
+    branches: ["dev", "feat/*", "fix/*", "chore/*", "update/*"]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixpkgs-unstable
+      - name: Code Check
+        run: nix develop --command bash -c " mdbook test ./docs"
+      - name: Build Check
+        run: nix develop --command bash -c "mdbook build ./docs"
