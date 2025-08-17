@@ -292,29 +292,29 @@ When editing docs for the first time, let it add <code>mdbook</code></p>
 </ul>
 <p>You can use mermaid diagrams in this docs.</p>
 <p>example</p>
-<pre><code class="language-md">\`\`\`mermaid
+<pre><code class="language-md">```mermaid
 graph TD;
     A--&gt;B;
     A--&gt;C;
     B--&gt;D;
     C--&gt;D;
-\`\`\`
 </code></pre>
-<ul>
-<li>mdbook-katex</li>
-</ul>
-<p>You can use KaTeX for rendering math in this docs.</p>
-<ul>
-<li>inline expression</li>
-</ul>
-<pre><code class="language-md">\$ \pi(\theta) \$
+<pre><code>
+- mdbook-katex
+
+You can use KaTeX for rendering math in this docs.
+
+- inline expression
+
+```md
+$ &lt;formula (katex expression)&gt; $
 </code></pre>
 <ul>
 <li>display math expression</li>
 </ul>
-<pre><code class="language-md">\$\$
-
-\$\$
+<pre><code class="language-md">$$
+&lt;formula (katex expression)&gt;
+$$
 </code></pre>
 <h2 id="setup-project"><a class="header" href="#setup-project">Setup Project</a></h2>
 <p>To format toml file and rust code, when you  commit, you need to install <code>husky</code> and <code>lint-staged</code>.</p>
