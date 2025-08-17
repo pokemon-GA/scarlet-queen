@@ -133,13 +133,13 @@ You can use mermaid diagrams in this docs.
 example
 
 ```md
-\`\`\`mermaid
+```mermaid
 graph TD;
     A-->B;
     A-->C;
     B-->D;
     C-->D;
-\`\`\`
+```
 ```
 
 - mdbook-katex
@@ -149,15 +149,15 @@ You can use KaTeX for rendering math in this docs.
 - inline expression
 
 ```md
-\$ \pi(\theta) \$
+$ <formula (katex expression)> $
 ```
 
 - display math expression
 
 ```md
-\$\$
-
-\$\$
+$$
+<formula (katex expression)>
+$$
 ```
 
 ## Setup Project
