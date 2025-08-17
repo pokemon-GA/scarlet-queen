@@ -124,6 +124,42 @@ mdbook watch -o ./docs
 mdbook build ./docs
 ```
 
+### Docs plugins
+
+- mdbook-mermaid
+
+You can use mermaid diagrams in this docs.
+
+example
+
+```md
+\`\`\`mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+\`\`\`
+```
+
+- mdbook-katex
+
+You can use KaTeX for rendering math in this docs.
+
+- inline expression
+
+```md
+\$ \pi(\theta) \$
+```
+
+- display math expression
+
+```md
+\$\$
+
+\$\$
+```
+
 ## Setup Project
 
 To format toml file and rust code, when you  commit, you need to install `husky` and `lint-staged`.

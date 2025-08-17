@@ -1,0 +1,423 @@
+<!DOCTYPE HTML>
+<html lang="en" class="system sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Scarlet Queen - scarlet-queen</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "system";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('system')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">scarlet-queen</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/pokemon-GA/scarlet-queen/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/pokemon-GA/scarlet-queen/edit/dev/docs/src/../../README.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="scarlet-queen"><a class="header" href="#scarlet-queen">Scarlet Queen</a></h1>
+<p>Scarlet Queen is a Rust framework for co-evolution.</p>
+<h2 id="what-mean-scarlet-queen"><a class="header" href="#what-mean-scarlet-queen">What mean Scarlet Queen?</a></h2>
+<p>The name is inspired by Red Queen’s Hypothesis and Pokémon Scarlet and Violet.</p>
+<p>Red Queen’s Hypothesis is a hypothesis about co-evolution.</p>
+<h2 id="project-dependencies"><a class="header" href="#project-dependencies">Project Dependencies</a></h2>
+<pre class="mermaid">flowchart RL
+    initializer[scarlet-queen-initializer] --&gt; core[scarlet-queen-core]
+    fitness[scarlet-queen-fitness] --&gt; core[scarlet-queen-core]
+    selector[scarlet-queen-selector] --&gt; core[scarlet-queen-core]
+    replenisher[scarlet-queen-replenisher] --&gt; core[scarlet-queen-core]
+    generation[scarlet-queen-generation] --&gt; core[scarlet-queen-core]
+    entrypoint[&quot;scarlet-queen-entrypoint (binary crate)&quot;] --&gt; core[scarlet-queen-core]
+
+    generation[scarlet-queen-generation] --&gt; fitness[scarlet-queen-fitness]
+    generation[scarlet-queen-generation] --&gt; selector[scarlet-queen-selector]
+    generation[scarlet-queen-generation] --&gt; replenisher[scarlet-queen-replenisher]
+
+    entrypoint[&quot;scarlet-queen-entrypoint (binary crate)&quot;] --&gt; initializer[scarlet-queen-initializer]
+    entrypoint[&quot;scarlet-queen-entrypoint (binary crate)&quot;] --&gt; generation[scarlet-queen-generation]
+</pre>
+<h2 id="life-cycle"><a class="header" href="#life-cycle">Life Cycle</a></h2>
+<pre class="mermaid">flowchart LR
+    initializer[&quot;scarlet-queen-initialize (initializer)&quot;] --&gt; fitness[&quot;scarlet-queen-arithmetic of fitness (fitness)&quot;]
+    subgraph generation
+        fitness[&quot;scarlet-queen-arithmetic of fitness (fitness)&quot;] --&gt; selector[&quot;scarlet-queen-select (selector)&quot;]
+        selector[&quot;scarlet-queen-select (selector)&quot;] --&gt; replenisher[&quot;scarlet-queen-replenisher (replenisher)&quot;]
+        replenisher[&quot;scarlet-queen-replenisher (replenisher)&quot;] --&gt; fitness[&quot;scarlet-queen-arithmetic of fitness (fitness)&quot;]
+    end
+</pre>
+<h2 id="project-structure"><a class="header" href="#project-structure">Project Structure</a></h2>
+<h3 id="scarlet-queen-core-library-crate"><a class="header" href="#scarlet-queen-core-library-crate"><code>scarlet-queen-core</code> (library crate)</a></h3>
+<p>Contains the core type definition and logic.</p>
+<h3 id="scarlet-queen-initializer-library-crate"><a class="header" href="#scarlet-queen-initializer-library-crate"><code>scarlet-queen-initializer</code> (library crate)</a></h3>
+<p>Contains the logic for initializing the group (environment).</p>
+<ul>
+<li>modules
+<ul>
+<li><code>random</code>: enables the random initialization.</li>
+<li><code>weight</code>: enables the weighted initialization.</li>
+</ul>
+</li>
+</ul>
+<h3 id="scarlet-queen-fitness-library-crate"><a class="header" href="#scarlet-queen-fitness-library-crate"><code>scarlet-queen-fitness</code> (library crate)</a></h3>
+<p>Contains the fitness evaluation logic.</p>
+<h3 id="scarlet-queen-selector-library-crate"><a class="header" href="#scarlet-queen-selector-library-crate"><code>scarlet-queen-selector</code> (library crate)</a></h3>
+<p>Contains the logic for selecting individuals for the next generation.</p>
+<ul>
+<li>modules
+<ul>
+<li><code>random</code>: enables the random selection.</li>
+<li><code>roulette</code>: enables the roulette selection.</li>
+<li><code>tournament</code>: enables the tournament selection.</li>
+</ul>
+</li>
+</ul>
+<h3 id="scarlet-queen-replenisher-library-crate"><a class="header" href="#scarlet-queen-replenisher-library-crate"><code>scarlet-queen-replenisher</code> (library crate)</a></h3>
+<p>Contains the logic for replenishing new individuals.</p>
+<ul>
+<li>modules
+<ul>
+<li><code>random</code>: enables the random generation.</li>
+<li><code>novelty</code>: enables the novelty search algorithm.</li>
+</ul>
+</li>
+</ul>
+<h3 id="scarlet-queen-generation-library-crate"><a class="header" href="#scarlet-queen-generation-library-crate"><code>scarlet-queen-generation</code> (library crate)</a></h3>
+<p>Contains the logic for managing the generation process.</p>
+<h3 id="scarlet-queen-entrypoint-binary-crate"><a class="header" href="#scarlet-queen-entrypoint-binary-crate"><code>scarlet-queen-entrypoint</code> (binary crate)</a></h3>
+<p>The binary crate that runs the Scarlet Queen framework.</p>
+<h2 id="get-started"><a class="header" href="#get-started">Get Started</a></h2>
+<pre><code class="language-sh">cargo run --bin scarlet-queen-entrypoint
+</code></pre>
+<h2 id="tests"><a class="header" href="#tests">Tests</a></h2>
+<ul>
+<li>run all tests</li>
+</ul>
+<pre><code class="language-sh">cargo test
+</code></pre>
+<ul>
+<li>run tests for a specific package</li>
+</ul>
+<pre><code class="language-sh">cargo test -p &lt;test_name&gt;
+</code></pre>
+<h2 id="docs"><a class="header" href="#docs">Docs</a></h2>
+<blockquote>
+<p>[!WARNING]
+When editing docs for the first time, let it add <code>mdbook</code></p>
+</blockquote>
+<p>install command is under the command</p>
+<pre><code class="language-sh">cargo install mdbook
+</code></pre>
+<ul>
+<li>watch docs</li>
+</ul>
+<pre><code class="language-sh">mdbook watch -o ./docs
+</code></pre>
+<ul>
+<li>build docs</li>
+</ul>
+<pre><code class="language-sh">mdbook build ./docs
+</code></pre>
+<h3 id="docs-plugins"><a class="header" href="#docs-plugins">Docs plugins</a></h3>
+<ul>
+<li>mdbook-mermaid</li>
+</ul>
+<p>You can use mermaid diagrams in this docs.</p>
+<p>example</p>
+<pre><code class="language-md">\`\`\`mermaid
+graph TD;
+    A--&gt;B;
+    A--&gt;C;
+    B--&gt;D;
+    C--&gt;D;
+\`\`\`
+</code></pre>
+<ul>
+<li>mdbook-katex</li>
+</ul>
+<p>You can use KaTeX for rendering math in this docs.</p>
+<ul>
+<li>inline expression</li>
+</ul>
+<pre><code class="language-md">\$ \pi(\theta) \$
+</code></pre>
+<ul>
+<li>display math expression</li>
+</ul>
+<pre><code class="language-md">\$\$
+
+\$\$
+</code></pre>
+<h2 id="setup-project"><a class="header" href="#setup-project">Setup Project</a></h2>
+<p>To format toml file and rust code, when you  commit, you need to install <code>husky</code> and <code>lint-staged</code>.</p>
+<p>Under the commands is setup commands for <code>husky</code>, <code>lint-staged</code> and <code>prettier</code>.</p>
+<pre><code class="language-sh">npm i &amp;&amp; npm exec husky-init -y &amp;&amp;  npm exec husky set .husky/pre-commit "npm exec lint-staged --allow-empty"
+</code></pre>
+<h2 id="branch-strategy"><a class="header" href="#branch-strategy">Branch Strategy</a></h2>
+<h3 id="main"><a class="header" href="#main">main</a></h3>
+<p>main branch is the release branch.</p>
+<h3 id="dev"><a class="header" href="#dev">dev</a></h3>
+<p>dev branch is the development root branch.</p>
+<h3 id="feature"><a class="header" href="#feature">feature</a></h3>
+<ul>
+<li>
+<p>feat/#[issue-number]-[issue-summary]</p>
+<p>example) feat/#12-add-card-button-component</p>
+</li>
+</ul>
+<h3 id="chore"><a class="header" href="#chore">chore</a></h3>
+<ul>
+<li>
+<p>chore/#[issue-number]-[issue-summary]</p>
+<p>example) chore/#12-add-prettier-config</p>
+</li>
+</ul>
+<h3 id="fix"><a class="header" href="#fix">fix</a></h3>
+<ul>
+<li>
+<p>fix/#[issue-number]-[issue-summary]</p>
+<p>example) fix/#12-change-title</p>
+</li>
+</ul>
+<h3 id="update"><a class="header" href="#update">update</a></h3>
+<ul>
+<li>
+<p>update/#[issue-number]-[issue-summary]</p>
+<p>example) update/#12-update-dependencies</p>
+</li>
+</ul>
+<pre class="mermaid">flowchart LR
+    dev[&quot;dev&quot;] --&gt;|with strict checks| main[&quot;main&quot;]
+    feature[&quot;feat/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
+    chore[&quot;chore/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
+    fix[&quot;fix/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
+    update[&quot;update/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
+    main[&quot;main&quot;] --&gt;|&quot;with strict checks (cron)&quot;| main[&quot;main&quot;]
+</pre>
+<h4 id="with-loose-checks-dev-branch"><a class="header" href="#with-loose-checks-dev-branch">with loose checks (<code>dev branch</code>)</a></h4>
+<ul>
+<li>dev-test (<code>push</code> and <code>pull requests</code>)</li>
+<li>docs-test (<code>push</code> and <code>pull requests</code>)</li>
+<li>docs (<code>push</code>)</li>
+</ul>
+<h4 id="with-strict-checks-main-branch"><a class="header" href="#with-strict-checks-main-branch">with strict checks (<code>main branch</code>)</a></h4>
+<ul>
+<li>prod-test (<code>pull requests</code>)</li>
+<li>docs-test (<code>pull requests</code>)</li>
+</ul>
+<h4 id="with-strict-checks-main-branch-1"><a class="header" href="#with-strict-checks-main-branch-1">with strict checks (<code>main branch</code>)</a></h4>
+<ul>
+<li>prod-test (<code>cron</code>)</li>
+<li>docs-test (<code>cron</code>)</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+
+    </div>
+    </body>
+</html>
