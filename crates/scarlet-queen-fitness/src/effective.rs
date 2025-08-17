@@ -471,13 +471,7 @@ mod tests {
     // タイプ相性のチェック
     #[test]
     fn test_typeeffectiveness_fromeffectivearray() {
-        let testcases: Vec<(
-            (
-                FitnessPokemonType<PokemonTypeAll>,
-                FitnessPokemonType<PokemonTypeAll>,
-            ),
-            TypeEffectiveness,
-        )> = vec![
+        let testcases = vec![
             (
                 (
                     FitnessPokemonType::new(&Rc::new(Individual::new(0, PokemonTypeAll::None))),

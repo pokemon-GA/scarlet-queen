@@ -167,27 +167,21 @@ flowchart LR
     chore["chore/*"] -->|with loose checks| dev["dev"]
     fix["fix/*"] -->|with loose checks| dev["dev"]
     update["update/*"] -->|with loose checks| dev["dev"]
-    dev["dev"] -->|"update docs (push dev branch)"| dev["dev"]
-    main["main"] -->|"with strict checks (cron main branch)"| main["main"]
+    main["main"] -->|"with strict checks (cron)"| main["main"]
 ```
 
-#### with loose checks
+#### with loose checks (`dev branch`)
 
-- dev-test
-- docs-test
+- dev-test (`push` and `pull requests`)
+- docs-test (`push` and `pull requests`)
+- docs (`push`)
 
-#### with strict checks
+#### with strict checks (`main branch`)
 
-- prod-test
-- docs-test
+- prod-test (`pull requests`)
+- docs-test (`pull requests`)
 
-#### with strict checks (cron main branch)
+#### with strict checks (`main branch`)
 
-- prod-test
-- docs-test
-
-#### update docs (push dev branch)
-
-- docs
-- docs-test
-- dev-test
+- prod-test (`cron`)
+- docs-test (`cron`)
