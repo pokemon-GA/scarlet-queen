@@ -42,14 +42,14 @@ where
             data: data
                 .into_iter()
                 .enumerate()
-                .map(|(i, v)| GenerationIndividual::new(&Rc::new(Individual::new(i, v))))
+                .map(|(i, v)| GenerationIndividual::new(&Rc::new(Individual::new_with_id(i, v))))
                 .collect::<Vec<GenerationIndividual<T, FI, SI, RI, N, R>>>(),
         }
     }
 
-    fn one_loop(&mut self) -> Result<(), Self::Err> {
+    fn one_cycle(&mut self) -> Result<(), Self::Err> {
         let scores: HashMap<usize, usize> = GenerationIndividual::fitness_group(&*self);
-        let selector: HashSet<usize> = GenerationIndividual::make_selector(&*self, scores)
+        let selector: HashSet<usize> = GenerationIndividual::selected_ids(&*self, scores)
             .map_err(|v| GenerationError::SelectorError(format!("{v:?}")))?;
         let mut data_for_edit: Vec<GenerationIndividual<T, FI, SI, RI, N, R>> = Vec::new();
         swap(&mut data_for_edit, &mut self.data);
@@ -63,20 +63,17 @@ where
                 }
             })
             .collect::<Vec<GenerationIndividual<T, FI, SI, RI, N, R>>>();
-        let new_individuals: Vec<T> = GenerationIndividual::replenisher(&*self);
+        let new_individuals: Vec<T> = GenerationIndividual::replenish(&*self);
         self.data.extend(
             new_individuals
                 .into_iter()
-                .map(|v| GenerationIndividual::new(&Rc::new(Individual::new(0, v)))),
+                .map(|v| GenerationIndividual::new(&Rc::new(Individual::new_with_id(0, v)))),
         );
-        self.data
-            .iter()
-            .enumerate()
-            .for_each(|(i, v)| v.get_individual().set_id(i));
+        self.reset_id();
         Ok(())
     }
 
-    fn one_loop_out<W>(&mut self, mut out: W) -> Result<(), Self::Err>
+    fn one_cycle_out<W>(&mut self, mut out: W) -> Result<(), Self::Err>
     where
         W: std::io::Write,
     {
@@ -95,7 +92,7 @@ where
             .enumerate()
             .try_for_each(|(i, v)| writeln!(out, "id: {i}, value: {v:?}"))?;
 
-        let selector: HashSet<usize> = GenerationIndividual::make_selector(&*self, scores)
+        let selector: HashSet<usize> = GenerationIndividual::selected_ids(&*self, scores)
             .map_err(|v| GenerationError::SelectorError(format!("{v:?}")))?;
         let mut data_for_edit: Vec<GenerationIndividual<T, FI, SI, RI, N, R>> = Vec::new();
         swap(&mut data_for_edit, &mut self.data);
@@ -109,25 +106,22 @@ where
                 }
             })
             .collect::<Vec<GenerationIndividual<T, FI, SI, RI, N, R>>>();
-        let new_individuals: Vec<T> = GenerationIndividual::replenisher(&*self);
+        let new_individuals: Vec<T> = GenerationIndividual::replenish(&*self);
         self.data.extend(
             new_individuals
                 .into_iter()
-                .map(|v| GenerationIndividual::new(&Rc::new(Individual::new(0, v)))),
+                .map(|v| GenerationIndividual::new(&Rc::new(Individual::new_with_id(0, v)))),
         );
-        self.data
-            .iter()
-            .enumerate()
-            .for_each(|(i, v)| v.get_individual().set_id(i));
+        self.reset_id();
         writeln!(out)?;
         Ok(())
     }
 
-    fn iter<'a>(&'a self) -> impl Iterator<Item = &'a T>
+    fn iter<'a>(&'a self) -> impl Iterator<Item = &'a Individual<T>>
     where
         T: 'a,
     {
-        self.data.iter().map(|v| v.get_value())
+        self.data.iter().map(|v| v.get_individual())
     }
 }
 
