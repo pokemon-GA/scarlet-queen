@@ -181,12 +181,15 @@
 
                 <div id="content" class="content">
                     <main>
-                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
-<h1 id="scarlet-queen"><a class="header" href="#scarlet-queen">Scarlet Queen</a></h1>
+                        <h1 id="scarlet-queen"><a class="header" href="#scarlet-queen">Scarlet Queen</a></h1>
 <p>Scarlet Queen is a Rust framework for co-evolution.</p>
-<h2 id="what-mean-scarlet-queen"><a class="header" href="#what-mean-scarlet-queen">What mean Scarlet Queen?</a></h2>
+<h1 id="what-mean-scarlet-queen"><a class="header" href="#what-mean-scarlet-queen">What mean Scarlet Queen?</a></h1>
 <p>The name is inspired by Red Queen’s Hypothesis and Pokémon Scarlet and Violet.</p>
 <p>Red Queen’s Hypothesis is a hypothesis about co-evolution.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
+<pre><code class="language-sh">cargo run --bin scarlet-queen-entrypoint
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="structure"><a class="header" href="#structure">Structure</a></h1>
 <h2 id="project-dependencies"><a class="header" href="#project-dependencies">Project Dependencies</a></h2>
 <pre class="mermaid">flowchart RL
     initializer[scarlet-queen-initializer] --&gt; core[scarlet-queen-core]
@@ -252,21 +255,76 @@
 <p>Contains the logic for managing the generation process.</p>
 <h3 id="scarlet-queen-entrypoint-binary-crate"><a class="header" href="#scarlet-queen-entrypoint-binary-crate"><code>scarlet-queen-entrypoint</code> (binary crate)</a></h3>
 <p>The binary crate that runs the Scarlet Queen framework.</p>
-<h2 id="get-started"><a class="header" href="#get-started">Get Started</a></h2>
-<pre><code class="language-sh">cargo run --bin scarlet-queen-entrypoint
+<div style="break-before: page; page-break-before: always;"></div><h1 id="setup"><a class="header" href="#setup">Setup</a></h1>
+<p>To format toml file and rust code, when you  commit, you need to install <code>husky</code> and <code>lint-staged</code>.</p>
+<p>Under the commands is setup commands for <code>husky</code>, <code>lint-staged</code> and <code>prettier</code>.</p>
+<pre><code class="language-sh">npm i &amp;&amp; npm exec husky-init -y &amp;&amp;  npm exec husky set .husky/pre-commit "npm exec lint-staged --allow-empty"
 </code></pre>
-<h2 id="tests"><a class="header" href="#tests">Tests</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="branch-strategy"><a class="header" href="#branch-strategy">Branch Strategy</a></h1>
+<h2 id="main"><a class="header" href="#main">main</a></h2>
+<p>main branch is the release branch.</p>
+<h2 id="dev"><a class="header" href="#dev">dev</a></h2>
+<p>dev branch is the development root branch.</p>
+<h2 id="feature"><a class="header" href="#feature">feature</a></h2>
 <ul>
-<li>run all tests</li>
+<li>
+<p>feat/#[issue-number]-[issue-summary]</p>
+<p>example) feat/#12-add-card-button-component</p>
+</li>
 </ul>
+<h2 id="chore"><a class="header" href="#chore">chore</a></h2>
+<ul>
+<li>
+<p>chore/#[issue-number]-[issue-summary]</p>
+<p>example) chore/#12-add-prettier-config</p>
+</li>
+</ul>
+<h2 id="fix"><a class="header" href="#fix">fix</a></h2>
+<ul>
+<li>
+<p>fix/#[issue-number]-[issue-summary]</p>
+<p>example) fix/#12-change-title</p>
+</li>
+</ul>
+<h2 id="update"><a class="header" href="#update">update</a></h2>
+<ul>
+<li>
+<p>update/#[issue-number]-[issue-summary]</p>
+<p>example) update/#12-update-dependencies</p>
+</li>
+</ul>
+<pre class="mermaid">flowchart LR
+    dev[&quot;dev&quot;] --&gt;|with strict checks| main[&quot;main&quot;]
+    feature[&quot;feat/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
+    chore[&quot;chore/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
+    fix[&quot;fix/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
+    update[&quot;update/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
+    main[&quot;main&quot;] --&gt;|&quot;with strict checks (cron)&quot;| main[&quot;main&quot;]
+</pre>
+<h3 id="with-loose-checks-dev-branch"><a class="header" href="#with-loose-checks-dev-branch">with loose checks (<code>dev branch</code>)</a></h3>
+<ul>
+<li>dev-test (<code>push</code> and <code>pull requests</code>)</li>
+<li>docs-test (<code>push</code> and <code>pull requests</code>)</li>
+<li>docs (<code>push</code>)</li>
+</ul>
+<h3 id="with-strict-checks-main-branch"><a class="header" href="#with-strict-checks-main-branch">with strict checks (<code>main branch</code>)</a></h3>
+<ul>
+<li>prod-test (<code>pull requests</code>)</li>
+<li>docs-test (<code>pull requests</code>)</li>
+</ul>
+<h3 id="with-strict-checks-main-branch-1"><a class="header" href="#with-strict-checks-main-branch-1">with strict checks (<code>main branch</code>)</a></h3>
+<ul>
+<li>prod-test (<code>cron</code>)</li>
+<li>docs-test (<code>cron</code>)</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="test"><a class="header" href="#test">Test</a></h1>
+<h2 id="run-all-tests"><a class="header" href="#run-all-tests">Run all tests</a></h2>
 <pre><code class="language-sh">cargo test
 </code></pre>
-<ul>
-<li>run tests for a specific package</li>
-</ul>
+<h2 id="run-tests-for-a-specific-package"><a class="header" href="#run-tests-for-a-specific-package">Run tests for a specific package</a></h2>
 <pre><code class="language-sh">cargo test -p &lt;test_name&gt;
 </code></pre>
-<h2 id="docs"><a class="header" href="#docs">Docs</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="documents"><a class="header" href="#documents">Documents</a></h1>
 <blockquote>
 <p>[!WARNING]
 When editing docs for the first time, let it add <code>mdbook</code></p>
@@ -284,7 +342,7 @@ When editing docs for the first time, let it add <code>mdbook</code></p>
 </ul>
 <pre><code class="language-sh">mdbook build ./docs
 </code></pre>
-<h3 id="docs-plugins"><a class="header" href="#docs-plugins">Docs plugins</a></h3>
+<h2 id="added-plugins"><a class="header" href="#added-plugins">added plugins</a></h2>
 <ul>
 <li>mdbook-mermaid</li>
 </ul>
@@ -298,84 +356,6 @@ graph TD;
     C--&gt;D;
 ```
 </code></pre>
-<ul>
-<li>mdbook-katex</li>
-</ul>
-<p>You can use KaTeX for rendering math in this docs.</p>
-<ul>
-<li>inline expression</li>
-</ul>
-<pre><code class="language-md">$ &lt;formula (katex expression)&gt; $
-</code></pre>
-<ul>
-<li>display math expression</li>
-</ul>
-<pre><code class="language-md">$$
-&lt;formula (katex expression)&gt;
-$$
-</code></pre>
-<h2 id="setup-project"><a class="header" href="#setup-project">Setup Project</a></h2>
-<p>To format toml file and rust code, when you  commit, you need to install <code>husky</code> and <code>lint-staged</code>.</p>
-<p>Under the commands is setup commands for <code>husky</code>, <code>lint-staged</code> and <code>prettier</code>.</p>
-<pre><code class="language-sh">npm i &amp;&amp; npm exec husky-init -y &amp;&amp;  npm exec husky set .husky/pre-commit "npm exec lint-staged --allow-empty"
-</code></pre>
-<h2 id="branch-strategy"><a class="header" href="#branch-strategy">Branch Strategy</a></h2>
-<h3 id="main"><a class="header" href="#main">main</a></h3>
-<p>main branch is the release branch.</p>
-<h3 id="dev"><a class="header" href="#dev">dev</a></h3>
-<p>dev branch is the development root branch.</p>
-<h3 id="feature"><a class="header" href="#feature">feature</a></h3>
-<ul>
-<li>
-<p>feat/#[issue-number]-[issue-summary]</p>
-<p>example) feat/#12-add-card-button-component</p>
-</li>
-</ul>
-<h3 id="chore"><a class="header" href="#chore">chore</a></h3>
-<ul>
-<li>
-<p>chore/#[issue-number]-[issue-summary]</p>
-<p>example) chore/#12-add-prettier-config</p>
-</li>
-</ul>
-<h3 id="fix"><a class="header" href="#fix">fix</a></h3>
-<ul>
-<li>
-<p>fix/#[issue-number]-[issue-summary]</p>
-<p>example) fix/#12-change-title</p>
-</li>
-</ul>
-<h3 id="update"><a class="header" href="#update">update</a></h3>
-<ul>
-<li>
-<p>update/#[issue-number]-[issue-summary]</p>
-<p>example) update/#12-update-dependencies</p>
-</li>
-</ul>
-<pre class="mermaid">flowchart LR
-    dev[&quot;dev&quot;] --&gt;|with strict checks| main[&quot;main&quot;]
-    feature[&quot;feat/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
-    chore[&quot;chore/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
-    fix[&quot;fix/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
-    update[&quot;update/*&quot;] --&gt;|with loose checks| dev[&quot;dev&quot;]
-    main[&quot;main&quot;] --&gt;|&quot;with strict checks (cron)&quot;| main[&quot;main&quot;]
-</pre>
-<h4 id="with-loose-checks-dev-branch"><a class="header" href="#with-loose-checks-dev-branch">with loose checks (<code>dev branch</code>)</a></h4>
-<ul>
-<li>dev-test (<code>push</code> and <code>pull requests</code>)</li>
-<li>docs-test (<code>push</code> and <code>pull requests</code>)</li>
-<li>docs (<code>push</code>)</li>
-</ul>
-<h4 id="with-strict-checks-main-branch"><a class="header" href="#with-strict-checks-main-branch">with strict checks (<code>main branch</code>)</a></h4>
-<ul>
-<li>prod-test (<code>pull requests</code>)</li>
-<li>docs-test (<code>pull requests</code>)</li>
-</ul>
-<h4 id="with-strict-checks-main-branch-1"><a class="header" href="#with-strict-checks-main-branch-1">with strict checks (<code>main branch</code>)</a></h4>
-<ul>
-<li>prod-test (<code>cron</code>)</li>
-<li>docs-test (<code>cron</code>)</li>
-</ul>
 
                     </main>
 
