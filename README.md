@@ -142,24 +142,6 @@ graph TD;
 ```
 ~~~
 
-- mdbook-katex
-
-You can use KaTeX for rendering math in this docs.
-
-- inline expression
-
-```md
-$ <formula (katex expression)> $
-```
-
-- display math expression
-
-```md
-$$
-<formula (katex expression)>
-$$
-```
-
 ## Setup Project
 
 To format toml file and rust code, when you  commit, you need to install `husky` and `lint-staged`.
