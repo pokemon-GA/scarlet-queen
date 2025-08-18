@@ -22,10 +22,12 @@ where
     }
 }
 
-impl<P> EachCrateIndividual<P> for FitnessPokemonType<P>
+impl<P> EachCrateIndividual for FitnessPokemonType<P>
 where
     P: PokemonType,
 {
+    type Item = P;
+
     fn new(pokemon_type: &Rc<Individual<P>>) -> FitnessPokemonType<P> {
         FitnessPokemonType {
             pokemon_type: Rc::clone(pokemon_type),
@@ -37,7 +39,7 @@ where
     }
 }
 
-impl<P> FitnessIndividualTrait<P> for FitnessPokemonType<P>
+impl<P> FitnessIndividualTrait for FitnessPokemonType<P>
 where
     P: PokemonType,
 {
