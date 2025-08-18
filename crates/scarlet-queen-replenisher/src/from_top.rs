@@ -20,12 +20,8 @@ where
         }
     }
 
-    fn get_id(&self) -> usize {
-        self.individual.get_id()
-    }
-
-    fn get_value(&self) -> &T {
-        self.individual.get_value()
+    fn get_individual(&self) -> &Individual<T> {
+        &self.individual
     }
 }
 
@@ -34,7 +30,7 @@ impl<T, const N: usize, const R: usize> ReplenisherIndividualTrait<T, N, R>
 where
     T: Clone,
 {
-    fn replenisher<'a, U>(group: U) -> Vec<T>
+    fn replenish<'a, U>(group: U) -> Vec<T>
     where
         U: IntoIterator<Item = &'a Self>,
         Self: 'a,
