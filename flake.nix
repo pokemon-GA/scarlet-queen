@@ -27,11 +27,16 @@
           with pkgs;
           mkShell {
             buildInputs = [
+              # Rust
               openssl
               pkg-config
               fontconfig
               bacon
               (rust-bin.stable.latest.default.override { extensions = [ "rust-src" ]; })
+              # mdbook (Rust)
+              mdbook
+              mdbook-mermaid
+              # JavaScript
               nodejs
             ];
             RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";

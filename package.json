@@ -9,7 +9,6 @@
   "author": "Myxogastria0808 (Yuki Osada)",
   "license": "Apache-2.0",
   "scripts": {
-    "fmt": "prettier --write '**/*.toml' && prettier --check '**/*.toml'",
     "prepare": "husky install"
   },
   "bugs": {
