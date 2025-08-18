@@ -11,7 +11,9 @@ pub struct RankSelectorIndividual<T, const R: usize> {
     individual: Rc<Individual<T>>,
 }
 
-impl<T, const R: usize> EachCrateIndividual<T> for RankSelectorIndividual<T, R> {
+impl<T, const R: usize> EachCrateIndividual for RankSelectorIndividual<T, R> {
+    type Item = T;
+
     fn new(individual: &Rc<Individual<T>>) -> Self {
         RankSelectorIndividual {
             individual: Rc::clone(individual),
@@ -31,7 +33,7 @@ impl<T, const R: usize> EachCrateIndividual<T> for RankSelectorIndividual<T, R> 
     }
 }
 
-impl<T, const R: usize> SelectorIndividualTrait<T, R> for RankSelectorIndividual<T, R> {
+impl<T, const R: usize> SelectorIndividualTrait<R> for RankSelectorIndividual<T, R> {
     type Err = SelectorError;
 
     fn selected_ids<'a, U>(

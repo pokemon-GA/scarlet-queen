@@ -1,9 +1,13 @@
+//! Mod for `PokemonType`, `PokemonTypeAll` and other.
+
 use crate::error::CoreError;
 use plotters::style::{Color, RGBColor};
 use rand::distr::{Distribution, StandardUniform};
 use std::{fmt::Debug, hash::Hash, str::FromStr};
 
+/// A trait for a enum which is a `PokemonTypeAll` subset.
 pub trait PokemonType: Into<PokemonTypeAll> + TryFrom<PokemonTypeAll> + Clone + Eq + Hash {
+    /// The size of subset.
     const ALL_LEN: usize;
     const ALL: [Option<Self>; 19];
 
@@ -230,16 +234,6 @@ impl PokemonType for PokemonTypeFWG {
         None,
         None,
     ];
-
-    fn sample<R: rand::Rng + ?Sized>(rng: &mut R) -> PokemonTypeFWG {
-        let rand_int: u8 = rng.random_range(0..3);
-        match rand_int {
-            0 => PokemonTypeFWG::Fire,
-            1 => PokemonTypeFWG::Water,
-            2 => PokemonTypeFWG::Grass,
-            _ => unreachable!(),
-        }
-    }
 }
 
 #[cfg(test)]

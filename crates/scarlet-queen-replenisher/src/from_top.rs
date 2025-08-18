@@ -9,11 +9,13 @@ where
     individual: Rc<Individual<T>>,
 }
 
-impl<T, const N: usize, const R: usize> EachCrateIndividual<T>
+impl<T, const N: usize, const R: usize> EachCrateIndividual
     for FromTopReplenisherIndividual<T, N, R>
 where
     T: Clone,
 {
+    type Item = T;
+
     fn new(individual: &std::rc::Rc<scarlet_queen_core::individual::Individual<T>>) -> Self {
         FromTopReplenisherIndividual {
             individual: Rc::clone(individual),
@@ -25,7 +27,7 @@ where
     }
 }
 
-impl<T, const N: usize, const R: usize> ReplenisherIndividualTrait<T, N, R>
+impl<T, const N: usize, const R: usize> ReplenisherIndividualTrait<N, R>
     for FromTopReplenisherIndividual<T, N, R>
 where
     T: Clone,
