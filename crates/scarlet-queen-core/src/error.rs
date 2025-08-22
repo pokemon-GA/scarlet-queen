@@ -1,7 +1,12 @@
+//! Mod for `CoreError`.
+
 #[derive(Debug, thiserror::Error, PartialEq, Eq)]
+/// Error
 pub enum CoreError {
-    #[error("StringToPokemonTypeConvertError: Failed to convert string to PokemonType")]
+    #[error("StringToPokemonTypeConvertError: Failed to convert String to PokemonType")]
+    /// Failed to convert `String` to `PokemonType`
     StringToPokemonTypeConvertError,
-    #[error("PokemonTypeConvertError: The subset of pokemon types does not contain the type")]
+    /// Failed to convert `PokemonType` to different `PokemonType`
+    #[error("PokemonTypeConvertError: Failed to convert `PokemonType` to different `PokemonType`")]
     PokemonTypeConvertError,
 }
