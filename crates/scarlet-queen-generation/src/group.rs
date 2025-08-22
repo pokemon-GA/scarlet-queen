@@ -105,6 +105,7 @@ where
                 }
             })
             .collect::<Vec<GenerationIndividual<T, FI, SI, RI, N, R>>>();
+
         let new_individuals: Vec<T> = GenerationIndividual::replenish(&*self);
         self.data.extend(
             new_individuals
