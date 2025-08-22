@@ -11,7 +11,9 @@ pub struct RankSelectorIndividual<T, const R: usize> {
     individual: Rc<Individual<T>>,
 }
 
-impl<T, const R: usize> EachCrateIndividual<T> for RankSelectorIndividual<T, R> {
+impl<T, const R: usize> EachCrateIndividual for RankSelectorIndividual<T, R> {
+    type Item = T;
+
     fn new(individual: &Rc<Individual<T>>) -> Self {
         RankSelectorIndividual {
             individual: Rc::clone(individual),
@@ -25,12 +27,16 @@ impl<T, const R: usize> EachCrateIndividual<T> for RankSelectorIndividual<T, R> 
     fn get_value(&self) -> &T {
         self.individual.get_value()
     }
+
+    fn get_individual(&self) -> &Individual<T> {
+        &self.individual
+    }
 }
 
-impl<T, const R: usize> SelectorIndividualTrait<T, R> for RankSelectorIndividual<T, R> {
+impl<T, const R: usize> SelectorIndividualTrait<R> for RankSelectorIndividual<T, R> {
     type Err = SelectorError;
 
-    fn make_selector<'a, U>(
+    fn selected_ids<'a, U>(
         group: U,
         scores: HashMap<usize, usize>,
     ) -> Result<HashSet<usize>, Self::Err>
@@ -38,27 +44,28 @@ impl<T, const R: usize> SelectorIndividualTrait<T, R> for RankSelectorIndividual
         U: IntoIterator<Item = &'a Self>,
         Self: 'a,
     {
-        let mut id_with_score: Vec<(isize, usize)> = group
+        let group: Vec<&Self> = group.into_iter().collect::<Vec<&Self>>();
+
+        if group.len() < R {
+            return Err(SelectorError::TooFewGroupError);
+        };
+
+        let mut id_with_score: Vec<(usize, usize)> = group
             .into_iter()
             .map(|v| {
                 let id: usize = v.get_id();
                 scores
                     .get(&id)
-                    .map_or(Err(SelectorError::BadScoreDataError), |v| {
-                        Ok((-(*v as isize), id))
-                    })
+                    .map_or(Err(SelectorError::BadScoreDataError), |&v| Ok((id, v)))
             })
-            .collect::<Result<Vec<(isize, usize)>, SelectorError>>()?;
+            .collect::<Result<Vec<(usize, usize)>, SelectorError>>()?;
 
-        if id_with_score.len() < R {
-            return Err(SelectorError::TooFewGroupError);
-        }
+        id_with_score.sort_by_key(|&(_, v)| -(v as isize));
 
-        id_with_score.sort();
         Ok(id_with_score
             .into_iter()
             .take(R)
-            .map(|(_, id)| id)
+            .map(|(id, _)| id)
             .collect::<HashSet<usize>>())
     }
 }

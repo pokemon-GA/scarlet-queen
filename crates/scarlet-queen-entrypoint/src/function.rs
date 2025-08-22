@@ -16,12 +16,12 @@ where
     W: Write,
 {
     let mut res: Vec<Vec<T>> = vec![];
-    let mut group: G = G::new(I::initializer());
+    let mut group: G = G::init::<I>();
     res.push(group.clone_values());
     for i in 1..(MAIN_LOOP + 1) {
         writeln!(out, "===== GENERATION {i:3} =====")?;
         group
-            .one_loop_out(out)
+            .one_cycle_out(&mut out)
             .map_err(|v| Error::LoopError(format!("{v:?}")))?;
         res.push(group.clone_values());
     }

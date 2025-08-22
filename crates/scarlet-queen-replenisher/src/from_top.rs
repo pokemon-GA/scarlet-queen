@@ -9,32 +9,30 @@ where
     individual: Rc<Individual<T>>,
 }
 
-impl<T, const N: usize, const R: usize> EachCrateIndividual<T>
+impl<T, const N: usize, const R: usize> EachCrateIndividual
     for FromTopReplenisherIndividual<T, N, R>
 where
     T: Clone,
 {
+    type Item = T;
+
     fn new(individual: &std::rc::Rc<scarlet_queen_core::individual::Individual<T>>) -> Self {
         FromTopReplenisherIndividual {
             individual: Rc::clone(individual),
         }
     }
 
-    fn get_id(&self) -> usize {
-        self.individual.get_id()
-    }
-
-    fn get_value(&self) -> &T {
-        self.individual.get_value()
+    fn get_individual(&self) -> &Individual<T> {
+        &self.individual
     }
 }
 
-impl<T, const N: usize, const R: usize> ReplenisherIndividualTrait<T, N, R>
+impl<T, const N: usize, const R: usize> ReplenisherIndividualTrait<N, R>
     for FromTopReplenisherIndividual<T, N, R>
 where
     T: Clone,
 {
-    fn replenisher<'a, U>(group: U) -> Vec<T>
+    fn replenish<'a, U>(group: U) -> Vec<T>
     where
         U: IntoIterator<Item = &'a Self>,
         Self: 'a,

@@ -20,9 +20,9 @@ use std::{
 pub struct Group<T, FI, SI, RI, const N: usize, const R: usize>
 where
     T: Clone,
-    FI: FitnessIndividualTrait<T>,
-    SI: SelectorIndividualTrait<T, R>,
-    RI: ReplenisherIndividualTrait<T, N, R>,
+    FI: EachCrateIndividual<Item = T> + FitnessIndividualTrait,
+    SI: EachCrateIndividual<Item = T> + SelectorIndividualTrait<R>,
+    RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
 {
     data: Vec<GenerationIndividual<T, FI, SI, RI, N, R>>,
 }
@@ -31,9 +31,9 @@ impl<T, FI, SI, RI, const N: usize, const R: usize> GroupTrait<T, N, R>
     for Group<T, FI, SI, RI, N, R>
 where
     T: Clone + Debug,
-    FI: FitnessIndividualTrait<T>,
-    SI: SelectorIndividualTrait<T, R>,
-    RI: ReplenisherIndividualTrait<T, N, R>,
+    FI: EachCrateIndividual<Item = T> + FitnessIndividualTrait,
+    SI: EachCrateIndividual<Item = T> + SelectorIndividualTrait<R>,
+    RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
 {
     type Err = GenerationError;
 
@@ -42,14 +42,14 @@ where
             data: data
                 .into_iter()
                 .enumerate()
-                .map(|(i, v)| GenerationIndividual::new(&Rc::new(Individual::new(i, v))))
+                .map(|(i, v)| GenerationIndividual::new(&Rc::new(Individual::new_with_id(i, v))))
                 .collect::<Vec<GenerationIndividual<T, FI, SI, RI, N, R>>>(),
         }
     }
 
-    fn one_loop(&mut self) -> Result<(), Self::Err> {
+    fn one_cycle(&mut self) -> Result<(), Self::Err> {
         let scores: HashMap<usize, usize> = GenerationIndividual::fitness_group(&*self);
-        let selector: HashSet<usize> = GenerationIndividual::make_selector(&*self, scores)
+        let selector: HashSet<usize> = GenerationIndividual::selected_ids(&*self, scores)
             .map_err(|v| GenerationError::SelectorError(format!("{v:?}")))?;
         let mut data_for_edit: Vec<GenerationIndividual<T, FI, SI, RI, N, R>> = Vec::new();
         swap(&mut data_for_edit, &mut self.data);
@@ -63,16 +63,13 @@ where
                 }
             })
             .collect::<Vec<GenerationIndividual<T, FI, SI, RI, N, R>>>();
-        let new_individuals: Vec<T> = GenerationIndividual::replenisher(&*self);
+        let new_individuals: Vec<T> = GenerationIndividual::replenish(&*self);
         self.data.extend(
             new_individuals
                 .into_iter()
-                .map(|v| GenerationIndividual::new(&Rc::new(Individual::new(0, v)))),
+                .map(|v| GenerationIndividual::new(&Rc::new(Individual::new_with_id(0, v)))),
         );
-        self.data
-            .iter()
-            .enumerate()
-            .for_each(|(i, v)| v.get_individual().set_id(i));
+        self.reset_id();
         Ok(())
     }
 
@@ -95,7 +92,7 @@ where
             .enumerate()
             .try_for_each(|(i, v)| writeln!(out, "id: {i}, value: {v:?}"))?;
 
-        let selector: HashSet<usize> = GenerationIndividual::make_selector(&*self, scores)
+        let selector: HashSet<usize> = GenerationIndividual::selected_ids(&*self, scores)
             .map_err(|v| GenerationError::SelectorError(format!("{v:?}")))?;
         let mut data_for_edit: Vec<GenerationIndividual<T, FI, SI, RI, N, R>> = Vec::new();
         swap(&mut data_for_edit, &mut self.data);
@@ -109,25 +106,23 @@ where
                 }
             })
             .collect::<Vec<GenerationIndividual<T, FI, SI, RI, N, R>>>();
-        let new_individuals: Vec<T> = GenerationIndividual::replenisher(&*self);
+
+        let new_individuals: Vec<T> = GenerationIndividual::replenish(&*self);
         self.data.extend(
             new_individuals
                 .into_iter()
-                .map(|v| GenerationIndividual::new(&Rc::new(Individual::new(0, v)))),
+                .map(|v| GenerationIndividual::new(&Rc::new(Individual::new_with_id(0, v)))),
         );
-        self.data
-            .iter()
-            .enumerate()
-            .for_each(|(i, v)| v.get_individual().set_id(i));
+        self.reset_id();
         writeln!(out)?;
         Ok(())
     }
 
-    fn iter<'a>(&'a self) -> impl Iterator<Item = &'a T>
+    fn iter<'a>(&'a self) -> impl Iterator<Item = &'a Individual<T>>
     where
         T: 'a,
     {
-        self.data.iter().map(|v| v.get_value())
+        self.data.iter().map(|v| v.get_individual())
     }
 }
 
@@ -135,9 +130,9 @@ impl<'a, T, FI, SI, RI, const N: usize, const R: usize> IntoIterator
     for &'a Group<T, FI, SI, RI, N, R>
 where
     T: Clone,
-    FI: FitnessIndividualTrait<T>,
-    SI: SelectorIndividualTrait<T, R>,
-    RI: ReplenisherIndividualTrait<T, N, R>,
+    FI: EachCrateIndividual<Item = T> + FitnessIndividualTrait,
+    SI: EachCrateIndividual<Item = T> + SelectorIndividualTrait<R>,
+    RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
 {
     type IntoIter = Iter<'a, GenerationIndividual<T, FI, SI, RI, N, R>>;
     type Item = &'a GenerationIndividual<T, FI, SI, RI, N, R>;

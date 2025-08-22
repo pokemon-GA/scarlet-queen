@@ -26,7 +26,7 @@ impl<P, const N: usize> InitializerTrait<P, N> for InitializerSample<N>
 where
     P: PokemonType,
 {
-    fn initializer() -> [P; N] {
+    fn initialize() -> [P; N] {
         let mut rng: ThreadRng = rng();
         [0; N].map(|_| <P as PokemonType>::sample(&mut rng))
     }
