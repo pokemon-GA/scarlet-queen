@@ -103,7 +103,7 @@ cargo test -p <test_name>
 
 ## Docs
 
-> [!WARNING]
+> [!IMPORTANT]
 > When editing docs for the first time, let it add `mdbook`
 
 install command is under the command
@@ -113,6 +113,9 @@ cargo install mdbook
 ```
 
 - watch docs
+
+> [!TIPS]
+> This commands cannot deal with hot reloading. You have to reload manually, when you change the docs.
 
 ```sh
 mdbook watch -o ./docs

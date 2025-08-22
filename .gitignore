@@ -1,9 +1,13 @@
 # Rust
 target
 
+# mdbook
+index.html
+
 # Nix
 /.direnv
 
 # JavaScript
 /node_modules
 /.husky
+
