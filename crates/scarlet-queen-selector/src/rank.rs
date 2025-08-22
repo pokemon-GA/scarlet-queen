@@ -45,7 +45,7 @@ impl<T, const R: usize> SelectorIndividualTrait<R> for RankSelectorIndividual<T,
         Self: 'a,
     {
         let group: Vec<&Self> = group.into_iter().collect::<Vec<&Self>>();
-        
+
         if group.len() < R {
             return Err(SelectorError::TooFewGroupError);
         };
@@ -63,11 +63,11 @@ impl<T, const R: usize> SelectorIndividualTrait<R> for RankSelectorIndividual<T,
             .collect::<Result<Vec<(usize, usize)>, SelectorError>>()?;
 
         id_with_score.sort_by_key(|&(_, v)| -(v as isize));
-        
+
         Ok(id_with_score
             .into_iter()
             .take(R)
-            .map(|(_, id)| id)
+            .map(|(id, _)| id)
             .collect::<HashSet<usize>>())
     }
 }

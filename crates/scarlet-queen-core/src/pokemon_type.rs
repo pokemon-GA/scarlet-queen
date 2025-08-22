@@ -10,6 +10,75 @@ mod pokemon_type {
     use super::PokemonTypeAll;
 
     /// A trait for a enum which is a `PokemonTypeAll` subset.
+    ///
+    /// # Example
+    /// ```
+    /// use scarlet_queen_core::pokemon_type::{PokemonType, PokemonTypeAll};
+    /// use plotters::style::Color;
+    ///
+    /// #[derive(Clone, PartialEq, Eq, Hash)]
+    /// enum PTTraitSample {
+    ///     Normal,
+    ///     Water,
+    /// }
+    /// impl Into<PokemonTypeAll> for PTTraitSample {
+    ///     fn into(self) -> PokemonTypeAll {
+    ///         match self {
+    ///             PTTraitSample::Normal => PokemonTypeAll::Normal,
+    ///             PTTraitSample::Water => PokemonTypeAll::Water,
+    ///         }
+    ///     }
+    /// }
+    /// impl TryFrom<PokemonTypeAll> for PTTraitSample {
+    ///     type Error = ();
+    ///     fn try_from(value: PokemonTypeAll) -> Result<Self, Self::Error> {
+    ///         match value {
+    ///             PokemonTypeAll::Normal => Ok(PTTraitSample::Normal),
+    ///             PokemonTypeAll::Water => Ok(PTTraitSample::Water),
+    ///             _ => Err(()),
+    ///         }
+    ///     }
+    /// }
+    /// impl PokemonType for PTTraitSample {
+    ///     const ALL_LEN: usize = 2;
+    ///     const ALL: [Option<Self>; 19] = [
+    ///         Some(PTTraitSample::Normal),
+    ///         Some(PTTraitSample::Water),
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None
+    ///     ];
+    /// }
+    ///
+    /// let sample: PTTraitSample = PTTraitSample::Water;
+    ///
+    /// assert_eq!(sample.color_map().rgb(), (41, 146, 255));
+    ///
+    /// let mut thread_rng: rand::prelude::ThreadRng = rand::rng();
+    /// let sample: PTTraitSample = PTTraitSample::sample(&mut thread_rng);
+    ///
+    /// assert!(
+    ///     [
+    ///         PTTraitSample::Normal,
+    ///         PTTraitSample::Water,
+    ///     ]
+    ///         .contains(&sample)
+    /// )
+    /// ```
     pub trait PokemonType: Into<PokemonTypeAll> + TryFrom<PokemonTypeAll> + Clone + Eq + Hash {
         /// The size of subset.
         const ALL_LEN: usize;
@@ -19,7 +88,7 @@ mod pokemon_type {
         /// Generate a random pokemon type which this type contains.
         ///
         /// # Panics
-        /// An error may be occured if all of `Self::ALL[..Self::ALL_LEN]` is `Some`.
+        /// An error may be occured if all of `Self::ALL[..Self::ALL_LEN]` is not `Some`.
         fn sample<R>(rng: &mut R) -> Self
         where
             R: rand::Rng + Sized,
@@ -34,6 +103,89 @@ mod pokemon_type {
         /// Get a color of a pokemon type.
         fn color_map(&self) -> impl Color {
             <Self as Into<PokemonTypeAll>>::into(self.clone()).color_map()
+        }
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use std::collections::HashMap;
+        use plotters::style::Color;
+        use super::{PokemonType, PokemonTypeAll};
+
+        #[derive(Clone, PartialEq, Eq, Hash)]
+        enum PTTraitSample {
+            Normal,
+            Water,
+        }
+        impl Into<PokemonTypeAll> for PTTraitSample {
+            fn into(self) -> PokemonTypeAll {
+                match self {
+                    PTTraitSample::Normal => PokemonTypeAll::Normal,
+                    PTTraitSample::Water => PokemonTypeAll::Water,
+                }
+            }
+        }
+        impl TryFrom<PokemonTypeAll> for PTTraitSample {
+            type Error = ();
+            fn try_from(value: PokemonTypeAll) -> Result<Self, Self::Error> {
+                match value {
+                    PokemonTypeAll::Normal => Ok(PTTraitSample::Normal),
+                    PokemonTypeAll::Water => Ok(PTTraitSample::Water),
+                    _ => Err(()),
+                }
+            }
+        }
+        impl PokemonType for PTTraitSample {
+            const ALL_LEN: usize = 2;
+            const ALL: [Option<Self>; 19] = [
+                Some(PTTraitSample::Normal),
+                Some(PTTraitSample::Water),
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None
+            ];
+        }
+
+        /// This test fails by <1%.
+        #[test]
+        fn test_pokemontype_sample() {
+            let mut thread_rng: rand::prelude::ThreadRng = rand::rng();
+            let mut seen: HashMap<PTTraitSample, bool> = PTTraitSample::ALL
+                .iter()
+                .filter_map(|v| v.clone().map(|v| (v, false)))
+                .collect::<HashMap<PTTraitSample, bool>>();
+            for _ in 0..140 {
+                let pokemon_type: PTTraitSample = <PTTraitSample as PokemonType>::sample(&mut thread_rng);
+                if let Some(v) = seen.get_mut(&pokemon_type) {
+                    *v = true
+                }
+            }
+            assert!(seen.values().all(|&v| v))
+        }
+
+        #[test]
+        fn test_pokemontype_colormap() {
+            let testcases: Vec<(PTTraitSample, _)> = vec![
+                (PTTraitSample::Normal, PokemonTypeAll::Normal.color_map()),
+                (PTTraitSample::Water, PokemonTypeAll::Water.color_map()),
+            ];
+            for (arg, result) in testcases.into_iter() {
+                assert_eq!(<PTTraitSample as PokemonType>::color_map(&arg).rgb(), result.rgb());
+            }
         }
     }
 }
@@ -185,13 +337,149 @@ mod pokemon_type_all {
 
     #[cfg(test)]
     mod tests {
+        use std::{collections::HashMap, str::FromStr};
+        use plotters::style::Color;
+        use rand::{distr::StandardUniform, Rng};
+        use crate::error::CoreError;
+        use super::PokemonTypeAll;
 
+        #[test]
+        fn test_pokemontypeall_colormap() {
+            let testcases: Vec<(PokemonTypeAll, (u8, u8, u8))> = vec![
+                (PokemonTypeAll::None, (255, 255, 255)),
+                (PokemonTypeAll::Normal, (153, 153, 153)),
+                (PokemonTypeAll::Fire, (254, 97, 44)),
+                (PokemonTypeAll::Water, (41, 146, 255)),
+                (PokemonTypeAll::Electric, (255, 219, 0)),
+                (PokemonTypeAll::Grass, (66, 191, 37)),
+                (PokemonTypeAll::Ice, (67, 216, 255)),
+                (PokemonTypeAll::Fighting, (255, 162, 2)),
+                (PokemonTypeAll::Poison, (153, 78, 207)),
+                (PokemonTypeAll::Ground, (171, 121, 58)),
+                (PokemonTypeAll::Flying, (151, 199, 255)),
+                (PokemonTypeAll::Psychic, (255, 99, 128)),
+                (PokemonTypeAll::Bug, (159, 164, 36)),
+                (PokemonTypeAll::Rock, (188, 184, 137)),
+                (PokemonTypeAll::Ghost, (110, 69, 113)),
+                (PokemonTypeAll::Dragon, (85, 98, 213)),
+                (PokemonTypeAll::Dark, (79, 70, 71)),
+                (PokemonTypeAll::Steel, (106, 174, 211)),
+                (PokemonTypeAll::Fairy, (255, 176, 255)),
+            ];
+
+            for (arg, result) in testcases.into_iter() {
+                assert_eq!(arg.color_map().rgb(), result)
+            }
+        }
+
+        #[test]
+        fn test_pokemontypeall_fromstr_fromstr() {
+            let testcases: Vec<(&str, Result<PokemonTypeAll, CoreError>)> = vec![
+                ("None", Ok(PokemonTypeAll::None)),
+                ("なし", Ok(PokemonTypeAll::None)),
+                ("Normal", Ok(PokemonTypeAll::Normal)),
+                ("無", Ok(PokemonTypeAll::Normal)),
+                ("ノーマル", Ok(PokemonTypeAll::Normal)),
+                ("Fire", Ok(PokemonTypeAll::Fire)),
+                ("炎", Ok(PokemonTypeAll::Fire)),
+                ("ほのお", Ok(PokemonTypeAll::Fire)),
+                ("Water", Ok(PokemonTypeAll::Water)),
+                ("水", Ok(PokemonTypeAll::Water)),
+                ("みず", Ok(PokemonTypeAll::Water)),
+                ("Electric", Ok(PokemonTypeAll::Electric)),
+                ("電", Ok(PokemonTypeAll::Electric)),
+                ("でんき", Ok(PokemonTypeAll::Electric)),
+                ("Grass", Ok(PokemonTypeAll::Grass)),
+                ("草", Ok(PokemonTypeAll::Grass)),
+                ("くさ", Ok(PokemonTypeAll::Grass)),
+                ("Ice", Ok(PokemonTypeAll::Ice)),
+                ("氷", Ok(PokemonTypeAll::Ice)),
+                ("こおり", Ok(PokemonTypeAll::Ice)),
+                ("Fighting", Ok(PokemonTypeAll::Fighting)),
+                ("格", Ok(PokemonTypeAll::Fighting)),
+                ("かくとう", Ok(PokemonTypeAll::Fighting)),
+                ("Poison", Ok(PokemonTypeAll::Poison)),
+                ("毒", Ok(PokemonTypeAll::Poison)),
+                ("どく", Ok(PokemonTypeAll::Poison)),
+                ("Ground", Ok(PokemonTypeAll::Ground)),
+                ("地", Ok(PokemonTypeAll::Ground)),
+                ("じめん", Ok(PokemonTypeAll::Ground)),
+                ("Flying", Ok(PokemonTypeAll::Flying)),
+                ("飛", Ok(PokemonTypeAll::Flying)),
+                ("ひこう", Ok(PokemonTypeAll::Flying)),
+                ("Psychic", Ok(PokemonTypeAll::Psychic)),
+                ("超", Ok(PokemonTypeAll::Psychic)),
+                ("エスパー", Ok(PokemonTypeAll::Psychic)),
+                ("Bug", Ok(PokemonTypeAll::Bug)),
+                ("虫", Ok(PokemonTypeAll::Bug)),
+                ("むし", Ok(PokemonTypeAll::Bug)),
+                ("Rock", Ok(PokemonTypeAll::Rock)),
+                ("岩", Ok(PokemonTypeAll::Rock)),
+                ("いわ", Ok(PokemonTypeAll::Rock)),
+                ("Ghost", Ok(PokemonTypeAll::Ghost)),
+                ("霊", Ok(PokemonTypeAll::Ghost)),
+                ("ゴースト", Ok(PokemonTypeAll::Ghost)),
+                ("Dragon", Ok(PokemonTypeAll::Dragon)),
+                ("竜", Ok(PokemonTypeAll::Dragon)),
+                ("ドラゴン", Ok(PokemonTypeAll::Dragon)),
+                ("Dark", Ok(PokemonTypeAll::Dark)),
+                ("悪", Ok(PokemonTypeAll::Dark)),
+                ("あく", Ok(PokemonTypeAll::Dark)),
+                ("Steel", Ok(PokemonTypeAll::Steel)),
+                ("鋼", Ok(PokemonTypeAll::Steel)),
+                ("はがね", Ok(PokemonTypeAll::Steel)),
+                ("Fairy", Ok(PokemonTypeAll::Fairy)),
+                ("妖", Ok(PokemonTypeAll::Fairy)),
+                ("フェアリー", Ok(PokemonTypeAll::Fairy)),
+                ("Dummy", Err(CoreError::StringToPokemonTypeConvertError)),
+                ("ダミー", Err(CoreError::StringToPokemonTypeConvertError)),
+            ];
+
+            for (arg, result) in testcases {
+                assert_eq!(<PokemonTypeAll as FromStr>::from_str(arg), result)
+            }
+        }
+
+        /// This test fails by <1%.
+        #[test]
+        fn test_standarduniform_distribution_pokemontypeall_sample() {
+            let mut thread_rng: rand::prelude::ThreadRng = rand::rng();
+            let mut seen: HashMap<PokemonTypeAll, bool> = vec![
+                (PokemonTypeAll::None, false),
+                (PokemonTypeAll::Normal, false),
+                (PokemonTypeAll::Fire, false),
+                (PokemonTypeAll::Water, false),
+                (PokemonTypeAll::Electric, false),
+                (PokemonTypeAll::Grass, false),
+                (PokemonTypeAll::Ice, false),
+                (PokemonTypeAll::Fighting, false),
+                (PokemonTypeAll::Poison, false),
+                (PokemonTypeAll::Ground, false),
+                (PokemonTypeAll::Flying, false),
+                (PokemonTypeAll::Psychic, false),
+                (PokemonTypeAll::Bug, false),
+                (PokemonTypeAll::Rock, false),
+                (PokemonTypeAll::Ghost, false),
+                (PokemonTypeAll::Dragon, false),
+                (PokemonTypeAll::Dark, false),
+                (PokemonTypeAll::Steel, false),
+                (PokemonTypeAll::Fairy, false),
+            ]
+                .into_iter()
+                .collect::<HashMap<PokemonTypeAll, bool>>();
+            for _ in 0..140 {
+                let pokemon_type: PokemonTypeAll = thread_rng.sample::<PokemonTypeAll, StandardUniform>(StandardUniform);
+                if let Some(v) =  seen.get_mut(&pokemon_type) {
+                    *v = true;
+                };
+            }
+            assert!(seen.values().all(|&v| v));
+        }
     }
 }
 
 mod pokemon_type_fwg {
     use crate::{error::CoreError, pokemon_type::PokemonType};
-
     use super::PokemonTypeAll;
 
     /// A set of Fire, Water, and Grass.
@@ -252,78 +540,70 @@ mod pokemon_type_fwg {
             None,
         ];
     }
-}
 
-#[cfg(test)]
-mod tests {
-    use crate::{error::CoreError, pokemon_type::PokemonTypeAll};
-    use std::str::FromStr;
+    #[cfg(test)]
+    mod tests {
+        use std::collections::HashMap;
 
-    #[test]
-    fn test_pokemontypeall_fromstr() {
-        let testcases: Vec<(&str, Result<PokemonTypeAll, CoreError>)> = vec![
-            ("None", Ok(PokemonTypeAll::None)),
-            ("なし", Ok(PokemonTypeAll::None)),
-            ("Normal", Ok(PokemonTypeAll::Normal)),
-            ("無", Ok(PokemonTypeAll::Normal)),
-            ("ノーマル", Ok(PokemonTypeAll::Normal)),
-            ("Fire", Ok(PokemonTypeAll::Fire)),
-            ("炎", Ok(PokemonTypeAll::Fire)),
-            ("ほのお", Ok(PokemonTypeAll::Fire)),
-            ("Water", Ok(PokemonTypeAll::Water)),
-            ("水", Ok(PokemonTypeAll::Water)),
-            ("みず", Ok(PokemonTypeAll::Water)),
-            ("Electric", Ok(PokemonTypeAll::Electric)),
-            ("電", Ok(PokemonTypeAll::Electric)),
-            ("でんき", Ok(PokemonTypeAll::Electric)),
-            ("Grass", Ok(PokemonTypeAll::Grass)),
-            ("草", Ok(PokemonTypeAll::Grass)),
-            ("くさ", Ok(PokemonTypeAll::Grass)),
-            ("Ice", Ok(PokemonTypeAll::Ice)),
-            ("氷", Ok(PokemonTypeAll::Ice)),
-            ("こおり", Ok(PokemonTypeAll::Ice)),
-            ("Fighting", Ok(PokemonTypeAll::Fighting)),
-            ("格", Ok(PokemonTypeAll::Fighting)),
-            ("かくとう", Ok(PokemonTypeAll::Fighting)),
-            ("Poison", Ok(PokemonTypeAll::Poison)),
-            ("毒", Ok(PokemonTypeAll::Poison)),
-            ("どく", Ok(PokemonTypeAll::Poison)),
-            ("Ground", Ok(PokemonTypeAll::Ground)),
-            ("地", Ok(PokemonTypeAll::Ground)),
-            ("じめん", Ok(PokemonTypeAll::Ground)),
-            ("Flying", Ok(PokemonTypeAll::Flying)),
-            ("飛", Ok(PokemonTypeAll::Flying)),
-            ("ひこう", Ok(PokemonTypeAll::Flying)),
-            ("Psychic", Ok(PokemonTypeAll::Psychic)),
-            ("超", Ok(PokemonTypeAll::Psychic)),
-            ("エスパー", Ok(PokemonTypeAll::Psychic)),
-            ("Bug", Ok(PokemonTypeAll::Bug)),
-            ("虫", Ok(PokemonTypeAll::Bug)),
-            ("むし", Ok(PokemonTypeAll::Bug)),
-            ("Rock", Ok(PokemonTypeAll::Rock)),
-            ("岩", Ok(PokemonTypeAll::Rock)),
-            ("いわ", Ok(PokemonTypeAll::Rock)),
-            ("Ghost", Ok(PokemonTypeAll::Ghost)),
-            ("霊", Ok(PokemonTypeAll::Ghost)),
-            ("ゴースト", Ok(PokemonTypeAll::Ghost)),
-            ("Dragon", Ok(PokemonTypeAll::Dragon)),
-            ("竜", Ok(PokemonTypeAll::Dragon)),
-            ("ドラゴン", Ok(PokemonTypeAll::Dragon)),
-            ("Dark", Ok(PokemonTypeAll::Dark)),
-            ("悪", Ok(PokemonTypeAll::Dark)),
-            ("あく", Ok(PokemonTypeAll::Dark)),
-            ("Steel", Ok(PokemonTypeAll::Steel)),
-            ("鋼", Ok(PokemonTypeAll::Steel)),
-            ("はがね", Ok(PokemonTypeAll::Steel)),
-            ("Fairy", Ok(PokemonTypeAll::Fairy)),
-            ("妖", Ok(PokemonTypeAll::Fairy)),
-            ("フェアリー", Ok(PokemonTypeAll::Fairy)),
-            ("Dummy", Err(CoreError::StringToPokemonTypeConvertError)),
-            ("ダミー", Err(CoreError::StringToPokemonTypeConvertError)),
-        ];
+        use plotters::style::Color;
 
-        for (arg, result) in testcases {
-            assert_eq!(PokemonTypeAll::from_str(arg), result)
+        use crate::{error::CoreError, pokemon_type::{PokemonType, PokemonTypeAll}};
+        use super::PokemonTypeFWG;
+
+        #[test]
+        fn test_pokemontypefwg_into_pokemontypeall_into() {
+            let testcases: Vec<(PokemonTypeFWG, PokemonTypeAll)> = vec![
+                (PokemonTypeFWG::Fire, PokemonTypeAll::Fire),
+                (PokemonTypeFWG::Water, PokemonTypeAll::Water),
+                (PokemonTypeFWG::Grass, PokemonTypeAll::Grass),
+            ];
+
+            for (arg, result) in testcases.into_iter() {
+                assert_eq!(<PokemonTypeFWG as Into<PokemonTypeAll>>::into(arg), result);
+            }
+        }
+
+        #[test]
+        fn test_pokemontypefwg_tryfrom_pokemontypeall_tryfrom() {
+            let testcases: Vec<(PokemonTypeAll, Result<PokemonTypeFWG, CoreError>)> = vec![
+                (PokemonTypeAll::Fire, Ok(PokemonTypeFWG::Fire)),
+                (PokemonTypeAll::Water, Ok(PokemonTypeFWG::Water)),
+                (PokemonTypeAll::Grass, Ok(PokemonTypeFWG::Grass)),
+                (PokemonTypeAll::Normal, Err(CoreError::PokemonTypeConvertError))
+            ];
+
+            for (arg, result) in testcases.into_iter() {
+                assert_eq!(<PokemonTypeFWG as TryFrom<PokemonTypeAll>>::try_from(arg), result);
+            }
+        }
+
+        /// This test fails by <1%.
+        #[test]
+        fn test_pokemontypefwg_pokemontype_sample() {
+            let mut thread_rng: rand::prelude::ThreadRng = rand::rng();
+            let mut seen: HashMap<PokemonTypeFWG, bool> = <PokemonTypeFWG as PokemonType>::ALL
+                .iter()
+                .filter_map(|v| v.clone().map(|v| (v, false)))
+                .collect::<HashMap<PokemonTypeFWG, bool>>();
+            for _ in 0..140 {
+                let pokemon_type: PokemonTypeFWG = <PokemonTypeFWG as PokemonType>::sample(&mut thread_rng);
+                if let Some(v) = seen.get_mut(&pokemon_type) {
+                    *v = true
+                }
+            }
+            assert!(seen.values().all(|&v| v))
+        }
+
+        #[test]
+        fn test_pokemontypefwg_pokemontype_colormap() {
+            let testcases: Vec<(PokemonTypeFWG, _)> = vec![
+                (PokemonTypeFWG::Fire, PokemonTypeAll::Fire.color_map()),
+                (PokemonTypeFWG::Water, PokemonTypeAll::Water.color_map()),
+                (PokemonTypeFWG::Grass, PokemonTypeAll::Grass.color_map()),
+            ];
+            for (arg, result) in testcases.into_iter() {
+                assert_eq!(<PokemonTypeFWG as PokemonType>::color_map(&arg).rgb(), result.rgb());
+            }
         }
     }
 }
