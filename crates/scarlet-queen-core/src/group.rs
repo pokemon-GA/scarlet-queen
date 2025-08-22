@@ -26,7 +26,7 @@ where
         Self::new(I::initializer())
     }
 
-    fn one_loop_out<W>(&mut self, _: W) -> Result<(), Self::Err>
+    fn one_loop_out<W>(&mut self, _: &mut W) -> Result<(), Self::Err>
     where
         W: Write,
     {
