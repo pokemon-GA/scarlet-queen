@@ -114,7 +114,7 @@ cargo install mdbook
 
 - watch docs
 
-> [!TIPS]
+> [!TIP]
 > This commands cannot deal with hot reloading. You have to reload manually, when you change the docs.
 
 ```sh
