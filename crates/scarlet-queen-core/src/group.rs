@@ -108,7 +108,7 @@ mod group {
         ///
         /// By default, there is not outputing.(Run `one_cycle` simply.)
         /// * `out` - A target of outputing.
-        fn one_cycle_out<W>(&mut self, out: W) -> Result<(), Self::Err>
+        fn one_cycle_out<W>(&mut self, out: &mut W) -> Result<(), Self::Err>
         where
             W: Write,
         {

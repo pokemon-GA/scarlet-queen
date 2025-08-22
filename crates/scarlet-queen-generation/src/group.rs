@@ -73,7 +73,7 @@ where
         Ok(())
     }
 
-    fn one_loop_out<W>(&mut self, out: &mut W) -> Result<(), Self::Err>
+    fn one_cycle_out<W>(&mut self, out: &mut W) -> Result<(), Self::Err>
     where
         W: std::io::Write,
     {
