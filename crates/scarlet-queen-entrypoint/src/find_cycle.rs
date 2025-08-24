@@ -1,7 +1,7 @@
 use std::{collections::HashMap, hash::Hash, io::Write};
 
 pub fn find_tail_cycle<T, W>(
-    count_data: &Vec<HashMap<T, usize>>,
+    count_data: &[HashMap<T, usize>],
     out: &mut W,
 ) -> Result<(), std::io::Error>
 where
@@ -9,7 +9,7 @@ where
     W: Write,
 {
     let data_len: usize = count_data.len();
-    let (header_len, cycle_len) = tail_cycle(&count_data);
+    let (header_len, cycle_len) = tail_cycle(count_data);
     let result: String = if let Some(v) = count_data.last() {
         let mut last_count: Vec<&usize> = v.values().collect::<Vec<&usize>>();
         last_count.sort();
@@ -18,26 +18,24 @@ where
             .take(last_count.len() - 1)
             .all(|&&v| v == 0)
         {
-            format!("cycle: Divergence")
+            "cycle: Divergence".to_string()
+        } else if header_len == data_len {
+            "cycle: NotEnoughLoop".to_string()
         } else {
-            if header_len == data_len {
-                format!("cycle: NotEnoughLoop")
-            } else {
-                format!("cycle: HeaderLen-CycleLen({}-{})", header_len, cycle_len)
-            }
+            format!("cycle: HeaderLen-CycleLen({header_len}-{cycle_len})")
         }
     } else {
-        format!("cycle: NoData")
+        "cycle: NoData".to_string()
     };
-    writeln!(out, "{}", result)
+    writeln!(out, "{result}")
 }
 
-pub fn tail_cycle<T>(data: &Vec<T>) -> (usize, usize)
+pub fn tail_cycle<T>(data: &[T]) -> (usize, usize)
 where
     T: Eq,
 {
     let data_len: usize = data.len();
-    let data_rev: Vec<&T> = data.into_iter().rev().collect::<Vec<&T>>();
+    let data_rev: Vec<&T> = data.iter().rev().collect::<Vec<&T>>();
     let match_table: Vec<usize> = match_table(data_rev);
     match_table
         .iter()
@@ -52,7 +50,7 @@ where
                 None
             }
         })
-        .last()
+        .next_back()
         .map(|(all_cycle_len, cycle_len)| (data_len - all_cycle_len, cycle_len))
         .unwrap_or((data_len, 0))
 }

@@ -250,7 +250,7 @@ mod each_crate_individual {
         impl EachCrateIndividual for SampleIndividual {
             type Item = u8;
             fn new(individual: &Rc<Individual<Self::Item>>) -> Self {
-                SampleIndividual(Rc::clone(&individual))
+                SampleIndividual(Rc::clone(individual))
             }
             fn get_individual(&self) -> &Individual<Self::Item> {
                 self.0.as_ref()
