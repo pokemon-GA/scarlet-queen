@@ -13,7 +13,7 @@ mod pokemon_type_trait {
     ///
     /// # Example
     /// ```
-    /// use scarlet_queen_core::pokemon_type::{PokemonType, PokemonTypeAll};
+    /// use scarlet_queen_core::pokemon_type::{PokemonTypeTrait, PokemonTypeAll};
     /// use plotters::style::Color;
     ///
     /// #[derive(Clone, PartialEq, Eq, Hash)]
@@ -39,7 +39,7 @@ mod pokemon_type_trait {
     ///         }
     ///     }
     /// }
-    /// impl PokemonType for PTTraitSample {
+    /// impl PokemonTypeTrait for PTTraitSample {
     ///     const ALL_LEN: usize = 2;
     ///     const ALL: [Option<Self>; 19] = [
     ///         Some(PTTraitSample::Normal),

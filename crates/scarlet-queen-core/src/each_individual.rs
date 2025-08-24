@@ -20,7 +20,7 @@ mod individual {
     ///
     /// # Example
     /// ```
-    /// use scarlet_queen_core::individual::Individual;
+    /// use scarlet_queen_core::each_individual::Individual;
     ///
     /// let sample: Individual<u8> = Individual::new(5);
     ///
@@ -193,7 +193,7 @@ mod each_crate_individual {
     /// # Example
     /// ```
     /// use std::rc::Rc;
-    /// use scarlet_queen_core::individual::{Individual, EachCrateIndividual};
+    /// use scarlet_queen_core::each_individual::{Individual, EachCrateIndividual};
     ///
     /// #[derive(PartialEq, Eq, Debug)]
     /// struct SampleIndividual(Rc<Individual<u8>>);
@@ -349,7 +349,7 @@ mod fitness_individual {
     /// ```
     /// use std::{collections::HashMap, rc::Rc};
     ///
-    /// use scarlet_queen_core::individual::{Individual, EachCrateIndividual, FitnessIndividualTrait};
+    /// use scarlet_queen_core::each_individual::{Individual, EachCrateIndividual, FitnessIndividualTrait};
     ///
     /// struct FITraitSample {
     ///     individual: Rc<Individual<u8>>
