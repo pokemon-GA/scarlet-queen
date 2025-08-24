@@ -1,6 +1,6 @@
 //! Mod for `InitializerTrait` and `GroupTrait`.
 
-pub use group::GroupTrait;
+pub use group_trait::GroupTrait;
 pub use initializer::InitializerTrait;
 
 mod initializer {
@@ -59,13 +59,13 @@ mod initializer {
     }
 }
 
-mod group {
+mod group_trait {
     //! Mod for `GroupTrait`.
 
     use std::{fmt::Debug, io::Write};
 
     use super::InitializerTrait;
-    use crate::individual::Individual;
+    use crate::each_individual::Individual;
 
     /// A trait for a group which contains individuals.
     /// * `T` - A element of this group

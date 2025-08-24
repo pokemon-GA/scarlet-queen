@@ -212,7 +212,7 @@ mod each_crate_individual {
     ///
     /// let r: Rc<Individual<u8>> = Rc::new(Individual::new(5u8));
     /// let sample: SampleIndividual = SampleIndividual::new(&r);
-
+    ///
     /// assert_eq!(sample.get_individual(), r.as_ref());
     /// assert_eq!(sample.get_id(), r.get_id());
     /// assert_eq!(sample.get_value(), r.get_value());
@@ -243,7 +243,7 @@ mod each_crate_individual {
         use std::rc::Rc;
 
         use super::EachCrateIndividual;
-        use crate::individual::Individual;
+        use crate::each_individual::Individual;
 
         #[derive(PartialEq, Eq, Debug)]
         struct SampleIndividual(Rc<Individual<u8>>);
@@ -435,7 +435,7 @@ mod fitness_individual {
         use std::{collections::HashMap, rc::Rc};
 
         use super::FitnessIndividualTrait;
-        use crate::individual::{EachCrateIndividual, Individual};
+        use crate::each_individual::{EachCrateIndividual, Individual};
 
         struct FITraitSample {
             individual: Rc<Individual<u8>>,

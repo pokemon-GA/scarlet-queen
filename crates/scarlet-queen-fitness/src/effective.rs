@@ -1,4 +1,4 @@
-use scarlet_queen_core::pokemon_type::PokemonType;
+use scarlet_queen_core::pokemon_type::PokemonTypeTrait;
 
 use crate::pokemon_type::FitnessPokemonType;
 
@@ -444,7 +444,7 @@ impl TypeEffectiveness {
         defense: &FitnessPokemonType<P>,
     ) -> TypeEffectiveness
     where
-        P: PokemonType,
+        P: PokemonTypeTrait,
     {
         TypeEffectiveness::EFFECTIVE_ARRAY[usize::from(attack)][usize::from(defense)]
     }
@@ -463,7 +463,7 @@ impl TypeEffectiveness {
 mod tests {
     use crate::{effective::TypeEffectiveness, pokemon_type::FitnessPokemonType};
     use scarlet_queen_core::{
-        individual::{EachCrateIndividual, Individual},
+        each_individual::{EachCrateIndividual, Individual},
         pokemon_type::PokemonTypeAll,
     };
     use std::rc::Rc;

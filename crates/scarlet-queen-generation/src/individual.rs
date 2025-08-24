@@ -1,4 +1,4 @@
-use scarlet_queen_core::individual::{
+use scarlet_queen_core::each_individual::{
     EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait,
     SelectorIndividualTrait,
 };
@@ -136,7 +136,7 @@ where
 #[cfg(test)]
 mod tests {
     use crate::individual::GenerationIndividual;
-    use scarlet_queen_core::individual::{
+    use scarlet_queen_core::each_individual::{
         EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait,
         SelectorIndividualTrait,
     };

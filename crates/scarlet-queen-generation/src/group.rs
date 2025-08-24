@@ -1,10 +1,10 @@
 use crate::{error::GenerationError, individual::GenerationIndividual};
 use scarlet_queen_core::{
-    group::GroupTrait,
-    individual::{
+    each_individual::{
         EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait,
         SelectorIndividualTrait,
     },
+    group::GroupTrait,
 };
 use scarlet_queen_fitness::pokemon_type::FitnessPokemonType;
 use scarlet_queen_replenisher::from_top::FromTopReplenisherIndividual;
