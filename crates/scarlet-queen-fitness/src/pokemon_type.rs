@@ -1,21 +1,21 @@
 use crate::effective::TypeEffectiveness;
 use scarlet_queen_core::{
-    individual::{EachCrateIndividual, FitnessIndividualTrait, Individual},
-    pokemon_type::{PokemonType, PokemonTypeAll},
+    each_individual::{EachCrateIndividual, FitnessIndividualTrait, Individual},
+    pokemon_type::{PokemonTypeAll, PokemonTypeTrait},
 };
 use std::{ops::Deref, rc::Rc};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FitnessPokemonType<P>
 where
-    P: PokemonType,
+    P: PokemonTypeTrait,
 {
     pokemon_type: Rc<Individual<P>>,
 }
 
 impl<P> FitnessPokemonType<P>
 where
-    P: PokemonType,
+    P: PokemonTypeTrait,
 {
     fn attack_effectiveness(&self, defense: &Self) -> TypeEffectiveness {
         TypeEffectiveness::from_effective_array(self, defense)
@@ -24,7 +24,7 @@ where
 
 impl<P> EachCrateIndividual for FitnessPokemonType<P>
 where
-    P: PokemonType,
+    P: PokemonTypeTrait,
 {
     type Item = P;
 
@@ -41,7 +41,7 @@ where
 
 impl<P> FitnessIndividualTrait for FitnessPokemonType<P>
 where
-    P: PokemonType,
+    P: PokemonTypeTrait,
 {
     fn fitness(&self, other: &Self) -> usize {
         self.attack_effectiveness(other).point()
@@ -50,7 +50,7 @@ where
 
 impl<P> From<FitnessPokemonType<P>> for usize
 where
-    P: PokemonType,
+    P: PokemonTypeTrait,
 {
     fn from(val: FitnessPokemonType<P>) -> Self {
         usize::from(&val)
@@ -59,7 +59,7 @@ where
 
 impl<P> From<&FitnessPokemonType<P>> for usize
 where
-    P: PokemonType,
+    P: PokemonTypeTrait,
 {
     fn from(val: &FitnessPokemonType<P>) -> Self {
         match <P as Into<PokemonTypeAll>>::into(val.pokemon_type.deref().get_value().clone()) {
@@ -91,7 +91,7 @@ mod tests {
     use std::rc::Rc;
 
     use scarlet_queen_core::{
-        individual::{EachCrateIndividual, FitnessIndividualTrait, Individual},
+        each_individual::{EachCrateIndividual, FitnessIndividualTrait, Individual},
         pokemon_type::PokemonTypeAll,
     };
 

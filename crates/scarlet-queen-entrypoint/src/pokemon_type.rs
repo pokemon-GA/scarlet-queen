@@ -11,18 +11,19 @@ use plotters::{
     series::LineSeries,
     style::{IntoFont, ShapeStyle, WHITE},
 };
-use scarlet_queen_core::pokemon_type::PokemonType;
+use scarlet_queen_core::pokemon_type::PokemonTypeTrait;
 use scarlet_queen_generation::group::PokemonTypeGroup;
 use scarlet_queen_initializer::group::InitializerSample;
 
 use crate::{
     error::Error,
+    find_cycle::find_tail_cycle,
     function::{main_loop, MAIN_LOOP},
 };
 
 pub fn count<P>(loop_result: Vec<Vec<P>>) -> Vec<HashMap<P, usize>>
 where
-    P: PokemonType,
+    P: PokemonTypeTrait,
 {
     loop_result
         .into_iter()
@@ -35,9 +36,9 @@ where
         .collect::<Vec<HashMap<P, usize>>>()
 }
 
-pub fn draw_graph<P>(loop_result_count: Vec<HashMap<P, usize>>, img_name: &str)
+pub fn draw_graph<P>(loop_result_count: &Vec<HashMap<P, usize>>, img_name: &str)
 where
-    P: PokemonType,
+    P: PokemonTypeTrait,
 {
     let graph_data: Vec<(P, Vec<(i32, i32)>)> = P::ALL
         .into_iter()
@@ -81,20 +82,21 @@ where
 
 pub fn test_and_draw<P, const N: usize, const R: usize>(test_name: &str) -> Result<(), Error>
 where
-    P: PokemonType + Debug,
+    P: PokemonTypeTrait + Debug,
 {
     let dir_path: String = format!("./out/{test_name}");
     fs::create_dir_all(&dir_path)?;
-    let file: BufWriter<File> = BufWriter::new(File::create(format!(
+    let mut file: BufWriter<File> = BufWriter::new(File::create(format!(
         "{}/res_{}.txt",
         &dir_path, test_name
     ))?);
     let result: Vec<Vec<P>> =
         main_loop::<P, InitializerSample<N>, PokemonTypeGroup<P, N, R>, BufWriter<File>, N, R>(
-            file,
+            &mut file,
         )
         .unwrap();
-    let count: Vec<std::collections::HashMap<P, usize>> = count(result);
-    draw_graph(count, &format!("{}/img_{}.png", &dir_path, test_name));
+    let count: Vec<HashMap<P, usize>> = count(result);
+    draw_graph(&count, &format!("{}/img_{}.png", &dir_path, test_name));
+    find_tail_cycle(&count, &mut file).unwrap();
     Ok(())
 }

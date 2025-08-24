@@ -5,7 +5,7 @@ use rand::{
 };
 use scarlet_queen_core::{
     group::InitializerTrait,
-    pokemon_type::{PokemonType, PokemonTypeAll},
+    pokemon_type::{PokemonTypeAll, PokemonTypeTrait},
 };
 
 #[derive(Debug, Clone, Default)]
@@ -24,10 +24,10 @@ pub struct InitializerSample<const N: usize> {}
 
 impl<P, const N: usize> InitializerTrait<P, N> for InitializerSample<N>
 where
-    P: PokemonType,
+    P: PokemonTypeTrait,
 {
     fn initialize() -> [P; N] {
         let mut rng: ThreadRng = rng();
-        [0; N].map(|_| <P as PokemonType>::sample(&mut rng))
+        [0; N].map(|_| <P as PokemonTypeTrait>::sample(&mut rng))
     }
 }

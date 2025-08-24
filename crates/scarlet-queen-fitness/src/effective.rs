@@ -1,4 +1,4 @@
-use scarlet_queen_core::pokemon_type::PokemonType;
+use scarlet_queen_core::pokemon_type::PokemonTypeTrait;
 
 use crate::pokemon_type::FitnessPokemonType;
 
@@ -444,7 +444,7 @@ impl TypeEffectiveness {
         defense: &FitnessPokemonType<P>,
     ) -> TypeEffectiveness
     where
-        P: PokemonType,
+        P: PokemonTypeTrait,
     {
         TypeEffectiveness::EFFECTIVE_ARRAY[usize::from(attack)][usize::from(defense)]
     }
@@ -463,7 +463,7 @@ impl TypeEffectiveness {
 mod tests {
     use crate::{effective::TypeEffectiveness, pokemon_type::FitnessPokemonType};
     use scarlet_queen_core::{
-        individual::{EachCrateIndividual, Individual},
+        each_individual::{EachCrateIndividual, Individual},
         pokemon_type::PokemonTypeAll,
     };
     use std::rc::Rc;
@@ -474,2528 +474,4694 @@ mod tests {
         let testcases = vec![
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::None))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::None,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::NoEffect,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Normal))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Normal,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fire))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fire,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Water))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Water,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::NoEffect,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Electric))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Electric,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Grass))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Grass,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ice))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ice,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::NoEffect,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fighting))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fighting,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::NoEffect,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Poison))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Poison,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::NoEffect,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ground))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ground,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Flying))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Flying,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::NoEffect,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Psychic))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Psychic,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Bug))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Bug,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Rock))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Rock,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::NoEffect,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Ghost))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Ghost,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dragon))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dragon,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::NoEffect,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Dark))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Dark,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Steel))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Steel,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::None))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::None,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Normal))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Normal,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fire))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fire,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Water))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Water,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Electric))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Electric,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Grass))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Grass,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ice))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ice,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fighting))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fighting,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Poison))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Poison,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ground))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ground,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Flying))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Flying,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Psychic))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Psychic,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Bug))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Bug,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Rock))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Rock,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Ghost))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Ghost,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dragon))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dragon,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Dark))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Dark,
+                    ))),
                 ),
                 TypeEffectiveness::SuperEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Steel))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Steel,
+                    ))),
                 ),
                 TypeEffectiveness::NotVeryEffective,
             ),
             (
                 (
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(0, PokemonTypeAll::Fairy))),
-                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(1, PokemonTypeAll::Fairy))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        0,
+                        PokemonTypeAll::Fairy,
+                    ))),
+                    FitnessPokemonType::new(&Rc::new(Individual::new_with_id(
+                        1,
+                        PokemonTypeAll::Fairy,
+                    ))),
                 ),
                 TypeEffectiveness::Normal,
             ),

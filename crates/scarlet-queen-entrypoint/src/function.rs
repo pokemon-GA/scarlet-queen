@@ -7,7 +7,7 @@ use crate::error::Error;
 pub const MAIN_LOOP: usize = 100;
 
 pub fn main_loop<T, I, G, W, const N: usize, const R: usize>(
-    mut out: W,
+    out: &mut W,
 ) -> Result<Vec<Vec<T>>, Error>
 where
     T: Hash + Clone,
@@ -19,9 +19,9 @@ where
     let mut group: G = G::init::<I>();
     res.push(group.clone_values());
     for i in 1..(MAIN_LOOP + 1) {
-        writeln!(&mut out, "===== GENERATION {i:3} =====")?;
+        writeln!(out, "===== GENERATION {i:3} =====")?;
         group
-            .one_cycle_out(&mut out)
+            .one_cycle_out(out)
             .map_err(|v| Error::LoopError(format!("{v:?}")))?;
         res.push(group.clone_values());
     }
