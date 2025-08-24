@@ -119,9 +119,9 @@ mod pokemon_type_trait {
             Normal,
             Water,
         }
-        impl Into<PokemonTypeAll> for PTTraitSample {
-            fn into(self) -> PokemonTypeAll {
-                match self {
+        impl From<PTTraitSample> for PokemonTypeAll {
+            fn from(val: PTTraitSample) -> Self {
+                match val {
                     PTTraitSample::Normal => PokemonTypeAll::Normal,
                     PTTraitSample::Water => PokemonTypeAll::Water,
                 }

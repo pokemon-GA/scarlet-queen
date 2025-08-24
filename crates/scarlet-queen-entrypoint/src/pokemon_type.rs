@@ -36,7 +36,7 @@ where
         .collect::<Vec<HashMap<P, usize>>>()
 }
 
-pub fn draw_graph<P>(loop_result_count: &Vec<HashMap<P, usize>>, img_name: &str)
+pub fn draw_graph<P>(loop_result_count: &[HashMap<P, usize>], img_name: &str)
 where
     P: PokemonTypeTrait,
 {
