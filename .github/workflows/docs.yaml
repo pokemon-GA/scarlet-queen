@@ -33,7 +33,7 @@ jobs:
           publish_dir: ./docs/book
       # Build Astro
       - name: Build Astro
-        run: nix develop --command bash -c "cd hub && pnpm run build"
+        run: nix develop --command bash -c "cd hub && pnpm i && pnpm run build"
       # Add Astro
       - name: Add Astro
         run: |
