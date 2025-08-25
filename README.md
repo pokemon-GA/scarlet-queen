@@ -43,9 +43,13 @@ flowchart LR
 
 ### `scarlet-queen-core` (library crate)
 
+https://scarlet-queen.netlify.app/doc/scarlet_queen_core/
+
 Contains the core type definition and logic.
 
 ### `scarlet-queen-initializer` (library crate)
+
+https://scarlet-queen.netlify.app/doc/scarlet_queen_initializer/
 
 Contains the logic for initializing the group (environment).
 
@@ -55,9 +59,13 @@ Contains the logic for initializing the group (environment).
 
 ### `scarlet-queen-fitness` (library crate)
 
+https://scarlet-queen.netlify.app/doc/scarlet_queen_fitness/
+
 Contains the fitness evaluation logic.
 
 ### `scarlet-queen-selector` (library crate)
+
+https://scarlet-queen.netlify.app/doc/scarlet_queen_selector/
 
 Contains the logic for selecting individuals for the next generation.
 
@@ -68,6 +76,8 @@ Contains the logic for selecting individuals for the next generation.
 
 ### `scarlet-queen-replenisher` (library crate)
 
+https://scarlet-queen.netlify.app/doc/scarlet_queen_replenisher/
+
 Contains the logic for replenishing new individuals.
 
 - modules
@@ -76,9 +86,13 @@ Contains the logic for replenishing new individuals.
 
 ### `scarlet-queen-generation` (library crate)
 
+https://scarlet-queen.netlify.app/doc/scarlet_queen_generation/
+
 Contains the logic for managing the generation process.
 
 ### `scarlet-queen-entrypoint` (binary crate)
+
+https://scarlet-queen.netlify.app/doc/scarlet_queen_entrypoint/
 
 The binary crate that runs the Scarlet Queen framework.
 
