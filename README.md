@@ -115,7 +115,9 @@ cargo test
 cargo test -p <test_name>
 ```
 
-## Docs
+## Documents Site (mdbook)
+
+project directory: `docs/`
 
 > [!IMPORTANT]
 > When editing docs for the first time, let it add `mdbook`
@@ -126,7 +128,7 @@ install command is under the command
 cargo install mdbook
 ```
 
-- watch docs
+- start dev server
 
 > [!TIP]
 > This commands cannot deal with hot reloading. You have to reload manually, when you change the docs.
@@ -141,7 +143,7 @@ mdbook watch -o ./docs
 mdbook build ./docs
 ```
 
-### Docs plugins
+**mdbook plugins**
 
 - mdbook-mermaid
 
@@ -158,6 +160,32 @@ graph TD;
     C-->D;
 ```
 ~~~
+
+## Hub Page (Astro.js)
+
+project directory: `hub/`
+
+> [!IMPORTANT]
+> When editing hub page for the first time, let it add `pnpm`
+
+install command is under the following:
+
+https://pnpm.io/installation
+
+> [!IMPORTANT]
+> The following commands are executed under `hub/`.
+
+- start dev server
+
+```sh
+pnpm run dev
+```
+
+- build hub page
+
+```sh
+pnpm run build
+```
 
 ## Setup Project
 
