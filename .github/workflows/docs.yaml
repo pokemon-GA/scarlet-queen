@@ -25,6 +25,19 @@ jobs:
       - name: Add _config.yaml
         run: |
           cp ./docs/_config.yaml ./docs/book/
+      # Build rustdoc
+      - name: Build rustdoc
+        run: nix develop --command bash -c "cargo doc --no-deps --workspace"
+      # Add rustdoc to book
+      - name: Add rustdoc
+        run: |
+          cp -r ./target/doc/scarlet_queen_core ./docs/book/
+          cp -r ./target/doc/scarlet_queen_entrypoint ./docs/book/
+          cp -r ./target/doc/scarlet_queen_fitness ./docs/book/
+          cp -r ./target/doc/scarlet_queen_generation ./docs/book/
+          cp -r ./target/doc/scarlet_queen_initializer ./docs/book/
+          cp -r ./target/doc/scarlet_queen_replenisher ./docs/book/
+          cp -r ./target/doc/scarlet_queen_selector ./docs/book/
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
