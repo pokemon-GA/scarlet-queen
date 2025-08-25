@@ -324,17 +324,22 @@
 <h2 id="run-tests-for-a-specific-package"><a class="header" href="#run-tests-for-a-specific-package">Run tests for a specific package</a></h2>
 <pre><code class="language-sh">cargo test -p &lt;test_name&gt;
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="documents"><a class="header" href="#documents">Documents</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="documents-mdbook"><a class="header" href="#documents-mdbook">Documents (mdbook)</a></h1>
+<p>project directory: <code>docs/</code></p>
 <blockquote>
-<p>[!WARNING]
+<p>[!IMPORTANT]
 When editing docs for the first time, let it add <code>mdbook</code></p>
 </blockquote>
 <p>install command is under the command</p>
 <pre><code class="language-sh">cargo install mdbook
 </code></pre>
 <ul>
-<li>watch docs</li>
+<li>start dev server</li>
 </ul>
+<blockquote>
+<p>[!TIP]
+This commands cannot deal with hot reloading. You have to reload manually, when you change the docs.</p>
+</blockquote>
 <pre><code class="language-sh">mdbook watch -o ./docs
 </code></pre>
 <ul>
@@ -342,7 +347,7 @@ When editing docs for the first time, let it add <code>mdbook</code></p>
 </ul>
 <pre><code class="language-sh">mdbook build ./docs
 </code></pre>
-<h2 id="added-plugins"><a class="header" href="#added-plugins">added plugins</a></h2>
+<p><strong>mdbook plugins</strong></p>
 <ul>
 <li>mdbook-mermaid</li>
 </ul>
@@ -355,6 +360,28 @@ graph TD;
     B--&gt;D;
     C--&gt;D;
 ```
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hub-page-astrojs"><a class="header" href="#hub-page-astrojs">Hub Page (Astro.js)</a></h1>
+<p>project directory: <code>hub/</code></p>
+<blockquote>
+<p>[!IMPORTANT]
+When editing hub page for the first time, let it add <code>pnpm</code></p>
+</blockquote>
+<p>install command is under the following:</p>
+<p>https://pnpm.io/installation</p>
+<blockquote>
+<p>[!IMPORTANT]
+The following commands are executed under <code>hub/</code>.</p>
+</blockquote>
+<ul>
+<li>start dev server</li>
+</ul>
+<pre><code class="language-sh">pnpm run dev
+</code></pre>
+<ul>
+<li>build hub page</li>
+</ul>
+<pre><code class="language-sh">pnpm run build
 </code></pre>
 
                     </main>
