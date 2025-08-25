@@ -37,7 +37,7 @@ jobs:
       # Add Astro
       - name: Add Astro
         run: |
-          cp -pR ./hub/dist ./netlify
+          cp -pR ./hub/dist/* ./netlify
       # Build rustdoc
       - name: Build rustdoc
         run: nix develop --command bash -c "cargo doc --no-deps --workspace"
