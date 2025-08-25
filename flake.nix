@@ -38,6 +38,7 @@
               mdbook-mermaid
               # JavaScript
               nodejs
+              corepack
             ];
             RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
           };
