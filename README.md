@@ -8,6 +8,18 @@ The name is inspired by Red Queen's Hypothesis and Pokémon Scarlet and Violet.
 
 Red Queen's Hypothesis is a hypothesis about co-evolution.
 
+## Documentation
+
+- scarlet-queen
+
+[scarlet-queen](https://pokemon-ga.github.io/scarlet-queen/)
+
+- rustdoc
+
+https://scarlet-queen.netlify.app/
+
+
+- [rustdoc](https://scarlet-queen.netlify.app/)
 ## Project Dependencies
 
 ```mermaid
@@ -115,7 +127,7 @@ cargo test
 cargo test -p <test_name>
 ```
 
-## Documents (mdbook)
+## scarlet-queen Documentation (mdbook)
 
 project directory: `docs/`
 
@@ -161,7 +173,7 @@ graph TD;
 ```
 ~~~
 
-## Hub Page (Astro.js)
+## rustdoc Hub Page (Astro.js)
 
 project directory: `hub/`
 
