@@ -37,7 +37,7 @@ jobs:
       # Add rustdoc
       - name: Add rustdoc
         run: |
-          cp -r ./target/doc ./netlify/
+          cp -pR ./target/doc ./netlify
       # Deploy to Netlify
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1
