@@ -16,10 +16,8 @@ Red Queen's Hypothesis is a hypothesis about co-evolution.
 
 - rustdoc
 
-https://scarlet-queen.netlify.app/
+[rustdoc](https://scarlet-queen.netlify.app/)
 
-
-- [rustdoc](https://scarlet-queen.netlify.app/)
 ## Project Dependencies
 
 ```mermaid
