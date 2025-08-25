@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["each_individual","error","group","pokemon_type"]};

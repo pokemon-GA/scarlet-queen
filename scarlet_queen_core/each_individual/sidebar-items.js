@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["Individual"],"trait":["EachCrateIndividual","FitnessIndividualTrait","ReplenisherIndividualTrait","SelectorIndividualTrait"]};

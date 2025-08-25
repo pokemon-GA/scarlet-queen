@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["error","find_cycle","function","pokemon_type"]};

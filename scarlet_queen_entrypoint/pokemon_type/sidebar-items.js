@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["count","draw_graph","test_and_draw"]};
