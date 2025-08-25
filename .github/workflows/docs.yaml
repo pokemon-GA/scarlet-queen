@@ -25,22 +25,31 @@ jobs:
       - name: Add _config.yaml
         run: |
           cp ./docs/_config.yaml ./docs/book/
-      # Build rustdoc
-      - name: Build rustdoc
-        run: nix develop --command bash -c "cargo doc --no-deps --workspace"
-      # Add rustdoc to book
-      - name: Add rustdoc
-        run: |
-          cp -r ./target/doc/scarlet_queen_core ./docs/book/
-          cp -r ./target/doc/scarlet_queen_entrypoint ./docs/book/
-          cp -r ./target/doc/scarlet_queen_fitness ./docs/book/
-          cp -r ./target/doc/scarlet_queen_generation ./docs/book/
-          cp -r ./target/doc/scarlet_queen_initializer ./docs/book/
-          cp -r ./target/doc/scarlet_queen_replenisher ./docs/book/
-          cp -r ./target/doc/scarlet_queen_selector ./docs/book/
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/book
+      # Build rustdoc
+      - name: Build rustdoc
+        run: nix develop --command bash -c "cargo doc --no-deps --workspace"
+      # Add rustdoc
+      - name: Add rustdoc
+        run: |
+          cp -r ./target/doc ./netlify/
+      # Deploy to Netlify
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1
+        with:
+          publish-dir: './netlify'
+          production-branch: dev
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+          enable-pull-request-comment: true
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1
