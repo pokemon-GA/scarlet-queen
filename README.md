@@ -115,7 +115,7 @@ cargo test
 cargo test -p <test_name>
 ```
 
-## Documents Site (mdbook)
+## Documents (mdbook)
 
 project directory: `docs/`
 
