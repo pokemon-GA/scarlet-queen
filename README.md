@@ -12,7 +12,7 @@ Red Queen's Hypothesis is a hypothesis about co-evolution.
 
 - scarlet-queen
 
-pokemon-ga.github.io/scarlet-queen/
+[scarlet-queen](https://pokemon-ga.github.io/scarlet-queen/)
 
 - rustdoc
 
