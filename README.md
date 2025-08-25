@@ -178,11 +178,7 @@ graph TD;
 project directory: `hub/`
 
 > [!IMPORTANT]
-> When editing hub page for the first time, let it add `pnpm`
-
-install command is under the following:
-
-https://pnpm.io/installation
+> When editing hub page for the first time, let it add `npm` and run `npm i` in `hub/` directory.
 
 > [!IMPORTANT]
 > The following commands are executed under `hub/`.
@@ -190,13 +186,13 @@ https://pnpm.io/installation
 - start dev server
 
 ```sh
-pnpm run dev
+npm run dev
 ```
 
 - build hub page
 
 ```sh
-pnpm run build
+npm run build
 ```
 
 ## Setup Project
