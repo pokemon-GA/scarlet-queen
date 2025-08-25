@@ -1,6 +1,8 @@
-# Documents
+# Documents (mdbook)
 
-> [!WARNING]
+project directory: `docs/`
+
+> [!IMPORTANT]
 > When editing docs for the first time, let it add `mdbook`
 
 install command is under the command
@@ -9,7 +11,10 @@ install command is under the command
 cargo install mdbook
 ```
 
-- watch docs
+- start dev server
+
+> [!TIP]
+> This commands cannot deal with hot reloading. You have to reload manually, when you change the docs.
 
 ```sh
 mdbook watch -o ./docs
@@ -21,7 +26,7 @@ mdbook watch -o ./docs
 mdbook build ./docs
 ```
 
-## added plugins
+**mdbook plugins**
 
 - mdbook-mermaid
 
