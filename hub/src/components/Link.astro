@@ -1,0 +1,29 @@
+---
+const { title, url } = Astro.props;
+---
+
+<li>
+  <a href={url} target="_blank" rel="noopener noreferrer">
+    <h2>{title}</h2>
+  </a>
+</li>
+
+<style>
+  li {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 20px;
+    background-color: rgb(216, 177, 1);
+    list-style: none;
+  }
+  a {
+    color: #000000;
+  }
+  h2 {
+    color: #000000;
+    font-size: 1.5rem;
+    padding: 20px 30px;
+  }
+</style>

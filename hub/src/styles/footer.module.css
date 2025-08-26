@@ -1,0 +1,12 @@
+.footer {
+  width: fit-content;
+  height: fit-content;
+  border-radius: 22px;
+  padding: 10px 20px;
+  margin: 270px auto 50px auto;
+  background-color: rgb(216, 177, 1);
+}
+
+.copyRight {
+  font-size: 1.2rem;
+}
