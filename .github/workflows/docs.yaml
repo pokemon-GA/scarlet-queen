@@ -22,7 +22,7 @@ jobs:
       - name: Build mdbook
         run: nix develop --command bash -c "mdbook build ./docs"
       # Add _config.yaml
-      - name: Add _config.yaml
+      - name: Add _config.yaml to GitHub Pages
         run: |
           cp ./docs/_config.yaml ./docs/book/
       # Deploy to GitHub Pages
@@ -35,14 +35,14 @@ jobs:
       - name: Build Astro
         run: nix develop --command bash -c "cd hub && npm i && npm run build"
       # Add Astro
-      - name: Add Astro
+      - name: Add Astro to Netlify
         run: |
           cp -pR ./hub/dist/* ./netlify
       # Build rustdoc
       - name: Build rustdoc
         run: nix develop --command bash -c "cargo doc --no-deps --workspace"
       # Add rustdoc
-      - name: Add rustdoc
+      - name: Add rustdoc to Netlify
         run: |
           cp -r ./target/doc ./netlify
       # Deploy to Netlify
