@@ -10,13 +10,13 @@ Red Queen's Hypothesis is a hypothesis about co-evolution.
 
 ## Documentation
 
-- scarlet-queen
+- mdbook
 
-[scarlet-queen](https://pokemon-ga.github.io/scarlet-queen/)
+[mdbook](https://pokemon-ga.github.io/scarlet-queen/) (https://pokemon-ga.github.io/scarlet-queen/)
 
 - rustdoc
 
-[rustdoc](https://scarlet-queen.netlify.app/)
+[rustdoc](https://scarlet-queen.netlify.app/) (https://scarlet-queen.netlify.app/)
 
 ## Project Dependencies
 
