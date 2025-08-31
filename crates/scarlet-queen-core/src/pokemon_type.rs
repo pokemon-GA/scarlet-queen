@@ -1,13 +1,13 @@
 //! Mod for `PokemonType`, `PokemonTypeAll` and other.
 
+pub use pokemon_type_trait::PokemonTypeTrait;
 pub use pokemon_type_all::PokemonTypeAll;
 pub use pokemon_type_fwg::PokemonTypeFWG;
-pub use pokemon_type_trait::PokemonTypeTrait;
 
 mod pokemon_type_trait {
-    use super::PokemonTypeAll;
-    use plotters::style::Color;
     use std::hash::Hash;
+    use plotters::style::Color;
+    use super::PokemonTypeAll;
 
     /// A trait for a enum which is a `PokemonTypeAll` subset.
     ///
@@ -79,9 +79,7 @@ mod pokemon_type_trait {
     ///         .contains(&sample)
     /// )
     /// ```
-    pub trait PokemonTypeTrait:
-        Into<PokemonTypeAll> + TryFrom<PokemonTypeAll> + Clone + Eq + Hash
-    {
+    pub trait PokemonTypeTrait: Into<PokemonTypeAll> + TryFrom<PokemonTypeAll> + Clone + Eq + Hash {
         /// The size of subset.
         const ALL_LEN: usize;
         /// All of this values.
@@ -110,18 +108,18 @@ mod pokemon_type_trait {
 
     #[cfg(test)]
     mod tests {
-        use super::{PokemonTypeAll, PokemonTypeTrait};
-        use plotters::style::Color;
         use std::collections::HashMap;
+        use plotters::style::Color;
+        use super::{PokemonTypeTrait, PokemonTypeAll};
 
         #[derive(Clone, PartialEq, Eq, Hash)]
         enum PTTraitSample {
             Normal,
             Water,
         }
-        impl From<PTTraitSample> for PokemonTypeAll {
-            fn from(val: PTTraitSample) -> Self {
-                match val {
+        impl Into<PokemonTypeAll> for PTTraitSample {
+            fn into(self) -> PokemonTypeAll {
+                match self {
                     PTTraitSample::Normal => PokemonTypeAll::Normal,
                     PTTraitSample::Water => PokemonTypeAll::Water,
                 }
@@ -158,7 +156,7 @@ mod pokemon_type_trait {
                 None,
                 None,
                 None,
-                None,
+                None
             ];
         }
 
@@ -171,8 +169,7 @@ mod pokemon_type_trait {
                 .filter_map(|v| v.clone().map(|v| (v, false)))
                 .collect::<HashMap<PTTraitSample, bool>>();
             for _ in 0..140 {
-                let pokemon_type: PTTraitSample =
-                    <PTTraitSample as PokemonTypeTrait>::sample(&mut thread_rng);
+                let pokemon_type: PTTraitSample = <PTTraitSample as PokemonTypeTrait>::sample(&mut thread_rng);
                 if let Some(v) = seen.get_mut(&pokemon_type) {
                     *v = true
                 }
@@ -187,21 +184,17 @@ mod pokemon_type_trait {
                 (PTTraitSample::Water, PokemonTypeAll::Water.color_map()),
             ];
             for (arg, result) in testcases.into_iter() {
-                assert_eq!(
-                    <PTTraitSample as PokemonTypeTrait>::color_map(&arg).rgb(),
-                    result.rgb()
-                );
+                assert_eq!(<PTTraitSample as PokemonTypeTrait>::color_map(&arg).rgb(), result.rgb());
             }
         }
     }
 }
 
 mod pokemon_type_all {
-    use super::PokemonTypeTrait;
-    use crate::error::CoreError;
+    use std::str::FromStr;
     use plotters::style::{Color, RGBColor};
     use rand::distr::{Distribution, StandardUniform};
-    use std::str::FromStr;
+    use crate::{error::CoreError, pokemon_type::PokemonTypeTrait};
 
     /// All of pokemon type.
     #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -255,7 +248,7 @@ mod pokemon_type_all {
         }
     }
 
-    // Implment `PokemonType`.
+    // Implment `PokemonTypeTrait`.
     impl PokemonTypeTrait for PokemonTypeAll {
         const ALL_LEN: usize = 19;
         const ALL: [Option<Self>; 19] = [
@@ -343,11 +336,11 @@ mod pokemon_type_all {
 
     #[cfg(test)]
     mod tests {
-        use super::PokemonTypeAll;
-        use crate::error::CoreError;
+        use std::{collections::HashMap, str::FromStr};
         use plotters::style::Color;
         use rand::{distr::StandardUniform, Rng};
-        use std::{collections::HashMap, str::FromStr};
+        use crate::error::CoreError;
+        use super::PokemonTypeAll;
 
         #[test]
         fn test_pokemontypeall_colormap() {
@@ -471,12 +464,11 @@ mod pokemon_type_all {
                 (PokemonTypeAll::Steel, false),
                 (PokemonTypeAll::Fairy, false),
             ]
-            .into_iter()
-            .collect::<HashMap<PokemonTypeAll, bool>>();
+                .into_iter()
+                .collect::<HashMap<PokemonTypeAll, bool>>();
             for _ in 0..140 {
-                let pokemon_type: PokemonTypeAll =
-                    thread_rng.sample::<PokemonTypeAll, StandardUniform>(StandardUniform);
-                if let Some(v) = seen.get_mut(&pokemon_type) {
+                let pokemon_type: PokemonTypeAll = thread_rng.sample::<PokemonTypeAll, StandardUniform>(StandardUniform);
+                if let Some(v) =  seen.get_mut(&pokemon_type) {
                     *v = true;
                 };
             }
@@ -486,8 +478,8 @@ mod pokemon_type_all {
 }
 
 mod pokemon_type_fwg {
-    use super::PokemonTypeAll;
     use crate::{error::CoreError, pokemon_type::PokemonTypeTrait};
+    use super::PokemonTypeAll;
 
     /// A set of Fire, Water, and Grass.
     #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -522,7 +514,7 @@ mod pokemon_type_fwg {
         }
     }
 
-    // Implment `PokemonType`.
+    // Implment `PokemonTypeTrait`.
     impl PokemonTypeTrait for PokemonTypeFWG {
         const ALL_LEN: usize = 3;
         const ALL: [Option<Self>; 19] = [
@@ -554,11 +546,8 @@ mod pokemon_type_fwg {
 
         use plotters::style::Color;
 
+        use crate::{error::CoreError, pokemon_type::{PokemonTypeTrait, PokemonTypeAll}};
         use super::PokemonTypeFWG;
-        use crate::{
-            error::CoreError,
-            pokemon_type::{PokemonTypeAll, PokemonTypeTrait},
-        };
 
         #[test]
         fn test_pokemontypefwg_into_pokemontypeall_into() {
@@ -579,17 +568,11 @@ mod pokemon_type_fwg {
                 (PokemonTypeAll::Fire, Ok(PokemonTypeFWG::Fire)),
                 (PokemonTypeAll::Water, Ok(PokemonTypeFWG::Water)),
                 (PokemonTypeAll::Grass, Ok(PokemonTypeFWG::Grass)),
-                (
-                    PokemonTypeAll::Normal,
-                    Err(CoreError::PokemonTypeConvertError),
-                ),
+                (PokemonTypeAll::Normal, Err(CoreError::PokemonTypeConvertError))
             ];
 
             for (arg, result) in testcases.into_iter() {
-                assert_eq!(
-                    <PokemonTypeFWG as TryFrom<PokemonTypeAll>>::try_from(arg),
-                    result
-                );
+                assert_eq!(<PokemonTypeFWG as TryFrom<PokemonTypeAll>>::try_from(arg), result);
             }
         }
 
@@ -602,8 +585,7 @@ mod pokemon_type_fwg {
                 .filter_map(|v| v.clone().map(|v| (v, false)))
                 .collect::<HashMap<PokemonTypeFWG, bool>>();
             for _ in 0..140 {
-                let pokemon_type: PokemonTypeFWG =
-                    <PokemonTypeFWG as PokemonTypeTrait>::sample(&mut thread_rng);
+                let pokemon_type: PokemonTypeFWG = <PokemonTypeFWG as PokemonTypeTrait>::sample(&mut thread_rng);
                 if let Some(v) = seen.get_mut(&pokemon_type) {
                     *v = true
                 }
@@ -619,10 +601,7 @@ mod pokemon_type_fwg {
                 (PokemonTypeFWG::Grass, PokemonTypeAll::Grass.color_map()),
             ];
             for (arg, result) in testcases.into_iter() {
-                assert_eq!(
-                    <PokemonTypeFWG as PokemonTypeTrait>::color_map(&arg).rgb(),
-                    result.rgb()
-                );
+                assert_eq!(<PokemonTypeFWG as PokemonTypeTrait>::color_map(&arg).rgb(), result.rgb());
             }
         }
     }
