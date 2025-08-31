@@ -8,6 +8,16 @@ The name is inspired by Red Queen's Hypothesis and Pokémon Scarlet and Violet.
 
 Red Queen's Hypothesis is a hypothesis about co-evolution.
 
+## Documentation
+
+- mdbook
+
+[mdbook](https://pokemon-ga.github.io/scarlet-queen/) (https://pokemon-ga.github.io/scarlet-queen/)
+
+- rustdoc
+
+[rustdoc](https://scarlet-queen.netlify.app/) (https://scarlet-queen.netlify.app/)
+
 ## Project Dependencies
 
 ```mermaid
@@ -43,9 +53,13 @@ flowchart LR
 
 ### `scarlet-queen-core` (library crate)
 
+https://scarlet-queen.netlify.app/doc/scarlet_queen_core/
+
 Contains the core type definition and logic.
 
 ### `scarlet-queen-initializer` (library crate)
+
+https://scarlet-queen.netlify.app/doc/scarlet_queen_initializer/
 
 Contains the logic for initializing the group (environment).
 
@@ -55,9 +69,13 @@ Contains the logic for initializing the group (environment).
 
 ### `scarlet-queen-fitness` (library crate)
 
+https://scarlet-queen.netlify.app/doc/scarlet_queen_fitness/
+
 Contains the fitness evaluation logic.
 
 ### `scarlet-queen-selector` (library crate)
+
+https://scarlet-queen.netlify.app/doc/scarlet_queen_selector/
 
 Contains the logic for selecting individuals for the next generation.
 
@@ -68,6 +86,8 @@ Contains the logic for selecting individuals for the next generation.
 
 ### `scarlet-queen-replenisher` (library crate)
 
+https://scarlet-queen.netlify.app/doc/scarlet_queen_replenisher/
+
 Contains the logic for replenishing new individuals.
 
 - modules
@@ -76,9 +96,13 @@ Contains the logic for replenishing new individuals.
 
 ### `scarlet-queen-generation` (library crate)
 
+https://scarlet-queen.netlify.app/doc/scarlet_queen_generation/
+
 Contains the logic for managing the generation process.
 
 ### `scarlet-queen-entrypoint` (binary crate)
+
+https://scarlet-queen.netlify.app/doc/scarlet_queen_entrypoint/
 
 The binary crate that runs the Scarlet Queen framework.
 
@@ -101,7 +125,9 @@ cargo test
 cargo test -p <test_name>
 ```
 
-## Docs
+## scarlet-queen Documentation (mdbook)
+
+project directory: `docs/`
 
 > [!IMPORTANT]
 > When editing docs for the first time, let it add `mdbook`
@@ -112,7 +138,7 @@ install command is under the command
 cargo install mdbook
 ```
 
-- watch docs
+- start dev server
 
 > [!TIP]
 > This commands cannot deal with hot reloading. You have to reload manually, when you change the docs.
@@ -127,7 +153,7 @@ mdbook watch -o ./docs
 mdbook build ./docs
 ```
 
-### Docs plugins
+**mdbook plugins**
 
 - mdbook-mermaid
 
@@ -144,6 +170,28 @@ graph TD;
     C-->D;
 ```
 ~~~
+
+## rustdoc Hub Page (Astro.js)
+
+project directory: `hub/`
+
+> [!IMPORTANT]
+> When editing hub page for the first time, let it add `npm` and run `npm i` in `hub/` directory.
+
+> [!IMPORTANT]
+> The following commands are executed under `hub/`.
+
+- start dev server
+
+```sh
+npm run dev
+```
+
+- build hub page
+
+```sh
+npm run build
+```
 
 ## Setup Project
 

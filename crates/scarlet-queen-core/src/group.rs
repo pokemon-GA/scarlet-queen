@@ -1,7 +1,7 @@
 //! Mod for `InitializerTrait` and `GroupTrait`.
 
+pub use group_trait::GroupTrait;
 pub use initializer::InitializerTrait;
-pub use group::GroupTrait;
 
 mod initializer {
     //! Mod for `InitializerTrait`.
@@ -20,7 +20,7 @@ mod initializer {
         /// * `R` - The `R` of group
         fn init_group<G, const R: usize>() -> G
         where
-            G: GroupTrait<T, N, R>
+            G: GroupTrait<T, N, R>,
         {
             G::new(Self::initialize())
         }
@@ -43,20 +43,29 @@ mod initializer {
 
         #[test]
         fn test_initalizertrait_initialize() {
-            assert_eq!(<SampleInitializer as InitializerTrait<u8, 0>>::initialize(), []);
-            assert_eq!(<SampleInitializer as InitializerTrait<u8, 4>>::initialize(), [0, 1, 2, 3]);
-            assert_eq!(<SampleInitializer as InitializerTrait<u8, 6>>::initialize(), [0, 1, 2, 3, 4, 5]);
+            assert_eq!(
+                <SampleInitializer as InitializerTrait<u8, 0>>::initialize(),
+                []
+            );
+            assert_eq!(
+                <SampleInitializer as InitializerTrait<u8, 4>>::initialize(),
+                [0, 1, 2, 3]
+            );
+            assert_eq!(
+                <SampleInitializer as InitializerTrait<u8, 6>>::initialize(),
+                [0, 1, 2, 3, 4, 5]
+            );
         }
     }
 }
 
-mod group {
+mod group_trait {
     //! Mod for `GroupTrait`.
 
     use std::{fmt::Debug, io::Write};
 
-    use crate::individual::Individual;
     use super::InitializerTrait;
+    use crate::each_individual::Individual;
 
     /// A trait for a group which contains individuals.
     /// * `T` - A element of this group
@@ -84,7 +93,7 @@ mod group {
         fn init<I>() -> Self
         where
             I: InitializerTrait<T, N>,
-            Self: Sized
+            Self: Sized,
         {
             I::init_group::<Self, R>()
         }
@@ -99,7 +108,7 @@ mod group {
         ///
         /// By default, there is not outputing.(Run `one_cycle` simply.)
         /// * `out` - A target of outputing.
-        fn one_cycle_out<W>(&mut self, out: W) -> Result<(), Self::Err>
+        fn one_cycle_out<W>(&mut self, out: &mut W) -> Result<(), Self::Err>
         where
             W: Write,
         {
@@ -109,10 +118,12 @@ mod group {
         /// Clone individuals which are contained by this.
         fn clone_values(&self) -> Vec<T>
         where
-            T: Clone
+            T: Clone,
         {
-            self.iter().map(|v| v.get_value()).cloned().collect::<Vec<T>>()
+            self.iter()
+                .map(|v| v.get_value())
+                .cloned()
+                .collect::<Vec<T>>()
         }
     }
-
 }

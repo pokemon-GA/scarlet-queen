@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy-docs:
+  docs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -22,7 +22,7 @@ jobs:
       - name: Build mdbook
         run: nix develop --command bash -c "mdbook build ./docs"
       # Add _config.yaml
-      - name: Add _config.yaml
+      - name: Add _config.yaml to GitHub Pages
         run: |
           cp ./docs/_config.yaml ./docs/book/
       # Deploy to GitHub Pages
@@ -31,3 +31,32 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/book
+      # Build Astro
+      - name: Build Astro
+        run: nix develop --command bash -c "cd hub && npm i && npm run build"
+      # Add Astro
+      - name: Add Astro to Netlify
+        run: |
+          cp -pR ./hub/dist/* ./netlify
+      # Build rustdoc
+      - name: Build rustdoc
+        run: nix develop --command bash -c "cargo doc --no-deps --workspace"
+      # Add rustdoc
+      - name: Add rustdoc to Netlify
+        run: |
+          cp -r ./target/doc ./netlify
+      # Deploy to Netlify
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1
+        with:
+          publish-dir: './netlify'
+          production-branch: dev
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+          enable-pull-request-comment: true
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1

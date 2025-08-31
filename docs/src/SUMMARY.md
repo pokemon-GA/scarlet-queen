@@ -12,3 +12,4 @@
 - [Branch Strategy](./contribute/branch_strategy.md)
 - [Test](./contribute/test.md)
 - [Documents](./contribute/documents.md)
+- [Hub Page](./contribute/hub_page.md)

@@ -1,10 +1,10 @@
 use crate::{error::GenerationError, individual::GenerationIndividual};
 use scarlet_queen_core::{
-    group::GroupTrait,
-    individual::{
+    each_individual::{
         EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait,
         SelectorIndividualTrait,
     },
+    group::GroupTrait,
 };
 use scarlet_queen_fitness::pokemon_type::FitnessPokemonType;
 use scarlet_queen_replenisher::from_top::FromTopReplenisherIndividual;
@@ -20,9 +20,9 @@ use std::{
 pub struct Group<T, FI, SI, RI, const N: usize, const R: usize>
 where
     T: Clone,
-    FI: EachCrateIndividual<Item=T> + FitnessIndividualTrait,
-    SI: EachCrateIndividual<Item=T> + SelectorIndividualTrait<R>,
-    RI: EachCrateIndividual<Item=T> + ReplenisherIndividualTrait<N, R>
+    FI: EachCrateIndividual<Item = T> + FitnessIndividualTrait,
+    SI: EachCrateIndividual<Item = T> + SelectorIndividualTrait<R>,
+    RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
 {
     data: Vec<GenerationIndividual<T, FI, SI, RI, N, R>>,
 }
@@ -30,9 +30,9 @@ where
 impl<T, FI, SI, RI, const N: usize, const R: usize> GroupTrait<T, N, R> for Group<T, FI, SI, RI, N, R>
 where
     T: Clone + Debug,
-    FI: EachCrateIndividual<Item=T> + FitnessIndividualTrait,
-    SI: EachCrateIndividual<Item=T> + SelectorIndividualTrait<R>,
-    RI: EachCrateIndividual<Item=T> + ReplenisherIndividualTrait<N, R>
+    FI: EachCrateIndividual<Item = T> + FitnessIndividualTrait,
+    SI: EachCrateIndividual<Item = T> + SelectorIndividualTrait<R>,
+    RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
 {
     type Err = GenerationError;
 
@@ -72,7 +72,7 @@ where
         Ok(())
     }
 
-    fn one_loop_out<W>(&mut self, out: &mut W) -> Result<(), Self::Err>
+    fn one_cycle_out<W>(&mut self, out: &mut W) -> Result<(), Self::Err>
     where
         W: std::io::Write,
     {
@@ -128,9 +128,9 @@ where
 impl<'a, T, FI, SI, RI, const N: usize, const R: usize> IntoIterator for &'a Group<T, FI, SI, RI, N, R>
 where
     T: Clone,
-    FI: EachCrateIndividual<Item=T> + FitnessIndividualTrait,
-    SI: EachCrateIndividual<Item=T> + SelectorIndividualTrait<R>,
-    RI: EachCrateIndividual<Item=T> + ReplenisherIndividualTrait<N, R>
+    FI: EachCrateIndividual<Item = T> + FitnessIndividualTrait,
+    SI: EachCrateIndividual<Item = T> + SelectorIndividualTrait<R>,
+    RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
 {
     type IntoIter = Iter<'a, GenerationIndividual<T, FI, SI, RI, N, R>>;
     type Item = &'a GenerationIndividual<T, FI, SI, RI, N, R>;

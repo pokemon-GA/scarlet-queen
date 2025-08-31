@@ -2,7 +2,7 @@
 target
 
 # mdbook
-index.html
+/index.html
 
 # Nix
 /.direnv

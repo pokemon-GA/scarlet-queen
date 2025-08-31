@@ -3,7 +3,9 @@ use std::{
     rc::Rc,
 };
 
-use scarlet_queen_core::individual::{EachCrateIndividual, Individual, SelectorIndividualTrait};
+use scarlet_queen_core::each_individual::{
+    EachCrateIndividual, Individual, SelectorIndividualTrait,
+};
 
 use crate::error::SelectorError;
 
@@ -56,9 +58,7 @@ impl<T, const R: usize> SelectorIndividualTrait<R> for RankSelectorIndividual<T,
                 let id: usize = v.get_id();
                 scores
                     .get(&id)
-                    .map_or(Err(SelectorError::BadScoreDataError), |&v| {
-                        Ok((id, v))
-                    })
+                    .map_or(Err(SelectorError::BadScoreDataError), |&v| Ok((id, v)))
             })
             .collect::<Result<Vec<(usize, usize)>, SelectorError>>()?;
 
