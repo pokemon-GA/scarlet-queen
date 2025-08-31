@@ -21,7 +21,7 @@ where
     for i in 1..(MAIN_LOOP + 1) {
         writeln!(out, "===== GENERATION {i:3} =====")?;
         group
-            .one_cycle_out(&mut out)
+            .one_cycle_out(out)
             .map_err(|v| Error::LoopError(format!("{v:?}")))?;
         res.push(group.clone_values());
     }
