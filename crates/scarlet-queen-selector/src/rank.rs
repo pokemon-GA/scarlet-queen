@@ -9,6 +9,7 @@ use scarlet_queen_core::each_individual::{
 
 use crate::error::SelectorError;
 
+#[derive(Debug)]
 pub struct RankSelectorIndividual<T, const R: usize> {
     individual: Rc<Individual<T>>,
 }
@@ -69,5 +70,39 @@ impl<T, const R: usize> SelectorIndividualTrait<R> for RankSelectorIndividual<T,
             .take(R)
             .map(|(id, _)| id)
             .collect::<HashSet<usize>>())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::{
+        collections::{HashMap, HashSet},
+        rc::Rc,
+    };
+
+    use scarlet_queen_core::each_individual::{
+        EachCrateIndividual, Individual, SelectorIndividualTrait,
+    };
+
+    use crate::rank::RankSelectorIndividual;
+
+    #[test]
+    fn test_selected_ids() {
+        let group: Vec<RankSelectorIndividual<&'static str, 2>> = vec![
+            RankSelectorIndividual::new(&Rc::new(Individual::new_with_id(1, "A"))),
+            RankSelectorIndividual::new(&Rc::new(Individual::new_with_id(2, "A"))),
+            RankSelectorIndividual::new(&Rc::new(Individual::new_with_id(3, "B"))),
+            RankSelectorIndividual::new(&Rc::new(Individual::new_with_id(4, "B"))),
+            RankSelectorIndividual::new(&Rc::new(Individual::new_with_id(5, "C"))),
+            RankSelectorIndividual::new(&Rc::new(Individual::new_with_id(6, "C"))),
+        ];
+        let group_refs: Vec<&RankSelectorIndividual<&'static str, 2>> = group.iter().collect();
+
+        let scores: HashMap<usize, usize> =
+            HashMap::from([(1, 10), (2, 10), (3, 20), (4, 20), (5, 30), (6, 30)]);
+
+        let selected = RankSelectorIndividual::selected_ids(group_refs, scores).unwrap();
+
+        assert_eq!(selected, HashSet::from([5, 6]));
     }
 }

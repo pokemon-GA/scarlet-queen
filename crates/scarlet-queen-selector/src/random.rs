@@ -9,6 +9,7 @@ use std::{
 
 use crate::error::SelectorError;
 
+#[derive(Debug)]
 pub struct RandomSelectorIndividual<T, const R: usize> {
     individual: Rc<Individual<T>>,
 }
@@ -58,5 +59,36 @@ impl<T, const R: usize> SelectorIndividualTrait<R> for RandomSelectorIndividual<
             .choose_multiple(&mut rng, R)
             .map(|v| v.get_id())
             .collect::<HashSet<usize>>())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::{collections::HashMap, rc::Rc};
+
+    use scarlet_queen_core::each_individual::{
+        EachCrateIndividual, Individual, SelectorIndividualTrait,
+    };
+
+    use crate::random::RandomSelectorIndividual;
+
+    #[test]
+    fn test_selected_ids() {
+        let group: Vec<RandomSelectorIndividual<&'static str, 2>> = vec![
+            RandomSelectorIndividual::new(&Rc::new(Individual::new_with_id(1, "A"))),
+            RandomSelectorIndividual::new(&Rc::new(Individual::new_with_id(2, "A"))),
+            RandomSelectorIndividual::new(&Rc::new(Individual::new_with_id(3, "B"))),
+            RandomSelectorIndividual::new(&Rc::new(Individual::new_with_id(4, "B"))),
+            RandomSelectorIndividual::new(&Rc::new(Individual::new_with_id(5, "C"))),
+            RandomSelectorIndividual::new(&Rc::new(Individual::new_with_id(6, "C"))),
+        ];
+        let group_refs: Vec<&RandomSelectorIndividual<&'static str, 2>> = group.iter().collect();
+
+        let scores: HashMap<usize, usize> =
+            HashMap::from([(1, 10), (2, 10), (3, 20), (4, 20), (5, 30), (6, 30)]);
+
+        let selected = RandomSelectorIndividual::selected_ids(group_refs, scores).unwrap();
+
+        assert_eq!(selected.len(), 2);
     }
 }
