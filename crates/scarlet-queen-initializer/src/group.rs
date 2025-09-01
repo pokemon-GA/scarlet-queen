@@ -1,6 +1,7 @@
 use rand::rng;
 use scarlet_queen_core::{group::InitializerTrait, pokemon_type::PokemonTypeTrait};
 
+#[derive(Debug)]
 pub struct InitializerSample<const N: usize> {}
 
 impl<P, const N: usize> InitializerTrait<P, N> for InitializerSample<N>
