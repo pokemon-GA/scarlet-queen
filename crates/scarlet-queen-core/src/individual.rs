@@ -2,12 +2,12 @@
 
 use std::{
     collections::{HashMap, HashSet},
-    fmt::Debug
+    fmt::Debug,
 };
 
-pub use individual::Individual;
 pub use each_crate_individual::EachCrateIndividual;
 pub use fitness_individual::FitnessIndividualTrait;
+pub use individual::Individual;
 
 mod individual {
     //! Mod for `Individual`.
@@ -85,15 +85,24 @@ mod individual {
             let testcases: Vec<(u8, Individual<u8>)> = vec![
                 (
                     5u8,
-                    Individual::<u8> { id: RefCell::new(0), value: 5 }
+                    Individual::<u8> {
+                        id: RefCell::new(0),
+                        value: 5,
+                    },
                 ),
                 (
                     0u8,
-                    Individual::<u8> { id: RefCell::new(0), value: 0 }
+                    Individual::<u8> {
+                        id: RefCell::new(0),
+                        value: 0,
+                    },
                 ),
                 (
                     13u8,
-                    Individual::<u8> { id: RefCell::new(0), value: 13 }
+                    Individual::<u8> {
+                        id: RefCell::new(0),
+                        value: 13,
+                    },
                 ),
             ];
             for (arg, result) in testcases.into_iter() {
@@ -105,25 +114,25 @@ mod individual {
         fn test_individual_newwithid() {
             let testcases: Vec<((usize, u8), Individual<u8>)> = vec![
                 (
-                    (
-                        6usize,
-                        5u8
-                    ),
-                    Individual::<u8> { id: RefCell::new(6), value: 5 }
+                    (6usize, 5u8),
+                    Individual::<u8> {
+                        id: RefCell::new(6),
+                        value: 5,
+                    },
                 ),
                 (
-                    (
-                        10usize,
-                        0u8
-                    ),
-                    Individual::<u8> { id: RefCell::new(10), value: 0 }
+                    (10usize, 0u8),
+                    Individual::<u8> {
+                        id: RefCell::new(10),
+                        value: 0,
+                    },
                 ),
                 (
-                    (
-                        0usize,
-                        13u8
-                    ),
-                    Individual::<u8> { id: RefCell::new(0), value: 13 }
+                    (0usize, 13u8),
+                    Individual::<u8> {
+                        id: RefCell::new(0),
+                        value: 13,
+                    },
                 ),
             ];
             for ((arg_1, arg_2), result) in testcases.into_iter() {
@@ -134,18 +143,9 @@ mod individual {
         #[test]
         fn test_individual_getid() {
             let testcases: Vec<(Individual<u8>, usize)> = vec![
-                (
-                    Individual::new_with_id(6usize, 5u8),
-                    6usize
-                ),
-                (
-                    Individual::new_with_id(10usize, 0u8),
-                    10usize
-                ),
-                (
-                    Individual::new_with_id(0usize, 13u8),
-                    0usize
-                )
+                (Individual::new_with_id(6usize, 5u8), 6usize),
+                (Individual::new_with_id(10usize, 0u8), 10usize),
+                (Individual::new_with_id(0usize, 13u8), 0usize),
             ];
             for (arg, result) in testcases.into_iter() {
                 assert_eq!(Individual::<u8>::get_id(&arg), result)
@@ -155,18 +155,9 @@ mod individual {
         #[test]
         fn test_individual_setid() {
             let testcases: Vec<(Individual<u8>, usize)> = vec![
-                (
-                    Individual::new_with_id(6usize, 5u8),
-                    10usize
-                ),
-                (
-                    Individual::new_with_id(10usize, 0u8),
-                    0usize
-                ),
-                (
-                    Individual::new_with_id(0usize, 13u8),
-                    6usize
-                )
+                (Individual::new_with_id(6usize, 5u8), 10usize),
+                (Individual::new_with_id(10usize, 0u8), 0usize),
+                (Individual::new_with_id(0usize, 13u8), 6usize),
             ];
             for (arg_1, arg_2) in testcases.into_iter() {
                 arg_1.set_id(arg_2);
@@ -177,18 +168,9 @@ mod individual {
         #[test]
         fn test_individual_getvalue() {
             let testcases: Vec<(Individual<u8>, u8)> = vec![
-                (
-                    Individual::new_with_id(6usize, 5u8),
-                    5u8
-                ),
-                (
-                    Individual::new_with_id(10usize, 0u8),
-                    0u8
-                ),
-                (
-                    Individual::new_with_id(0usize, 13u8),
-                    13u8
-                )
+                (Individual::new_with_id(6usize, 5u8), 5u8),
+                (Individual::new_with_id(10usize, 0u8), 0u8),
+                (Individual::new_with_id(0usize, 13u8), 13u8),
             ];
             for (arg_1, arg_2) in testcases.into_iter() {
                 assert_eq!(Individual::<u8>::get_value(&arg_1), &arg_2)
@@ -260,8 +242,8 @@ mod each_crate_individual {
     mod tests {
         use std::rc::Rc;
 
-        use crate::individual::Individual;
         use super::EachCrateIndividual;
+        use crate::individual::Individual;
 
         #[derive(PartialEq, Eq, Debug)]
         struct SampleIndividual(Rc<Individual<u8>>);
@@ -283,18 +265,9 @@ mod each_crate_individual {
                 Rc::new(Individual::new_with_id(5usize, 13u8)),
             ];
             let testcases: Vec<(Rc<Individual<u8>>, SampleIndividual)> = vec![
-                (
-                    Rc::clone(&base[0]),
-                    SampleIndividual(Rc::clone(&base[0]))
-                ),
-                (
-                    Rc::clone(&base[1]),
-                    SampleIndividual(Rc::clone(&base[1]))
-                ),
-                (
-                    Rc::clone(&base[2]),
-                    SampleIndividual(Rc::clone(&base[2]))
-                )
+                (Rc::clone(&base[0]), SampleIndividual(Rc::clone(&base[0]))),
+                (Rc::clone(&base[1]), SampleIndividual(Rc::clone(&base[1]))),
+                (Rc::clone(&base[2]), SampleIndividual(Rc::clone(&base[2]))),
             ];
             for (arg, result) in testcases.into_iter() {
                 assert_eq!(SampleIndividual::new(&arg), result);
@@ -309,21 +282,15 @@ mod each_crate_individual {
                 Rc::new(Individual::new_with_id(5usize, 13u8)),
             ];
             let testcases: Vec<(SampleIndividual, &Individual<u8>)> = vec![
-                (
-                    SampleIndividual::new(&base[0]),
-                    &base[0]
-                ),
-                (
-                    SampleIndividual::new(&base[1]),
-                    &base[1]
-                ),
-                (
-                    SampleIndividual::new(&base[2]),
-                    &base[2]
-                )
+                (SampleIndividual::new(&base[0]), &base[0]),
+                (SampleIndividual::new(&base[1]), &base[1]),
+                (SampleIndividual::new(&base[2]), &base[2]),
             ];
             for (arg, result) in testcases.into_iter() {
-                assert_eq!(<SampleIndividual as EachCrateIndividual>::get_individual(&arg), result);
+                assert_eq!(
+                    <SampleIndividual as EachCrateIndividual>::get_individual(&arg),
+                    result
+                );
             }
         }
 
@@ -335,21 +302,15 @@ mod each_crate_individual {
                 Rc::new(Individual::new_with_id(5usize, 13u8)),
             ];
             let testcases: Vec<(SampleIndividual, usize)> = vec![
-                (
-                    SampleIndividual::new(&base[0]),
-                    0usize
-                ),
-                (
-                    SampleIndividual::new(&base[1]),
-                    0usize
-                ),
-                (
-                    SampleIndividual::new(&base[2]),
-                    5usize
-                )
+                (SampleIndividual::new(&base[0]), 0usize),
+                (SampleIndividual::new(&base[1]), 0usize),
+                (SampleIndividual::new(&base[2]), 5usize),
             ];
             for (arg, result) in testcases.into_iter() {
-                assert_eq!(<SampleIndividual as EachCrateIndividual>::get_id(&arg), result);
+                assert_eq!(
+                    <SampleIndividual as EachCrateIndividual>::get_id(&arg),
+                    result
+                );
             }
         }
 
@@ -361,21 +322,15 @@ mod each_crate_individual {
                 Rc::new(Individual::new_with_id(5usize, 13u8)),
             ];
             let testcases: Vec<(SampleIndividual, &u8)> = vec![
-                (
-                    SampleIndividual::new(&base[0]),
-                    &5u8
-                ),
-                (
-                    SampleIndividual::new(&base[1]),
-                    &0u8
-                ),
-                (
-                    SampleIndividual::new(&base[2]),
-                    &13u8
-                )
+                (SampleIndividual::new(&base[0]), &5u8),
+                (SampleIndividual::new(&base[1]), &0u8),
+                (SampleIndividual::new(&base[2]), &13u8),
             ];
             for (arg, result) in testcases.into_iter() {
-                assert_eq!(<SampleIndividual as EachCrateIndividual>::get_value(&arg), result);
+                assert_eq!(
+                    <SampleIndividual as EachCrateIndividual>::get_value(&arg),
+                    result
+                );
             }
         }
     }
@@ -479,22 +434,24 @@ mod fitness_individual {
     mod tests {
         use std::{collections::HashMap, rc::Rc};
 
-        use crate::individual::{EachCrateIndividual, Individual};
         use super::FitnessIndividualTrait;
+        use crate::individual::{EachCrateIndividual, Individual};
 
         struct FITraitSample {
-            individual: Rc<Individual<u8>>
+            individual: Rc<Individual<u8>>,
         }
         impl FITraitSample {
             fn new_for_test(id: usize, value: u8) -> Self {
-                FITraitSample { individual: Rc::new(Individual::new_with_id(id, value)) }
+                FITraitSample {
+                    individual: Rc::new(Individual::new_with_id(id, value)),
+                }
             }
         }
         impl EachCrateIndividual for FITraitSample {
             type Item = u8;
             fn new(individual: &std::rc::Rc<Individual<u8>>) -> Self {
                 FITraitSample {
-                    individual: Rc::clone(individual)
+                    individual: Rc::clone(individual),
                 }
             }
             fn get_individual(&self) -> &Individual<u8> {
@@ -539,8 +496,8 @@ mod fitness_individual {
                         (8, 2),
                         (9, 0),
                     ]
-                        .into_iter()
-                        .collect::<HashMap<usize, usize>>(),
+                    .into_iter()
+                    .collect::<HashMap<usize, usize>>(),
                 ),
                 (
                     vec![
@@ -606,8 +563,8 @@ mod fitness_individual {
                         (18, 5),
                         (19, 1),
                     ]
-                        .into_iter()
-                        .collect::<HashMap<usize, usize>>(),
+                    .into_iter()
+                    .collect::<HashMap<usize, usize>>(),
                 ),
             ];
             for (arg, result) in testcases.into_iter() {
