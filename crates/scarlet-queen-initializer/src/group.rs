@@ -12,3 +12,16 @@ where
         [0; N].map(|_| <P as PokemonTypeTrait>::sample(&mut rng))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use scarlet_queen_core::{group::InitializerTrait, pokemon_type::PokemonTypeAll};
+
+    use crate::group::InitializerSample;
+
+    #[test]
+    fn test_initializer() {
+        let initialized: [PokemonTypeAll; 10] = InitializerSample::<10>::initialize();
+        assert_eq!(initialized.len(), 10);
+    }
+}
