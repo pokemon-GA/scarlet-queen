@@ -28,7 +28,8 @@ where
     data: Vec<GenerationIndividual<T, FI, SI, RI, N, R>>,
 }
 
-impl<T, FI, SI, RI, const N: usize, const R: usize> GroupTrait<T, N, R> for Group<T, FI, SI, RI, N, R>
+impl<T, FI, SI, RI, const N: usize, const R: usize> GroupTrait<T, N, R>
+    for Group<T, FI, SI, RI, N, R>
 where
     T: Clone + Debug,
     FI: EachCrateIndividual<Item = T> + FitnessIndividualTrait,
@@ -127,7 +128,8 @@ where
     }
 }
 
-impl<'a, T, FI, SI, RI, const N: usize, const R: usize> IntoIterator for &'a Group<T, FI, SI, RI, N, R>
+impl<'a, T, FI, SI, RI, const N: usize, const R: usize> IntoIterator
+    for &'a Group<T, FI, SI, RI, N, R>
 where
     T: Clone,
     FI: EachCrateIndividual<Item = T> + FitnessIndividualTrait,
