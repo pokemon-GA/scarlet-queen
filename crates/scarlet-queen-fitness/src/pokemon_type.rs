@@ -1,7 +1,10 @@
 use crate::effective::TypeEffectiveness;
 use scarlet_queen_core::{
-    each_individual::{EachCrateIndividual, FitnessIndividualTrait, Individual},
-    pokemon_type::{PokemonTypeAll, PokemonTypeTrait},
+    EachCrateIndividual,
+    FitnessIndividualTrait,
+    Individual,
+    PokemonTypeAll,
+    PokemonTypeTrait,
 };
 use std::{ops::Deref, rc::Rc};
 
@@ -91,8 +94,10 @@ mod tests {
     use std::rc::Rc;
 
     use scarlet_queen_core::{
-        each_individual::{EachCrateIndividual, FitnessIndividualTrait, Individual},
-        pokemon_type::PokemonTypeAll,
+        EachCrateIndividual,
+        FitnessIndividualTrait,
+        Individual,
+        PokemonTypeAll,
     };
 
     use crate::{effective::TypeEffectiveness, pokemon_type::FitnessPokemonType};

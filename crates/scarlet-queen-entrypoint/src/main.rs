@@ -1,4 +1,4 @@
-use scarlet_queen_core::pokemon_type::PokemonTypeFWG;
+use scarlet_queen_core::PokemonTypeFWG;
 use scarlet_queen_entrypoint::pokemon_type::test_and_draw;
 
 fn main() {

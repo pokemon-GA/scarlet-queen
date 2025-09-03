@@ -1,5 +1,8 @@
 use rand::rng;
-use scarlet_queen_core::{group::InitializerTrait, pokemon_type::PokemonTypeTrait};
+use scarlet_queen_core::{
+    InitializerTrait,
+    PokemonTypeTrait,
+};
 
 #[derive(Debug)]
 pub struct InitializerSample<const N: usize> {}
@@ -16,7 +19,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use scarlet_queen_core::{group::InitializerTrait, pokemon_type::PokemonTypeAll};
+    use scarlet_queen_core::{InitializerTrait, PokemonTypeAll};
 
     use crate::group::InitializerSample;
 
