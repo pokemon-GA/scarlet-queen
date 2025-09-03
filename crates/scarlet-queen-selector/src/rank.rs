@@ -3,8 +3,10 @@ use std::{
     rc::Rc,
 };
 
-use scarlet_queen_core::each_individual::{
-    EachCrateIndividual, Individual, SelectorIndividualTrait,
+use scarlet_queen_core::{
+    EachCrateIndividual,
+    Individual,
+    SelectorIndividualTrait,
 };
 
 use crate::error::SelectorError;

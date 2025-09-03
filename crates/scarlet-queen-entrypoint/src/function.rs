@@ -1,6 +1,6 @@
 use std::{hash::Hash, io::Write};
 
-use scarlet_queen_core::group::{GroupTrait, InitializerTrait};
+use scarlet_queen_core::{GroupTrait, InitializerTrait};
 
 use crate::error::Error;
 

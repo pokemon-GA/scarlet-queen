@@ -1,4 +1,4 @@
-use scarlet_queen_core::pokemon_type::PokemonTypeAll;
+use scarlet_queen_core::PokemonTypeAll;
 
 pub mod error;
 pub mod random;

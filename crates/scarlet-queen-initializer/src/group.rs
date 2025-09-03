@@ -4,8 +4,9 @@ use rand::{
     rngs::ThreadRng,
 };
 use scarlet_queen_core::{
-    group::InitializerTrait,
-    pokemon_type::{PokemonTypeAll, PokemonTypeTrait},
+    InitializerTrait,
+    PokemonTypeAll,
+    PokemonTypeTrait,
 };
 
 #[derive(Debug, Clone, Default)]

@@ -1,191 +1,187 @@
 //! Mod for `PokemonType`, `PokemonTypeAll` and other.
 
-pub use pokemon_type_trait::PokemonTypeTrait;
 pub use pokemon_type_all::PokemonTypeAll;
 pub use pokemon_type_fwg::PokemonTypeFWG;
 
-mod pokemon_type_trait {
-    use std::hash::Hash;
-    use plotters::style::Color;
-    use super::PokemonTypeAll;
+use std::hash::Hash;
+use plotters::style::Color;
 
-    /// A trait for a enum which is a `PokemonTypeAll` subset.
-    ///
-    /// # Example
-    /// ```
-    /// use scarlet_queen_core::pokemon_type::{PokemonTypeTrait, PokemonTypeAll};
-    /// use plotters::style::Color;
-    ///
-    /// #[derive(Clone, PartialEq, Eq, Hash)]
-    /// enum PTTraitSample {
-    ///     Normal,
-    ///     Water,
-    /// }
-    /// impl Into<PokemonTypeAll> for PTTraitSample {
-    ///     fn into(self) -> PokemonTypeAll {
-    ///         match self {
-    ///             PTTraitSample::Normal => PokemonTypeAll::Normal,
-    ///             PTTraitSample::Water => PokemonTypeAll::Water,
-    ///         }
-    ///     }
-    /// }
-    /// impl TryFrom<PokemonTypeAll> for PTTraitSample {
-    ///     type Error = ();
-    ///     fn try_from(value: PokemonTypeAll) -> Result<Self, Self::Error> {
-    ///         match value {
-    ///             PokemonTypeAll::Normal => Ok(PTTraitSample::Normal),
-    ///             PokemonTypeAll::Water => Ok(PTTraitSample::Water),
-    ///             _ => Err(()),
-    ///         }
-    ///     }
-    /// }
-    /// impl PokemonTypeTrait for PTTraitSample {
-    ///     const ALL_LEN: usize = 2;
-    ///     const ALL: [Option<Self>; 19] = [
-    ///         Some(PTTraitSample::Normal),
-    ///         Some(PTTraitSample::Water),
-    ///         None,
-    ///         None,
-    ///         None,
-    ///         None,
-    ///         None,
-    ///         None,
-    ///         None,
-    ///         None,
-    ///         None,
-    ///         None,
-    ///         None,
-    ///         None,
-    ///         None,
-    ///         None,
-    ///         None,
-    ///         None,
-    ///         None
-    ///     ];
-    /// }
-    ///
-    /// let sample: PTTraitSample = PTTraitSample::Water;
-    ///
-    /// assert_eq!(sample.color_map().rgb(), (41, 146, 255));
-    ///
-    /// let mut thread_rng: rand::prelude::ThreadRng = rand::rng();
-    /// let sample: PTTraitSample = PTTraitSample::sample(&mut thread_rng);
-    ///
-    /// assert!(
-    ///     [
-    ///         PTTraitSample::Normal,
-    ///         PTTraitSample::Water,
-    ///     ]
-    ///         .contains(&sample)
-    /// )
-    /// ```
-    pub trait PokemonTypeTrait: Into<PokemonTypeAll> + TryFrom<PokemonTypeAll> + Clone + Eq + Hash {
-        /// The size of subset.
-        const ALL_LEN: usize;
-        /// All of this values.
-        const ALL: [Option<Self>; 19];
+/// A trait for a enum which is a `PokemonTypeAll` subset.
+///
+/// # Example
+/// ```
+/// use scarlet_queen_core::{PokemonTypeTrait, PokemonTypeAll};
+/// use plotters::style::Color;
+///
+/// #[derive(Clone, PartialEq, Eq, Hash)]
+/// enum PTTraitSample {
+///     Normal,
+///     Water,
+/// }
+/// impl Into<PokemonTypeAll> for PTTraitSample {
+///     fn into(self) -> PokemonTypeAll {
+///         match self {
+///             PTTraitSample::Normal => PokemonTypeAll::Normal,
+///             PTTraitSample::Water => PokemonTypeAll::Water,
+///         }
+///     }
+/// }
+/// impl TryFrom<PokemonTypeAll> for PTTraitSample {
+///     type Error = ();
+///     fn try_from(value: PokemonTypeAll) -> Result<Self, Self::Error> {
+///         match value {
+///             PokemonTypeAll::Normal => Ok(PTTraitSample::Normal),
+///             PokemonTypeAll::Water => Ok(PTTraitSample::Water),
+///             _ => Err(()),
+///         }
+///     }
+/// }
+/// impl PokemonTypeTrait for PTTraitSample {
+///     const ALL_LEN: usize = 2;
+///     const ALL: [Option<Self>; 19] = [
+///         Some(PTTraitSample::Normal),
+///         Some(PTTraitSample::Water),
+///         None,
+///         None,
+///         None,
+///         None,
+///         None,
+///         None,
+///         None,
+///         None,
+///         None,
+///         None,
+///         None,
+///         None,
+///         None,
+///         None,
+///         None,
+///         None,
+///         None
+///     ];
+/// }
+///
+/// let sample: PTTraitSample = PTTraitSample::Water;
+///
+/// assert_eq!(sample.color_map().rgb(), (41, 146, 255));
+///
+/// let mut thread_rng: rand::prelude::ThreadRng = rand::rng();
+/// let sample: PTTraitSample = PTTraitSample::sample(&mut thread_rng);
+///
+/// assert!(
+///     [
+///         PTTraitSample::Normal,
+///         PTTraitSample::Water,
+///     ]
+///         .contains(&sample)
+/// )
+/// ```
+pub trait PokemonTypeTrait: Into<PokemonTypeAll> + TryFrom<PokemonTypeAll> + Clone + Eq + Hash {
+    /// The size of subset.
+    const ALL_LEN: usize;
+    /// All of this values.
+    const ALL: [Option<Self>; 19];
 
-        /// Generate a random pokemon type which this type contains.
-        ///
-        /// # Panics
-        /// An error may be occured if all of `Self::ALL[..Self::ALL_LEN]` is not `Some`.
-        fn sample<R>(rng: &mut R) -> Self
-        where
-            R: rand::Rng + Sized,
-        {
-            let rand_int: usize = rng.random_range(0..Self::ALL_LEN);
-            match Self::ALL.get(rand_int).cloned().flatten() {
-                Some(v) => v,
-                None => panic!("Error: PokemonType trait is implmented in bad way."),
-            }
-        }
-
-        /// Get a color of a pokemon type.
-        fn color_map(&self) -> impl Color {
-            <Self as Into<PokemonTypeAll>>::into(self.clone()).color_map()
+    /// Generate a random pokemon type which this type contains.
+    ///
+    /// # Panics
+    /// An error may be occured if all of `Self::ALL[..Self::ALL_LEN]` is not `Some`.
+    fn sample<R>(rng: &mut R) -> Self
+    where
+        R: rand::Rng + Sized,
+    {
+        let rand_int: usize = rng.random_range(0..Self::ALL_LEN);
+        match Self::ALL.get(rand_int).cloned().flatten() {
+            Some(v) => v,
+            None => panic!("Error: PokemonType trait is implmented in bad way."),
         }
     }
 
-    #[cfg(test)]
-    mod tests {
-        use std::collections::HashMap;
-        use plotters::style::Color;
-        use super::{PokemonTypeTrait, PokemonTypeAll};
+    /// Get a color of a pokemon type.
+    fn color_map(&self) -> impl Color {
+        <Self as Into<PokemonTypeAll>>::into(self.clone()).color_map()
+    }
+}
 
-        #[derive(Clone, PartialEq, Eq, Hash)]
-        enum PTTraitSample {
-            Normal,
-            Water,
-        }
-        impl Into<PokemonTypeAll> for PTTraitSample {
-            fn into(self) -> PokemonTypeAll {
-                match self {
-                    PTTraitSample::Normal => PokemonTypeAll::Normal,
-                    PTTraitSample::Water => PokemonTypeAll::Water,
-                }
-            }
-        }
-        impl TryFrom<PokemonTypeAll> for PTTraitSample {
-            type Error = ();
-            fn try_from(value: PokemonTypeAll) -> Result<Self, Self::Error> {
-                match value {
-                    PokemonTypeAll::Normal => Ok(PTTraitSample::Normal),
-                    PokemonTypeAll::Water => Ok(PTTraitSample::Water),
-                    _ => Err(()),
-                }
-            }
-        }
-        impl PokemonTypeTrait for PTTraitSample {
-            const ALL_LEN: usize = 2;
-            const ALL: [Option<Self>; 19] = [
-                Some(PTTraitSample::Normal),
-                Some(PTTraitSample::Water),
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None
-            ];
-        }
+#[cfg(test)]
+mod tests {
+    use std::collections::HashMap;
+    use plotters::style::Color;
+    use super::{PokemonTypeTrait, PokemonTypeAll};
 
-        /// This test fails by <1%.
-        #[test]
-        fn test_pokemontype_sample() {
-            let mut thread_rng: rand::prelude::ThreadRng = rand::rng();
-            let mut seen: HashMap<PTTraitSample, bool> = PTTraitSample::ALL
-                .iter()
-                .filter_map(|v| v.clone().map(|v| (v, false)))
-                .collect::<HashMap<PTTraitSample, bool>>();
-            for _ in 0..140 {
-                let pokemon_type: PTTraitSample = <PTTraitSample as PokemonTypeTrait>::sample(&mut thread_rng);
-                if let Some(v) = seen.get_mut(&pokemon_type) {
-                    *v = true
-                }
+    #[derive(Clone, PartialEq, Eq, Hash)]
+    enum PTTraitSample {
+        Normal,
+        Water,
+    }
+    impl Into<PokemonTypeAll> for PTTraitSample {
+        fn into(self) -> PokemonTypeAll {
+            match self {
+                PTTraitSample::Normal => PokemonTypeAll::Normal,
+                PTTraitSample::Water => PokemonTypeAll::Water,
             }
-            assert!(seen.values().all(|&v| v))
         }
-
-        #[test]
-        fn test_pokemontype_colormap() {
-            let testcases: Vec<(PTTraitSample, _)> = vec![
-                (PTTraitSample::Normal, PokemonTypeAll::Normal.color_map()),
-                (PTTraitSample::Water, PokemonTypeAll::Water.color_map()),
-            ];
-            for (arg, result) in testcases.into_iter() {
-                assert_eq!(<PTTraitSample as PokemonTypeTrait>::color_map(&arg).rgb(), result.rgb());
+    }
+    impl TryFrom<PokemonTypeAll> for PTTraitSample {
+        type Error = ();
+        fn try_from(value: PokemonTypeAll) -> Result<Self, Self::Error> {
+            match value {
+                PokemonTypeAll::Normal => Ok(PTTraitSample::Normal),
+                PokemonTypeAll::Water => Ok(PTTraitSample::Water),
+                _ => Err(()),
             }
+        }
+    }
+    impl PokemonTypeTrait for PTTraitSample {
+        const ALL_LEN: usize = 2;
+        const ALL: [Option<Self>; 19] = [
+            Some(PTTraitSample::Normal),
+            Some(PTTraitSample::Water),
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None
+        ];
+    }
+
+    /// This test fails by <1%.
+    #[test]
+    fn test_pokemontype_sample() {
+        let mut thread_rng: rand::prelude::ThreadRng = rand::rng();
+        let mut seen: HashMap<PTTraitSample, bool> = PTTraitSample::ALL
+            .iter()
+            .filter_map(|v| v.clone().map(|v| (v, false)))
+            .collect::<HashMap<PTTraitSample, bool>>();
+        for _ in 0..140 {
+            let pokemon_type: PTTraitSample = <PTTraitSample as PokemonTypeTrait>::sample(&mut thread_rng);
+            if let Some(v) = seen.get_mut(&pokemon_type) {
+                *v = true
+            }
+        }
+        assert!(seen.values().all(|&v| v))
+    }
+
+    #[test]
+    fn test_pokemontype_colormap() {
+        let testcases: Vec<(PTTraitSample, _)> = vec![
+            (PTTraitSample::Normal, PokemonTypeAll::Normal.color_map()),
+            (PTTraitSample::Water, PokemonTypeAll::Water.color_map()),
+        ];
+        for (arg, result) in testcases.into_iter() {
+            assert_eq!(<PTTraitSample as PokemonTypeTrait>::color_map(&arg).rgb(), result.rgb());
         }
     }
 }

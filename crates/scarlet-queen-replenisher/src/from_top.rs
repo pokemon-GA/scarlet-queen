@@ -1,7 +1,8 @@
 use std::rc::Rc;
-
-use scarlet_queen_core::each_individual::{
-    EachCrateIndividual, Individual, ReplenisherIndividualTrait,
+use scarlet_queen_core::{
+    EachCrateIndividual,
+    Individual,
+    ReplenisherIndividualTrait,
 };
 
 pub struct FromTopReplenisherIndividual<T, const N: usize, const R: usize>
@@ -18,7 +19,7 @@ where
 {
     type Item = T;
 
-    fn new(individual: &std::rc::Rc<scarlet_queen_core::each_individual::Individual<T>>) -> Self {
+    fn new(individual: &Rc<Individual<T>>) -> Self {
         FromTopReplenisherIndividual {
             individual: Rc::clone(individual),
         }
