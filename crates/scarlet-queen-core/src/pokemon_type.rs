@@ -2,7 +2,6 @@
 
 pub use pokemon_type_all::PokemonTypeAll;
 pub use pokemon_type_fwg::PokemonTypeFWG;
-pub use pokemon_type_trait::PokemonTypeTrait;
 
 use std::hash::Hash;
 use plotters::style::Color;

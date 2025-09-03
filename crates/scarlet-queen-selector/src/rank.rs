@@ -82,7 +82,7 @@ mod tests {
         rc::Rc,
     };
 
-    use scarlet_queen_core::each_individual::{
+    use scarlet_queen_core::{
         EachCrateIndividual, Individual, SelectorIndividualTrait,
     };
 

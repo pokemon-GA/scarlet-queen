@@ -1,11 +1,6 @@
-use rand::{
-    distr::{Distribution, StandardUniform},
-    rng,
-    rngs::ThreadRng,
-};
+use rand::rng;
 use scarlet_queen_core::{
     InitializerTrait,
-    PokemonTypeAll,
     PokemonTypeTrait,
 };
 
@@ -24,7 +19,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use scarlet_queen_core::{group::InitializerTrait, pokemon_type::PokemonTypeAll};
+    use scarlet_queen_core::{InitializerTrait, PokemonTypeAll};
 
     use crate::group::InitializerSample;
 
