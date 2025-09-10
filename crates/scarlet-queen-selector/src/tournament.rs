@@ -3,11 +3,7 @@ use std::{
     rc::Rc,
 };
 
-use scarlet_queen_core::{
-    EachCrateIndividual,
-    Individual,
-    SelectorIndividualTrait,
-};
+use scarlet_queen_core::{EachCrateIndividual, Individual, SelectorIndividualTrait};
 
 use crate::error::SelectorError;
 
@@ -82,11 +78,9 @@ mod tests {
         rc::Rc,
     };
 
-    use scarlet_queen_core::{
-        EachCrateIndividual, Individual, SelectorIndividualTrait,
-    };
+    use scarlet_queen_core::{EachCrateIndividual, Individual, SelectorIndividualTrait};
 
-    use crate::rank::RankSelectorIndividual;
+    use crate::tournament::RankSelectorIndividual;
 
     #[test]
     fn test_selected_ids() {
