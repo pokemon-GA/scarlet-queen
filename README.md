@@ -171,12 +171,16 @@ graph TD;
 ```
 ~~~
 
-## rustdoc Hub Page (Astro.js)
+# Rustdoc Hub Page (Astro.js)
 
 project directory: `hub/`
 
 > [!IMPORTANT]
-> When editing hub page for the first time, let it add `npm` and run `npm i` in `hub/` directory.
+> When editing hub page for the first time, let it add `pnpm`
+
+install command is under the following:
+
+https://pnpm.io/installation
 
 > [!IMPORTANT]
 > The following commands are executed under `hub/`.
@@ -184,13 +188,13 @@ project directory: `hub/`
 - start dev server
 
 ```sh
-npm run dev
+pnpm run dev
 ```
 
 - build hub page
 
 ```sh
-npm run build
+pnpm run build
 ```
 
 ## Setup Project

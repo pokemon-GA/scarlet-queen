@@ -1,4 +1,4 @@
-# Documents (mdbook)
+# scarlet-queen Documentation (mdbook)
 
 project directory: `docs/`
 
