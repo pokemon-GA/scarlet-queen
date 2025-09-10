@@ -1,22 +1,11 @@
 use scarlet_queen_core::{
-    EachCrateIndividual,
-    FitnessIndividualTrait,
-    Individual,
-    ReplenisherIndividualTrait,
+    EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait,
     SelectorIndividualTrait,
 };
 use std::{
     collections::{HashMap, HashSet},
     rc::Rc,
 };
-
-pub trait GenerationIndividualTrait<T, const N: usize, const R: usize>:
-    EachCrateIndividual<Item = T>
-    + FitnessIndividualTrait
-    + SelectorIndividualTrait<R>
-    + ReplenisherIndividualTrait<N, R>
-{
-}
 
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct GenerationIndividual<T, FI, SI, RI, const N: usize, const R: usize>
@@ -127,23 +116,11 @@ where
     }
 }
 
-impl<T, FI, SI, RI, const N: usize, const R: usize> GenerationIndividualTrait<T, N, R>
-    for GenerationIndividual<T, FI, SI, RI, N, R>
-where
-    FI: EachCrateIndividual<Item = T> + FitnessIndividualTrait,
-    SI: EachCrateIndividual<Item = T> + SelectorIndividualTrait<R>,
-    RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
-{
-}
-
 #[cfg(test)]
 mod tests {
     use crate::individual::GenerationIndividual;
     use scarlet_queen_core::{
-        EachCrateIndividual,
-        FitnessIndividualTrait,
-        Individual,
-        ReplenisherIndividualTrait,
+        EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait,
         SelectorIndividualTrait,
     };
     use scarlet_queen_selector::error::SelectorError;
