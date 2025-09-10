@@ -2,8 +2,7 @@ use std::rc::Rc;
 
 use rand::rng;
 use scarlet_queen_core::{
-    each_individual::{EachCrateIndividual, Individual, ReplenisherIndividualTrait},
-    pokemon_type::PokemonTypeTrait,
+    EachCrateIndividual, Individual, PokemonTypeTrait, ReplenisherIndividualTrait,
 };
 
 pub struct FromRandomReplenisherIndividual<T, const N: usize, const R: usize>
@@ -20,7 +19,7 @@ where
 {
     type Item = T;
 
-    fn new(individual: &std::rc::Rc<scarlet_queen_core::each_individual::Individual<T>>) -> Self {
+    fn new(individual: &std::rc::Rc<scarlet_queen_core::Individual<T>>) -> Self {
         FromRandomReplenisherIndividual {
             individual: Rc::clone(individual),
         }
