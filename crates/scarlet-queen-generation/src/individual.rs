@@ -14,7 +14,6 @@ where
     SI: EachCrateIndividual<Item = T> + SelectorIndividualTrait<R>,
     RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
 {
-    #[allow(dead_code)]
     individual: Rc<Individual<T>>,
     fitness_individual: FI,
     selector_individual: SI,
