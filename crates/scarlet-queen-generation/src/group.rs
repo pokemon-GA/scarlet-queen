@@ -9,7 +9,7 @@ use scarlet_queen_selector::tournament::TournamentSelectorIndividual;
 use std::{
     collections::{HashMap, HashSet},
     fmt::Debug,
-    mem::swap,
+    mem,
     rc::Rc,
     slice::Iter,
 };
@@ -51,7 +51,7 @@ where
         let selector: HashSet<usize> = GenerationIndividual::selected_ids(&*self, scores)
             .map_err(|v| GenerationError::SelectorError(format!("{v:?}")))?;
         let mut data_for_edit: Vec<GenerationIndividual<T, FI, SI, RI, N, R>> = Vec::new();
-        swap(&mut data_for_edit, &mut self.data);
+        mem::swap(&mut data_for_edit, &mut self.data);
         self.data = data_for_edit
             .into_iter()
             .filter_map(|v| {
@@ -94,7 +94,7 @@ where
         let selector: HashSet<usize> = GenerationIndividual::selected_ids(&*self, scores)
             .map_err(|v| GenerationError::SelectorError(format!("{v:?}")))?;
         let mut data_for_edit: Vec<GenerationIndividual<T, FI, SI, RI, N, R>> = Vec::new();
-        swap(&mut data_for_edit, &mut self.data);
+        mem::swap(&mut data_for_edit, &mut self.data);
         self.data = data_for_edit
             .into_iter()
             .filter_map(|v| {
