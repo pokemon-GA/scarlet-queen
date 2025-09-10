@@ -1,4 +1,4 @@
-# Hub Page (Astro.js)
+# rustdoc Hub Page (Astro.js)
 
 project directory: `hub/`
 

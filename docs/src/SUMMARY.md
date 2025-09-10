@@ -11,5 +11,5 @@
 - [Setup](./contribute/setup.md)
 - [Branch Strategy](./contribute/branch_strategy.md)
 - [Test](./contribute/test.md)
-- [Documents](./contribute/documents.md)
-- [Hub Page](./contribute/hub_page.md)
+- [scarlet-queen Documentation](./contribute/scarlet-queen_documentation.md)
+- [rustdoc Hub Page](./contribute/rustdoc.md)
