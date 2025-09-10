@@ -217,20 +217,23 @@
 </pre>
 <h2 id="project-structure"><a class="header" href="#project-structure">Project Structure</a></h2>
 <h3 id="scarlet-queen-core-library-crate"><a class="header" href="#scarlet-queen-core-library-crate"><code>scarlet-queen-core</code> (library crate)</a></h3>
+<p>https://scarlet-queen.netlify.app/doc/scarlet_queen_core/</p>
 <p>Contains the core type definition and logic.</p>
 <h3 id="scarlet-queen-initializer-library-crate"><a class="header" href="#scarlet-queen-initializer-library-crate"><code>scarlet-queen-initializer</code> (library crate)</a></h3>
+<p>https://scarlet-queen.netlify.app/doc/scarlet_queen_initializer/</p>
 <p>Contains the logic for initializing the group (environment).</p>
 <ul>
 <li>modules
 <ul>
 <li><code>random</code>: enables the random initialization.</li>
-<li><code>weight</code>: enables the weighted initialization.</li>
 </ul>
 </li>
 </ul>
 <h3 id="scarlet-queen-fitness-library-crate"><a class="header" href="#scarlet-queen-fitness-library-crate"><code>scarlet-queen-fitness</code> (library crate)</a></h3>
+<p>https://scarlet-queen.netlify.app/doc/scarlet_queen_fitness/</p>
 <p>Contains the fitness evaluation logic.</p>
 <h3 id="scarlet-queen-selector-library-crate"><a class="header" href="#scarlet-queen-selector-library-crate"><code>scarlet-queen-selector</code> (library crate)</a></h3>
+<p>https://scarlet-queen.netlify.app/doc/scarlet_queen_selector/</p>
 <p>Contains the logic for selecting individuals for the next generation.</p>
 <ul>
 <li>modules
@@ -242,18 +245,22 @@
 </li>
 </ul>
 <h3 id="scarlet-queen-replenisher-library-crate"><a class="header" href="#scarlet-queen-replenisher-library-crate"><code>scarlet-queen-replenisher</code> (library crate)</a></h3>
+<p>https://scarlet-queen.netlify.app/doc/scarlet_queen_replenisher/</p>
 <p>Contains the logic for replenishing new individuals.</p>
 <ul>
 <li>modules
 <ul>
 <li><code>random</code>: enables the random generation.</li>
-<li><code>novelty</code>: enables the novelty search algorithm.</li>
+<li><code>roulette</code>: enables the roulette selection.</li>
+<li><code>tournament</code>: enables the tournament generation.</li>
 </ul>
 </li>
 </ul>
 <h3 id="scarlet-queen-generation-library-crate"><a class="header" href="#scarlet-queen-generation-library-crate"><code>scarlet-queen-generation</code> (library crate)</a></h3>
+<p>https://scarlet-queen.netlify.app/doc/scarlet_queen_generation/</p>
 <p>Contains the logic for managing the generation process.</p>
 <h3 id="scarlet-queen-entrypoint-binary-crate"><a class="header" href="#scarlet-queen-entrypoint-binary-crate"><code>scarlet-queen-entrypoint</code> (binary crate)</a></h3>
+<p>https://scarlet-queen.netlify.app/doc/scarlet_queen_entrypoint/</p>
 <p>The binary crate that runs the Scarlet Queen framework.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="setup"><a class="header" href="#setup">Setup</a></h1>
 <p>To format toml file and rust code, when you  commit, you need to install <code>husky</code> and <code>lint-staged</code>.</p>
@@ -324,7 +331,7 @@
 <h2 id="run-tests-for-a-specific-package"><a class="header" href="#run-tests-for-a-specific-package">Run tests for a specific package</a></h2>
 <pre><code class="language-sh">cargo test -p &lt;test_name&gt;
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="documents-mdbook"><a class="header" href="#documents-mdbook">Documents (mdbook)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="scarlet-queen-documentation-mdbook"><a class="header" href="#scarlet-queen-documentation-mdbook">scarlet-queen Documentation (mdbook)</a></h1>
 <p>project directory: <code>docs/</code></p>
 <blockquote>
 <p>[!IMPORTANT]
@@ -361,7 +368,7 @@ graph TD;
     C--&gt;D;
 ```
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="hub-page-astrojs"><a class="header" href="#hub-page-astrojs">Hub Page (Astro.js)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rustdoc-hub-page-astrojs"><a class="header" href="#rustdoc-hub-page-astrojs">rustdoc Hub Page (Astro.js)</a></h1>
 <p>project directory: <code>hub/</code></p>
 <blockquote>
 <p>[!IMPORTANT]
