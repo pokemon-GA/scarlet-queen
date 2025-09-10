@@ -1,7 +1,7 @@
 use scarlet_queen_core::{EachCrateIndividual, Individual, ReplenisherIndividualTrait};
 use std::rc::Rc;
 
-pub struct FromTopReplenisherIndividual<T, const N: usize, const R: usize>
+pub struct TournamentReplenisherIndividual<T, const N: usize, const R: usize>
 where
     T: Clone,
 {
@@ -9,14 +9,14 @@ where
 }
 
 impl<T, const N: usize, const R: usize> EachCrateIndividual
-    for FromTopReplenisherIndividual<T, N, R>
+    for TournamentReplenisherIndividual<T, N, R>
 where
     T: Clone,
 {
     type Item = T;
 
     fn new(individual: &Rc<Individual<T>>) -> Self {
-        FromTopReplenisherIndividual {
+        TournamentReplenisherIndividual {
             individual: Rc::clone(individual),
         }
     }
@@ -27,7 +27,7 @@ where
 }
 
 impl<T, const N: usize, const R: usize> ReplenisherIndividualTrait<N, R>
-    for FromTopReplenisherIndividual<T, N, R>
+    for TournamentReplenisherIndividual<T, N, R>
 where
     T: Clone,
 {

@@ -8,15 +8,15 @@ use scarlet_queen_core::{EachCrateIndividual, Individual, SelectorIndividualTrai
 use crate::error::SelectorError;
 
 #[derive(Debug)]
-pub struct RankSelectorIndividual<T, const R: usize> {
+pub struct TournamentSelectorIndividual<T, const R: usize> {
     individual: Rc<Individual<T>>,
 }
 
-impl<T, const R: usize> EachCrateIndividual for RankSelectorIndividual<T, R> {
+impl<T, const R: usize> EachCrateIndividual for TournamentSelectorIndividual<T, R> {
     type Item = T;
 
     fn new(individual: &Rc<Individual<T>>) -> Self {
-        RankSelectorIndividual {
+        TournamentSelectorIndividual {
             individual: Rc::clone(individual),
         }
     }
@@ -34,7 +34,7 @@ impl<T, const R: usize> EachCrateIndividual for RankSelectorIndividual<T, R> {
     }
 }
 
-impl<T, const R: usize> SelectorIndividualTrait<R> for RankSelectorIndividual<T, R> {
+impl<T, const R: usize> SelectorIndividualTrait<R> for TournamentSelectorIndividual<T, R> {
     type Err = SelectorError;
 
     fn selected_ids<'a, U>(
@@ -80,22 +80,22 @@ mod tests {
 
     use scarlet_queen_core::{EachCrateIndividual, Individual, SelectorIndividualTrait};
 
-    use crate::tournament::RankSelectorIndividual;
+    use crate::tournament::TournamentSelectorIndividual;
 
     #[test]
     fn test_selected_ids() {
-        let group: Vec<RankSelectorIndividual<&'static str, 2>> = vec![
-            RankSelectorIndividual::new(&Rc::new(Individual::new_with_id(1, "A"))),
-            RankSelectorIndividual::new(&Rc::new(Individual::new_with_id(2, "A"))),
-            RankSelectorIndividual::new(&Rc::new(Individual::new_with_id(3, "B"))),
-            RankSelectorIndividual::new(&Rc::new(Individual::new_with_id(4, "B"))),
-            RankSelectorIndividual::new(&Rc::new(Individual::new_with_id(5, "C"))),
-            RankSelectorIndividual::new(&Rc::new(Individual::new_with_id(6, "C"))),
+        let group: Vec<TournamentSelectorIndividual<&'static str, 2>> = vec![
+            TournamentSelectorIndividual::new(&Rc::new(Individual::new_with_id(1, "A"))),
+            TournamentSelectorIndividual::new(&Rc::new(Individual::new_with_id(2, "A"))),
+            TournamentSelectorIndividual::new(&Rc::new(Individual::new_with_id(3, "B"))),
+            TournamentSelectorIndividual::new(&Rc::new(Individual::new_with_id(4, "B"))),
+            TournamentSelectorIndividual::new(&Rc::new(Individual::new_with_id(5, "C"))),
+            TournamentSelectorIndividual::new(&Rc::new(Individual::new_with_id(6, "C"))),
         ];
         let scores: HashMap<usize, usize> =
             HashMap::from([(1, 10), (2, 10), (3, 20), (4, 20), (5, 30), (6, 30)]);
 
-        let selected = RankSelectorIndividual::selected_ids(&group, scores).unwrap();
+        let selected = TournamentSelectorIndividual::selected_ids(&group, scores).unwrap();
 
         assert_eq!(selected, HashSet::from([5, 6]));
     }

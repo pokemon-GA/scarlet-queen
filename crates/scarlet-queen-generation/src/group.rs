@@ -4,8 +4,8 @@ use scarlet_queen_core::{
     ReplenisherIndividualTrait, SelectorIndividualTrait,
 };
 use scarlet_queen_fitness::pokemon_type::FitnessPokemonType;
-use scarlet_queen_replenisher::tournament::FromTopReplenisherIndividual;
-use scarlet_queen_selector::tournament::RankSelectorIndividual;
+use scarlet_queen_replenisher::random::RandomReplenisherIndividual;
+use scarlet_queen_selector::tournament::TournamentSelectorIndividual;
 use std::{
     collections::{HashMap, HashSet},
     fmt::Debug,
@@ -144,8 +144,8 @@ where
 pub type PokemonTypeGroup<P, const N: usize, const R: usize> = Group<
     P,
     FitnessPokemonType<P>,
-    RankSelectorIndividual<P, R>,
-    FromTopReplenisherIndividual<P, N, R>,
+    TournamentSelectorIndividual<P, R>,
+    RandomReplenisherIndividual<P, N, R>,
     N,
     R,
 >;

@@ -5,22 +5,21 @@ use scarlet_queen_core::{
     EachCrateIndividual, Individual, PokemonTypeTrait, ReplenisherIndividualTrait,
 };
 
-pub struct FromRandomReplenisherIndividual<T, const N: usize, const R: usize>
+pub struct RandomReplenisherIndividual<T, const N: usize, const R: usize>
 where
     T: Clone,
 {
     individual: Rc<Individual<T>>,
 }
 
-impl<T, const N: usize, const R: usize> EachCrateIndividual
-    for FromRandomReplenisherIndividual<T, N, R>
+impl<T, const N: usize, const R: usize> EachCrateIndividual for RandomReplenisherIndividual<T, N, R>
 where
     T: Clone,
 {
     type Item = T;
 
     fn new(individual: &std::rc::Rc<scarlet_queen_core::Individual<T>>) -> Self {
-        FromRandomReplenisherIndividual {
+        RandomReplenisherIndividual {
             individual: Rc::clone(individual),
         }
     }
@@ -31,7 +30,7 @@ where
 }
 
 impl<T, const N: usize, const R: usize> ReplenisherIndividualTrait<N, R>
-    for FromRandomReplenisherIndividual<T, N, R>
+    for RandomReplenisherIndividual<T, N, R>
 where
     T: Clone + PokemonTypeTrait,
 {
