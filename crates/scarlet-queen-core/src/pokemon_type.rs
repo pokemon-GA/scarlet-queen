@@ -3,8 +3,8 @@
 pub use pokemon_type_all::PokemonTypeAll;
 pub use pokemon_type_fwg::PokemonTypeFWG;
 
-use std::hash::Hash;
 use plotters::style::Color;
+use std::hash::Hash;
 
 /// A trait for a enum which is a `PokemonTypeAll` subset.
 ///
@@ -76,7 +76,9 @@ use plotters::style::Color;
 ///         .contains(&sample)
 /// )
 /// ```
-pub trait PokemonTypeTrait: Into<PokemonTypeAll> + TryFrom<PokemonTypeAll> + Clone + Eq + Hash {
+pub trait PokemonTypeTrait:
+    Into<PokemonTypeAll> + TryFrom<PokemonTypeAll> + Clone + Eq + Hash
+{
     /// The size of subset.
     const ALL_LEN: usize;
     /// All of this values.
@@ -105,18 +107,18 @@ pub trait PokemonTypeTrait: Into<PokemonTypeAll> + TryFrom<PokemonTypeAll> + Clo
 
 #[cfg(test)]
 mod tests {
-    use std::collections::HashMap;
+    use super::{PokemonTypeAll, PokemonTypeTrait};
     use plotters::style::Color;
-    use super::{PokemonTypeTrait, PokemonTypeAll};
+    use std::collections::HashMap;
 
     #[derive(Clone, PartialEq, Eq, Hash)]
     enum PTTraitSample {
         Normal,
         Water,
     }
-    impl Into<PokemonTypeAll> for PTTraitSample {
-        fn into(self) -> PokemonTypeAll {
-            match self {
+    impl From<PTTraitSample> for PokemonTypeAll {
+        fn from(val: PTTraitSample) -> Self {
+            match val {
                 PTTraitSample::Normal => PokemonTypeAll::Normal,
                 PTTraitSample::Water => PokemonTypeAll::Water,
             }
@@ -153,7 +155,7 @@ mod tests {
             None,
             None,
             None,
-            None
+            None,
         ];
     }
 
@@ -166,7 +168,8 @@ mod tests {
             .filter_map(|v| v.clone().map(|v| (v, false)))
             .collect::<HashMap<PTTraitSample, bool>>();
         for _ in 0..140 {
-            let pokemon_type: PTTraitSample = <PTTraitSample as PokemonTypeTrait>::sample(&mut thread_rng);
+            let pokemon_type: PTTraitSample =
+                <PTTraitSample as PokemonTypeTrait>::sample(&mut thread_rng);
             if let Some(v) = seen.get_mut(&pokemon_type) {
                 *v = true
             }
@@ -181,7 +184,10 @@ mod tests {
             (PTTraitSample::Water, PokemonTypeAll::Water.color_map()),
         ];
         for (arg, result) in testcases.into_iter() {
-            assert_eq!(<PTTraitSample as PokemonTypeTrait>::color_map(&arg).rgb(), result.rgb());
+            assert_eq!(
+                <PTTraitSample as PokemonTypeTrait>::color_map(&arg).rgb(),
+                result.rgb()
+            );
         }
     }
 }
