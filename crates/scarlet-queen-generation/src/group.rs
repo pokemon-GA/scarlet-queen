@@ -1,15 +1,11 @@
 use crate::{error::GenerationError, individual::GenerationIndividual};
 use scarlet_queen_core::{
-    EachCrateIndividual,
-    FitnessIndividualTrait,
-    Individual,
-    ReplenisherIndividualTrait,
-    SelectorIndividualTrait,
-    GroupTrait,
+    EachCrateIndividual, FitnessIndividualTrait, GroupTrait, Individual,
+    ReplenisherIndividualTrait, SelectorIndividualTrait,
 };
 use scarlet_queen_fitness::pokemon_type::FitnessPokemonType;
-use scarlet_queen_replenisher::from_top::FromTopReplenisherIndividual;
-use scarlet_queen_selector::rank::RankSelectorIndividual;
+use scarlet_queen_replenisher::tournament::FromTopReplenisherIndividual;
+use scarlet_queen_selector::tournament::RankSelectorIndividual;
 use std::{
     collections::{HashMap, HashSet},
     fmt::Debug,
@@ -50,7 +46,8 @@ where
 
     fn one_cycle(&mut self) -> Result<(), Self::Err> {
         let scores: HashMap<usize, usize> = GenerationIndividual::fitness_group(&*self);
-        self.data.sort_by_key(|v| scores.get(&v.get_id()).map(|&v| -(v as isize)));
+        self.data
+            .sort_by_key(|v| scores.get(&v.get_id()).map(|&v| -(v as isize)));
         let selector: HashSet<usize> = GenerationIndividual::selected_ids(&*self, scores)
             .map_err(|v| GenerationError::SelectorError(format!("{v:?}")))?;
         let mut data_for_edit: Vec<GenerationIndividual<T, FI, SI, RI, N, R>> = Vec::new();

@@ -1,7 +1,5 @@
 use rand::{rng, seq::IndexedRandom};
-use scarlet_queen_core::{
-    EachCrateIndividual, Individual, SelectorIndividualTrait,
-};
+use scarlet_queen_core::{EachCrateIndividual, Individual, SelectorIndividualTrait};
 use std::{
     collections::{HashMap, HashSet},
     rc::Rc,
@@ -66,9 +64,7 @@ impl<T, const R: usize> SelectorIndividualTrait<R> for RandomSelectorIndividual<
 mod tests {
     use std::{collections::HashMap, rc::Rc};
 
-    use scarlet_queen_core::{
-        EachCrateIndividual, Individual, SelectorIndividualTrait,
-    };
+    use scarlet_queen_core::{EachCrateIndividual, Individual, SelectorIndividualTrait};
 
     use crate::random::RandomSelectorIndividual;
 

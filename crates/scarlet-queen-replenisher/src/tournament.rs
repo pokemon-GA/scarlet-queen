@@ -1,9 +1,5 @@
+use scarlet_queen_core::{EachCrateIndividual, Individual, ReplenisherIndividualTrait};
 use std::rc::Rc;
-use scarlet_queen_core::{
-    EachCrateIndividual,
-    Individual,
-    ReplenisherIndividualTrait,
-};
 
 pub struct FromTopReplenisherIndividual<T, const N: usize, const R: usize>
 where

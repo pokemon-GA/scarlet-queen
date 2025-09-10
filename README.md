@@ -65,7 +65,6 @@ Contains the logic for initializing the group (environment).
 
 - modules
   - `random`: enables the random initialization.
-  - `weight`: enables the weighted initialization.
 
 ### `scarlet-queen-fitness` (library crate)
 
@@ -92,7 +91,8 @@ Contains the logic for replenishing new individuals.
 
 - modules
   - `random`: enables the random generation.
-  - `novelty`: enables the novelty search algorithm.
+  - `roulette`: enables the roulette selection.
+  - `tournament`: enables the tournament generation.
 
 ### `scarlet-queen-generation` (library crate)
 
