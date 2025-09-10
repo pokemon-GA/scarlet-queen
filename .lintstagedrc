@@ -1,4 +1,3 @@
 {
-  "*.rs": ["rustfmt"],
-  "*.toml": ["npm run fmt"]
+  "*.rs": ["rustfmt"]
 }

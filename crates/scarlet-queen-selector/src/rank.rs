@@ -96,12 +96,10 @@ mod tests {
             RankSelectorIndividual::new(&Rc::new(Individual::new_with_id(5, "C"))),
             RankSelectorIndividual::new(&Rc::new(Individual::new_with_id(6, "C"))),
         ];
-        let group_refs: Vec<&RankSelectorIndividual<&'static str, 2>> = group.iter().collect();
-
         let scores: HashMap<usize, usize> =
             HashMap::from([(1, 10), (2, 10), (3, 20), (4, 20), (5, 30), (6, 30)]);
 
-        let selected = RankSelectorIndividual::selected_ids(group_refs, scores).unwrap();
+        let selected = RankSelectorIndividual::selected_ids(&group, scores).unwrap();
 
         assert_eq!(selected, HashSet::from([5, 6]));
     }
