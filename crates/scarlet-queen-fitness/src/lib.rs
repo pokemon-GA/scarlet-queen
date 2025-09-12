@@ -1,3 +1,5 @@
-pub mod effective;
+mod effective;
 pub mod ord;
-pub mod pokemon_type;
+mod pokemon_type;
+
+pub use pokemon_type::FitnessPokemonType;

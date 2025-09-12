@@ -3,9 +3,9 @@ use scarlet_queen_core::{
     EachCrateIndividual, FitnessIndividualTrait, GroupTrait, Individual,
     ReplenisherIndividualTrait, SelectorIndividualTrait,
 };
-use scarlet_queen_fitness::pokemon_type::FitnessPokemonType;
-use scarlet_queen_replenisher::random::RandomReplenisherIndividual;
-use scarlet_queen_selector::tournament::TournamentSelectorIndividual;
+use scarlet_queen_fitness::FitnessPokemonType;
+use scarlet_queen_replenisher::RandomReplenisherIndividual;
+use scarlet_queen_selector::TournamentSelectorIndividual;
 use std::{
     collections::{HashMap, HashSet},
     fmt::Debug,

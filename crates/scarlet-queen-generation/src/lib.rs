@@ -1,3 +1,6 @@
 pub mod error;
-pub mod group;
-pub mod individual;
+mod group;
+mod individual;
+
+pub use group::{Group, PokemonTypeGroup};
+pub use individual::GenerationIndividual;

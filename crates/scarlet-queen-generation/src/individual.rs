@@ -16,9 +16,9 @@ use std::{
 /// use std::{collections::{HashSet, HashMap}, rc::Rc};
 /// use scarlet_queen_core::{Individual, EachCrateIndividual, FitnessIndividualTrait, SelectorIndividualTrait, ReplenisherIndividualTrait};
 /// use scarlet_queen_fitness::ord::GeFitness;
-/// use scarlet_queen_selector::tournament::TournamentSelectorIndividual;
-/// use scarlet_queen_replenisher::tournament::TournamentReplenisherIndividual;
-/// use scarlet_queen_generation::individual::GenerationIndividual;
+/// use scarlet_queen_selector::TournamentSelectorIndividual;
+/// use scarlet_queen_replenisher::TournamentReplenisherIndividual;
+/// use scarlet_queen_generation::GenerationIndividual;
 ///
 /// type IndividualFunction = GenerationIndividual::<u8, GeFitness<u8>, TournamentSelectorIndividual<u8, 8>, TournamentReplenisherIndividual<u8, 10, 8>, 10, 8>;
 /// let x: IndividualFunction = IndividualFunction::new(&Rc::new(Individual::new(5)));
@@ -74,18 +74,17 @@ where
     SI: EachCrateIndividual<Item = T> + SelectorIndividualTrait<R>,
     RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
 {
-    pub fn get_individual(&self) -> &Individual<T> {
-        &self.individual
-    }
-
+    /// Get an individual which has methods about fitness.
     pub fn get_fitness_individual(&self) -> &FI {
         &self.fitness_individual
     }
 
+    /// Get an individual which has methods about selector.
     pub fn get_selector_individual(&self) -> &SI {
         &self.selector_individual
     }
 
+    /// Get an individual which has methods about replenisher.
     pub fn get_replenisher_individual(&self) -> &RI {
         &self.replenisher_individual
     }

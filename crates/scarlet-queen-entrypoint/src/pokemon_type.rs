@@ -12,7 +12,7 @@ use plotters::{
     style::{IntoFont, ShapeStyle, WHITE},
 };
 use scarlet_queen_core::PokemonTypeTrait;
-use scarlet_queen_generation::group::PokemonTypeGroup;
+use scarlet_queen_generation::PokemonTypeGroup;
 use scarlet_queen_initializer::group::InitializerSample;
 
 use crate::{
