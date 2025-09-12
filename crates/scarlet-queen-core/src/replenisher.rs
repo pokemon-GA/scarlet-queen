@@ -1,7 +1,6 @@
 use crate::each_crate_individual::EachCrateIndividual;
 
 /// A trait for individual defined by replenisher crate.
-/// * `T` - A type of value.
 /// * `N` - The number of individuals.
 /// * `R` - The number of individuals after individuals are reduced by selector.
 ///
@@ -64,7 +63,7 @@ use crate::each_crate_individual::EachCrateIndividual;
 /// assert_eq!(<Replenisher<15, 12> as ReplenisherIndividualTrait<15, 12>>::replenish(&sample), vec![20, 19, 17])
 /// ```
 pub trait ReplenisherIndividualTrait<const N: usize, const R: usize>: EachCrateIndividual {
-    /// Replenish individuals.
+    /// Return values you want to replenish.
     /// `group` must return values in order of the fitness.
     /// * `'a` - A lifetime of group.
     /// * `G` - A type of group.

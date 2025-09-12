@@ -462,11 +462,7 @@ impl TypeEffectiveness {
 #[cfg(test)]
 mod tests {
     use crate::{effective::TypeEffectiveness, pokemon_type::FitnessPokemonType};
-    use scarlet_queen_core::{
-        EachCrateIndividual,
-        Individual,
-        PokemonTypeAll,
-    };
+    use scarlet_queen_core::{EachCrateIndividual, Individual, PokemonTypeAll};
     use std::rc::Rc;
 
     // タイプ相性のチェック

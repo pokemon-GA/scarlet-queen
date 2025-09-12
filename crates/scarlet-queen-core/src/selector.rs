@@ -1,9 +1,11 @@
-use std::{collections::{HashMap, HashSet}, fmt::Debug};
+use std::{
+    collections::{HashMap, HashSet},
+    fmt::Debug,
+};
 
 use crate::each_crate_individual::EachCrateIndividual;
 
 /// A trait for individual defined by selector crate.
-/// * `T` - A type of value.
 /// * `R` - The number of individuals after individuals are reduced by selector.
 ///
 /// # Example

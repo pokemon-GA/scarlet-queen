@@ -83,7 +83,7 @@ mod tests {
     use crate::tournament::TournamentSelectorIndividual;
 
     #[test]
-    fn test_selected_ids() {
+    fn test_tournamentselectorindividual_selectorindividualtrait_selectedids() {
         let group: Vec<TournamentSelectorIndividual<&'static str, 2>> = vec![
             TournamentSelectorIndividual::new(&Rc::new(Individual::new_with_id(1, "A"))),
             TournamentSelectorIndividual::new(&Rc::new(Individual::new_with_id(2, "A"))),
@@ -95,8 +95,10 @@ mod tests {
         let scores: HashMap<usize, usize> =
             HashMap::from([(1, 10), (2, 10), (3, 20), (4, 20), (5, 30), (6, 30)]);
 
-        let selected = TournamentSelectorIndividual::selected_ids(&group, scores).unwrap();
-
+        let selected = <TournamentSelectorIndividual<&'static str, 2> as SelectorIndividualTrait<
+            2,
+        >>::selected_ids(&group, scores)
+        .unwrap();
         assert_eq!(selected, HashSet::from([5, 6]));
     }
 }
