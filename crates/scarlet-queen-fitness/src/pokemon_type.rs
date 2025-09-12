@@ -1,10 +1,6 @@
 use crate::effective::TypeEffectiveness;
 use scarlet_queen_core::{
-    EachCrateIndividual,
-    FitnessIndividualTrait,
-    Individual,
-    PokemonTypeAll,
-    PokemonTypeTrait,
+    EachCrateIndividual, FitnessIndividualTrait, Individual, PokemonTypeAll, PokemonTypeTrait,
 };
 use std::{ops::Deref, rc::Rc};
 
@@ -94,10 +90,7 @@ mod tests {
     use std::rc::Rc;
 
     use scarlet_queen_core::{
-        EachCrateIndividual,
-        FitnessIndividualTrait,
-        Individual,
-        PokemonTypeAll,
+        EachCrateIndividual, FitnessIndividualTrait, Individual, PokemonTypeAll,
     };
 
     use crate::{effective::TypeEffectiveness, pokemon_type::FitnessPokemonType};
@@ -289,7 +282,7 @@ mod tests {
     }
 
     #[test]
-    fn test_fitnesspokemontype_intousize_into() {
+    fn test_fitnesspokemontype_into_usize_into() {
         let testcases: Vec<(FitnessPokemonType<PokemonTypeAll>, usize)> = vec![
             (
                 FitnessPokemonType {

@@ -7,6 +7,54 @@ use std::{
     rc::Rc,
 };
 
+/// An individual which has all functions.
+///
+/// This is implmented `FitnessIndividualTrait`, `SelectorIndividualTrait`, and `ReplenisherIndividualTrait` for same individuals.
+///
+/// # Example
+/// ```
+/// use std::{collections::{HashSet, HashMap}, rc::Rc};
+/// use scarlet_queen_core::{Individual, EachCrateIndividual, FitnessIndividualTrait, SelectorIndividualTrait, ReplenisherIndividualTrait};
+/// use scarlet_queen_fitness::ord::GeFitness;
+/// use scarlet_queen_selector::tournament::TournamentSelectorIndividual;
+/// use scarlet_queen_replenisher::tournament::TournamentReplenisherIndividual;
+/// use scarlet_queen_generation::individual::GenerationIndividual;
+///
+/// type IndividualFunction = GenerationIndividual::<u8, GeFitness<u8>, TournamentSelectorIndividual<u8, 8>, TournamentReplenisherIndividual<u8, 10, 8>, 10, 8>;
+/// let x: IndividualFunction = IndividualFunction::new(&Rc::new(Individual::new(5)));
+/// let y: IndividualFunction = IndividualFunction::new(&Rc::new(Individual::new(6)));
+/// assert_eq!(x.get_value(), &5);
+/// assert_eq!(x.fitness(&y), 0);
+///
+/// let mut group = vec![
+///     IndividualFunction::new(&Rc::new(Individual::new_with_id(0, 1))),
+///     IndividualFunction::new(&Rc::new(Individual::new_with_id(1, 2))),
+///     IndividualFunction::new(&Rc::new(Individual::new_with_id(2, 5))),
+///     IndividualFunction::new(&Rc::new(Individual::new_with_id(3, 9))),
+///     IndividualFunction::new(&Rc::new(Individual::new_with_id(4, 6))),
+///     IndividualFunction::new(&Rc::new(Individual::new_with_id(5, 13))),
+///     IndividualFunction::new(&Rc::new(Individual::new_with_id(6, 0))),
+///     IndividualFunction::new(&Rc::new(Individual::new_with_id(7, 7))),
+///     IndividualFunction::new(&Rc::new(Individual::new_with_id(8, 9))),
+///     IndividualFunction::new(&Rc::new(Individual::new_with_id(9, 11)))
+/// ];
+/// let fitnesses: HashMap<usize, usize> = <IndividualFunction as FitnessIndividualTrait>::fitness_group(&group);
+/// assert_eq!(<IndividualFunction as FitnessIndividualTrait>::fitness_group(&group), vec![
+///     (0, 1),
+///     (1, 2),
+///     (2, 3),
+///     (3, 7),
+///     (4, 4),
+///     (5, 9),
+///     (6, 0),
+///     (7, 5),
+///     (8, 7),
+///     (9, 8),
+/// ].into_iter().collect::<HashMap<usize, usize>>());
+/// group.sort_by_key(|v| fitnesses.get(&v.get_id()).map(|&v| -(v as isize)));
+/// assert_eq!(<IndividualFunction as SelectorIndividualTrait<8>>::selected_ids(&group, fitnesses), Ok(vec![1, 2, 3, 4, 5, 7, 8, 9].into_iter().collect::<HashSet<usize>>()));
+/// assert_eq!(<IndividualFunction as ReplenisherIndividualTrait<10, 8>>::replenish(&group), vec![13, 11]);
+/// ```
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct GenerationIndividual<T, FI, SI, RI, const N: usize, const R: usize>
 where
@@ -74,7 +122,8 @@ where
     RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
 {
     fn fitness(&self, other: &Self) -> usize {
-        self.fitness_individual.fitness(&other.fitness_individual)
+        self.get_fitness_individual()
+            .fitness(&other.get_fitness_individual())
     }
 }
 
@@ -95,7 +144,10 @@ where
         U: IntoIterator<Item = &'a Self>,
         Self: 'a,
     {
-        SI::selected_ids(group.into_iter().map(|v| &v.selector_individual), score)
+        SI::selected_ids(
+            group.into_iter().map(|v| v.get_selector_individual()),
+            score,
+        )
     }
 }
 
@@ -111,7 +163,7 @@ where
         U: IntoIterator<Item = &'a Self>,
         Self: 'a,
     {
-        RI::replenish(group.into_iter().map(|v| &v.replenisher_individual))
+        RI::replenish(group.into_iter().map(|v| v.get_replenisher_individual()))
     }
 }
 
@@ -129,18 +181,14 @@ mod tests {
     };
 
     #[derive(PartialEq, Eq, Debug)]
-    struct FITraitSample {
-        value: Rc<Individual<u8>>,
-    }
+    struct FITraitSample(Rc<Individual<u8>>);
     impl EachCrateIndividual for FITraitSample {
         type Item = u8;
         fn new(individual: &Rc<Individual<u8>>) -> Self {
-            FITraitSample {
-                value: Rc::clone(individual),
-            }
+            FITraitSample(Rc::clone(individual))
         }
         fn get_individual(&self) -> &Individual<u8> {
-            &self.value
+            &self.0
         }
     }
     impl FitnessIndividualTrait for FITraitSample {
@@ -153,18 +201,14 @@ mod tests {
         }
     }
     #[derive(PartialEq, Eq, Debug)]
-    struct SITraitSample<const R: usize> {
-        value: Rc<Individual<u8>>,
-    }
+    struct SITraitSample<const R: usize>(Rc<Individual<u8>>);
     impl<const R: usize> EachCrateIndividual for SITraitSample<R> {
         type Item = u8;
         fn new(individual: &Rc<Individual<u8>>) -> Self {
-            SITraitSample {
-                value: Rc::clone(individual),
-            }
+            SITraitSample(Rc::clone(individual))
         }
         fn get_individual(&self) -> &Individual<u8> {
-            &self.value
+            &self.0
         }
     }
     impl<const R: usize> SelectorIndividualTrait<R> for SITraitSample<R> {
@@ -195,18 +239,14 @@ mod tests {
         }
     }
     #[derive(PartialEq, Eq, Debug)]
-    struct RITraitSample<const N: usize, const R: usize> {
-        value: Rc<Individual<u8>>,
-    }
+    struct RITraitSample<const N: usize, const R: usize>(Rc<Individual<u8>>);
     impl<const N: usize, const R: usize> EachCrateIndividual for RITraitSample<N, R> {
         type Item = u8;
         fn new(individual: &Rc<Individual<u8>>) -> Self {
-            RITraitSample {
-                value: Rc::clone(individual),
-            }
+            RITraitSample(Rc::clone(individual))
         }
         fn get_individual(&self) -> &Individual<u8> {
-            &self.value
+            &self.0
         }
     }
     impl<const N: usize, const R: usize> ReplenisherIndividualTrait<N, R> for RITraitSample<N, R> {
@@ -331,7 +371,10 @@ mod tests {
             ),
         ];
         for (arg, result) in testcases.into_iter() {
-            assert_eq!(GenerationIndividualSample::new(&arg), result);
+            assert_eq!(
+                <GenerationIndividualSample<10, 8> as EachCrateIndividual>::new(&arg),
+                result
+            );
         }
     }
 
@@ -418,7 +461,7 @@ mod tests {
     }
 
     #[test]
-    fn test_generationindividual_selectorindividual_makeselector() {
+    fn test_generationindividual_selectorindividual_selectedids() {
         {
             let mut testcase: Vec<GenerationIndividualSample<5, 4>> = vec![
                 GenerationIndividualSample::new(&Rc::new(Individual::new_with_id(0, 6))),
@@ -481,7 +524,7 @@ mod tests {
     }
 
     #[test]
-    fn test_generationindividual_replenisherindividual_replenisher() {
+    fn test_generationindividual_replenisherindividual_replenish() {
         {
             let testcase: Vec<GenerationIndividualSample<5, 2>> = vec![
                 GenerationIndividualSample::new(&Rc::new(Individual::new_with_id(0, 12))),

@@ -4,7 +4,6 @@ use std::collections::HashMap;
 use crate::each_crate_individual::EachCrateIndividual;
 
 /// A trait for individual defined by fitness crate.
-/// * `T` - A type of value.
 ///
 /// # Example
 /// ```
@@ -92,7 +91,7 @@ mod tests {
     use std::{collections::HashMap, rc::Rc};
 
     use super::FitnessIndividualTrait;
-    use crate::{individual::Individual, each_crate_individual::EachCrateIndividual};
+    use crate::{each_crate_individual::EachCrateIndividual, individual::Individual};
 
     struct Fitness(Rc<Individual<u8>>);
     impl Fitness {

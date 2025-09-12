@@ -69,7 +69,7 @@ mod tests {
     use crate::random::RandomSelectorIndividual;
 
     #[test]
-    fn test_selected_ids() {
+    fn test_randomselectorindividual_selectorindividualtrait_selectedids() {
         let group: Vec<RandomSelectorIndividual<&'static str, 2>> = vec![
             RandomSelectorIndividual::new(&Rc::new(Individual::new_with_id(1, "A"))),
             RandomSelectorIndividual::new(&Rc::new(Individual::new_with_id(2, "A"))),
