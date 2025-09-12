@@ -15,10 +15,10 @@ use std::{
 /// ```
 /// use std::{collections::{HashSet, HashMap}, rc::Rc};
 /// use scarlet_queen_core::{Individual, EachCrateIndividual, FitnessIndividualTrait, SelectorIndividualTrait, ReplenisherIndividualTrait};
-/// use scarlet_queen_fitness::GeFitness;
-/// use scarlet_queen_selector::tournament::TournamentSelectorIndividual;
-/// use scarlet_queen_replenisher::tournament::TournamentReplenisherIndividual;
-/// use scarlet_queen_generation::individual::GenerationIndividual;
+/// use scarlet_queen_fitness::ord::GeFitness;
+/// use scarlet_queen_selector::TournamentSelectorIndividual;
+/// use scarlet_queen_replenisher::TournamentReplenisherIndividual;
+/// use scarlet_queen_generation::GenerationIndividual;
 ///
 /// type IndividualFunction = GenerationIndividual::<u8, GeFitness<u8>, TournamentSelectorIndividual<u8, 8>, TournamentReplenisherIndividual<u8, 10, 8>, 10, 8>;
 /// let x: IndividualFunction = IndividualFunction::new(&Rc::new(Individual::new(5)));
