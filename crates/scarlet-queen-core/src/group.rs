@@ -1,7 +1,7 @@
-//! Mod for `InitializerTrait` and `GroupTrait`.
+//! Mod for `GroupTrait`.
 
-use std::{fmt::Debug, io::Write};
 use crate::{individual::Individual, initializer::InitializerTrait};
+use std::{fmt::Debug, io::Write};
 
 /// A trait for a group which contains individuals.
 /// * `T` - An element of this group
@@ -187,8 +187,7 @@ pub trait GroupTrait<T, const N: usize, const R: usize> {
     where
         T: Clone,
     {
-        self
-            .iter()
+        self.iter()
             .map(|v| v.get_value())
             .cloned()
             .collect::<Vec<T>>()
@@ -197,8 +196,15 @@ pub trait GroupTrait<T, const N: usize, const R: usize> {
 
 #[cfg(test)]
 mod tests {
-    use std::{collections::{HashMap, HashSet}, mem::swap, rc::Rc};
-    use crate::{EachCrateIndividual, FitnessIndividualTrait, GroupTrait, Individual, InitializerTrait, ReplenisherIndividualTrait, SelectorIndividualTrait};
+    use crate::{
+        EachCrateIndividual, FitnessIndividualTrait, GroupTrait, Individual, InitializerTrait,
+        ReplenisherIndividualTrait, SelectorIndividualTrait,
+    };
+    use std::{
+        collections::{HashMap, HashSet},
+        mem::swap,
+        rc::Rc,
+    };
 
     #[derive(PartialEq, Eq, Debug)]
     struct IndividualWrapper<const N: usize, const R: usize>(Rc<Individual<u8>>);
@@ -232,27 +238,28 @@ mod tests {
             group: G,
             _fitnesses: std::collections::HashMap<usize, usize>,
         ) -> Result<std::collections::HashSet<usize>, Self::Err>
-            where
-                G: IntoIterator<Item = &'a Self>,
-                Self: 'a {
-            let group: Vec<&IndividualWrapper<N, R>> = group.into_iter().collect::<Vec<&IndividualWrapper<N, R>>>();
+        where
+            G: IntoIterator<Item = &'a Self>,
+            Self: 'a,
+        {
+            let group: Vec<&IndividualWrapper<N, R>> =
+                group.into_iter().collect::<Vec<&IndividualWrapper<N, R>>>();
             if group.len() < R {
                 return Err(String::from("The size of group is not enough."));
             };
-            Ok(
-                group
-                    .into_iter()
-                    .map(|v| v.get_id())
-                    .take(R)
-                    .collect::<HashSet<usize>>()
-            )
+            Ok(group
+                .into_iter()
+                .map(|v| v.get_id())
+                .take(R)
+                .collect::<HashSet<usize>>())
         }
     }
     impl<const N: usize, const R: usize> ReplenisherIndividualTrait<N, R> for IndividualWrapper<N, R> {
         fn replenish<'a, G>(group: G) -> Vec<<Self as EachCrateIndividual>::Item>
-            where
-                G: IntoIterator<Item = &'a Self>,
-                Self: 'a {
+        where
+            G: IntoIterator<Item = &'a Self>,
+            Self: 'a,
+        {
             group
                 .into_iter()
                 .map(|v| *v.get_value())
@@ -269,16 +276,16 @@ mod tests {
         type Err = String;
         fn new(data: [u8; N]) -> Self {
             Group(
-                data
-                    .into_iter()
+                data.into_iter()
                     .enumerate()
                     .map(|(i, v)| IndividualWrapper::new_for_test(i, v))
-                    .collect::<Vec<_>>()
+                    .collect::<Vec<_>>(),
             )
         }
         fn one_cycle(&mut self) -> Result<(), Self::Err> {
             let scores: HashMap<usize, usize> = IndividualWrapper::fitness_group(self.0.iter());
-            self.0.sort_by_key(|v| -(*scores.get(&v.get_id()).unwrap() as isize));
+            self.0
+                .sort_by_key(|v| -(*scores.get(&v.get_id()).unwrap() as isize));
             let selector: HashSet<usize> = IndividualWrapper::selected_ids(self.0.iter(), scores)?;
             let mut data_for_edit: Vec<IndividualWrapper<N, R>> = Vec::new();
             swap(&mut data_for_edit, &mut self.0);
@@ -302,8 +309,9 @@ mod tests {
             Ok(())
         }
         fn iter<'a>(&'a self) -> impl Iterator<Item = &'a Individual<u8>>
-            where
-                u8: 'a {
+        where
+            u8: 'a,
+        {
             self.0.iter().map(|v| v.get_individual())
         }
     }
@@ -320,35 +328,41 @@ mod tests {
 
     #[test]
     fn test_grouptrait_init() {
-        assert_eq!(Group::<10, 8>::init::<Initializer>(), Group(vec![
-            IndividualWrapper::new_for_test(0, 0),
-            IndividualWrapper::new_for_test(1, 1),
-            IndividualWrapper::new_for_test(2, 2),
-            IndividualWrapper::new_for_test(3, 3),
-            IndividualWrapper::new_for_test(4, 4),
-            IndividualWrapper::new_for_test(5, 5),
-            IndividualWrapper::new_for_test(6, 6),
-            IndividualWrapper::new_for_test(7, 7),
-            IndividualWrapper::new_for_test(8, 8),
-            IndividualWrapper::new_for_test(9, 9),
-        ]));
-        assert_eq!(Group::<15, 12>::init::<Initializer>(), Group(vec![
-            IndividualWrapper::new_for_test(0, 0),
-            IndividualWrapper::new_for_test(1, 1),
-            IndividualWrapper::new_for_test(2, 2),
-            IndividualWrapper::new_for_test(3, 3),
-            IndividualWrapper::new_for_test(4, 4),
-            IndividualWrapper::new_for_test(5, 5),
-            IndividualWrapper::new_for_test(6, 6),
-            IndividualWrapper::new_for_test(7, 7),
-            IndividualWrapper::new_for_test(8, 8),
-            IndividualWrapper::new_for_test(9, 9),
-            IndividualWrapper::new_for_test(10, 10),
-            IndividualWrapper::new_for_test(11, 11),
-            IndividualWrapper::new_for_test(12, 12),
-            IndividualWrapper::new_for_test(13, 13),
-            IndividualWrapper::new_for_test(14, 14),
-        ]));
+        assert_eq!(
+            Group::<10, 8>::init::<Initializer>(),
+            Group(vec![
+                IndividualWrapper::new_for_test(0, 0),
+                IndividualWrapper::new_for_test(1, 1),
+                IndividualWrapper::new_for_test(2, 2),
+                IndividualWrapper::new_for_test(3, 3),
+                IndividualWrapper::new_for_test(4, 4),
+                IndividualWrapper::new_for_test(5, 5),
+                IndividualWrapper::new_for_test(6, 6),
+                IndividualWrapper::new_for_test(7, 7),
+                IndividualWrapper::new_for_test(8, 8),
+                IndividualWrapper::new_for_test(9, 9),
+            ])
+        );
+        assert_eq!(
+            Group::<15, 12>::init::<Initializer>(),
+            Group(vec![
+                IndividualWrapper::new_for_test(0, 0),
+                IndividualWrapper::new_for_test(1, 1),
+                IndividualWrapper::new_for_test(2, 2),
+                IndividualWrapper::new_for_test(3, 3),
+                IndividualWrapper::new_for_test(4, 4),
+                IndividualWrapper::new_for_test(5, 5),
+                IndividualWrapper::new_for_test(6, 6),
+                IndividualWrapper::new_for_test(7, 7),
+                IndividualWrapper::new_for_test(8, 8),
+                IndividualWrapper::new_for_test(9, 9),
+                IndividualWrapper::new_for_test(10, 10),
+                IndividualWrapper::new_for_test(11, 11),
+                IndividualWrapper::new_for_test(12, 12),
+                IndividualWrapper::new_for_test(13, 13),
+                IndividualWrapper::new_for_test(14, 14),
+            ])
+        );
         assert_eq!(Group::<0, 0>::init::<Initializer>(), Group(vec![]))
     }
 
@@ -443,7 +457,7 @@ mod tests {
                 IndividualWrapper::<10, 8>::new_for_test(8, 80),
                 IndividualWrapper::<10, 8>::new_for_test(9, 90),
             ]);
-            let result: Vec<u8> = vec![0, 10, 20, 30, 40, 50, 60, 70, 80, 90,];
+            let result: Vec<u8> = vec![0, 10, 20, 30, 40, 50, 60, 70, 80, 90];
             assert_eq!(arg.clone_values(), result);
         }
         {
@@ -464,7 +478,7 @@ mod tests {
                 IndividualWrapper::<15, 12>::new_for_test(13, 19),
                 IndividualWrapper::<15, 12>::new_for_test(14, 17),
             ]);
-            let result: Vec<u8>= vec![20, 19, 17, 15, 14, 12, 11, 10, 9, 7, 5, 2, 20, 19, 17];
+            let result: Vec<u8> = vec![20, 19, 17, 15, 14, 12, 11, 10, 9, 7, 5, 2, 20, 19, 17];
             assert_eq!(arg.clone_values(), result);
         }
         {

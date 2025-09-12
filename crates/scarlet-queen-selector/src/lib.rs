@@ -1,3 +1,6 @@
 pub mod error;
-pub mod random;
-pub mod tournament;
+mod random;
+mod tournament;
+
+pub use random::RandomSelectorIndividual;
+pub use tournament::TournamentSelectorIndividual;
