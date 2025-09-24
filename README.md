@@ -171,7 +171,7 @@ graph TD;
 ```
 ~~~
 
-# Rustdoc Hub Page (Astro.js)
+## Rustdoc Hub Page (Astro.js)
 
 project directory: `hub/`
 
