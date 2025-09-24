@@ -42,7 +42,6 @@ use std::fmt::Debug;
 /// }
 /// impl<const N: usize, const R: usize> SelectorIndividualTrait<R> for IndividualWrapper<N, R> {
 ///     type Err = String;
-///
 ///     fn selected_ids<'a, G>(
 ///         group: G,
 ///         _fitnesses: std::collections::HashMap<usize, usize>,
@@ -82,6 +81,7 @@ use std::fmt::Debug;
 /// struct Group<const N: usize, const R: usize>(Vec<IndividualWrapper<N, R>>);
 /// impl<const N: usize, const R: usize> GroupTrait<u8, N, R> for Group<N, R> {
 ///     type Err = String;
+///     type Out = ();
 ///     fn new(data: [u8; N]) -> Self {
 ///         Group(
 ///             data
