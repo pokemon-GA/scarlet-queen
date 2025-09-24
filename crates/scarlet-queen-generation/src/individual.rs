@@ -75,16 +75,19 @@ where
     RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
 {
     /// Get an individual which has methods about fitness.
+    /// You can call those methods to `self` directly.
     pub fn get_fitness_individual(&self) -> &FI {
         &self.fitness_individual
     }
 
     /// Get an individual which has methods about selector.
+    /// You can call those methods to `self` directly.
     pub fn get_selector_individual(&self) -> &SI {
         &self.selector_individual
     }
 
     /// Get an individual which has methods about replenisher.
+    /// You can call those methods to `self` directly.
     pub fn get_replenisher_individual(&self) -> &RI {
         &self.replenisher_individual
     }

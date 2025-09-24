@@ -1,6 +1,8 @@
 //! Mod for `Individual`.
 
-use std::cell::RefCell;
+use std::{cell::RefCell, fmt::Debug};
+
+use serde::{ser::SerializeStruct, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 /// Individual for `Group`.
@@ -60,6 +62,22 @@ impl<T> Individual<T> {
     /// Get this value.
     pub fn get_value(&self) -> &T {
         &self.value
+    }
+}
+
+impl<T> Serialize for Individual<T>
+where
+    T: Debug,
+{
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let mut s: <S as serde::Serializer>::SerializeStruct =
+            serializer.serialize_struct("Individual", 2)?;
+        s.serialize_field("id", &self.id)?;
+        s.serialize_field("value", &format!("{:?}", &self.value))?;
+        s.end()
     }
 }
 

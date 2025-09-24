@@ -1,7 +1,9 @@
 //! Mod for `GroupTrait`.
 
+use serde::Serialize;
+
 use crate::{individual::Individual, initializer::InitializerTrait};
-use std::{fmt::Debug, io::Write};
+use std::fmt::Debug;
 
 /// A trait for a group which contains individuals.
 /// * `T` - An element of this group
@@ -40,7 +42,6 @@ use std::{fmt::Debug, io::Write};
 /// }
 /// impl<const N: usize, const R: usize> SelectorIndividualTrait<R> for IndividualWrapper<N, R> {
 ///     type Err = String;
-///
 ///     fn selected_ids<'a, G>(
 ///         group: G,
 ///         _fitnesses: std::collections::HashMap<usize, usize>,
@@ -80,6 +81,7 @@ use std::{fmt::Debug, io::Write};
 /// struct Group<const N: usize, const R: usize>(Vec<IndividualWrapper<N, R>>);
 /// impl<const N: usize, const R: usize> GroupTrait<u8, N, R> for Group<N, R> {
 ///     type Err = String;
+///     type Out = ();
 ///     fn new(data: [u8; N]) -> Self {
 ///         Group(
 ///             data
@@ -139,6 +141,7 @@ use std::{fmt::Debug, io::Write};
 pub trait GroupTrait<T, const N: usize, const R: usize> {
     /// An error of cycle.
     type Err: Debug;
+    type Out: Serialize;
 
     /// Create `Self` from an array.
     /// The return value is already assigned a number.
@@ -146,6 +149,7 @@ pub trait GroupTrait<T, const N: usize, const R: usize> {
     fn new(data: [T; N]) -> Self;
 
     /// Run one cycle and update individuals.
+    /// The elements of `self` must be already assigned a number.
     fn one_cycle(&mut self) -> Result<(), Self::Err>;
 
     /// Create an iterator of indivuduals.
@@ -165,7 +169,7 @@ pub trait GroupTrait<T, const N: usize, const R: usize> {
         GroupTrait::new(I::initialize())
     }
 
-    /// Assign a number to individuals in order.
+    /// Assign numbers to individuals in order.
     fn reset_id(&self) {
         self.iter().enumerate().for_each(|(i, v)| v.set_id(i));
     }
@@ -175,11 +179,9 @@ pub trait GroupTrait<T, const N: usize, const R: usize> {
     ///
     /// By default, there is not outputing.(Run `one_cycle` simply.)
     /// * `out` - A target of outputing.
-    fn one_cycle_out<W>(&mut self, _out: &mut W) -> Result<(), Self::Err>
-    where
-        W: Write,
-    {
-        <Self as GroupTrait<T, N, R>>::one_cycle(self)
+    fn one_cycle_out(&mut self) -> Result<Option<Self::Out>, Self::Err> {
+        <Self as GroupTrait<T, N, R>>::one_cycle(self)?;
+        Ok(None)
     }
 
     /// Clone individuals which are contained by this.
@@ -274,6 +276,7 @@ mod tests {
     struct Group<const N: usize, const R: usize>(Vec<IndividualWrapper<N, R>>);
     impl<const N: usize, const R: usize> GroupTrait<u8, N, R> for Group<N, R> {
         type Err = String;
+        type Out = ();
         fn new(data: [u8; N]) -> Self {
             Group(
                 data.into_iter()
