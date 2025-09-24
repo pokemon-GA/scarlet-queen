@@ -1,8 +1,10 @@
 use std::{collections::HashMap, hash::Hash, io::Write};
 
+use serde_derive::Serialize;
+
 pub fn find_tail_cycle<T, W>(
     count_data: &[HashMap<T, usize>],
-    out: &mut W,
+    analyze_file: &mut W,
 ) -> Result<(), std::io::Error>
 where
     T: Clone + Eq + Hash,
@@ -10,7 +12,7 @@ where
 {
     let data_len: usize = count_data.len();
     let (header_len, cycle_len) = tail_cycle(count_data);
-    let result: String = if let Some(v) = count_data.last() {
+    let result: CycleType = if let Some(v) = count_data.last() {
         let mut last_count: Vec<&usize> = v.values().collect::<Vec<&usize>>();
         last_count.sort();
         if last_count
@@ -18,16 +20,19 @@ where
             .take(last_count.len() - 1)
             .all(|&&v| v == 0)
         {
-            "cycle: Divergence".to_string()
+            CycleType::Divergence
         } else if header_len == data_len {
-            "cycle: NotEnoughLoop".to_string()
+            CycleType::NotEnoughLoop
         } else {
-            format!("cycle: HeaderLen-CycleLen({header_len}-{cycle_len})")
+            CycleType::TailCycle(TailCycle::new(header_len, cycle_len))
         }
     } else {
-        "cycle: NoData".to_string()
+        CycleType::None
     };
-    writeln!(out, "{result}")
+
+    let analyze_out: AnalyzeOut = AnalyzeOut { cycle: result };
+    let analyze_string: String = serde_json::to_string(&analyze_out)?;
+    analyze_file.write_all(analyze_string.as_bytes())
 }
 
 pub fn tail_cycle<T>(data: &[T]) -> (usize, usize)
@@ -75,4 +80,32 @@ where
         res[i + 1] = res[j] + 1;
     }
     res
+}
+
+#[derive(Serialize)]
+enum CycleType {
+    TailCycle(TailCycle),
+    Divergence,
+    NotEnoughLoop,
+    None,
+}
+
+#[derive(Serialize)]
+struct TailCycle {
+    header_len: usize,
+    cycle_len: usize,
+}
+
+impl TailCycle {
+    fn new(header_len: usize, cycle_len: usize) -> TailCycle {
+        TailCycle {
+            header_len,
+            cycle_len,
+        }
+    }
+}
+
+#[derive(Serialize)]
+struct AnalyzeOut {
+    cycle: CycleType,
 }

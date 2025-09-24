@@ -9,3 +9,6 @@ scarlet-queen-fitness = { path = "../scarlet-queen-fitness" }
 scarlet-queen-replenisher = { path = "../scarlet-queen-replenisher" }
 scarlet-queen-selector = { path = "../scarlet-queen-selector" }
 thiserror.workspace = true
+serde.workspace = true
+serde_derive.workspace = true
+serde_json.workspace = true

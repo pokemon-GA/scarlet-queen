@@ -10,3 +10,6 @@ scarlet-queen-initializer = { path = "../scarlet-queen-initializer" }
 plotters.workspace = true
 rand.workspace = true
 thiserror.workspace = true
+serde.workspace = true
+serde_derive.workspace = true
+serde_json.workspace = true
