@@ -1,14 +1,25 @@
 //! Mod for `GroupTrait`.
 
 use serde::Serialize;
-
-use crate::{individual::Individual, initializer::InitializerTrait};
 use std::fmt::Debug;
 
-/// A trait for a group which contains individuals.
-/// * `T` - An element of this group
-/// * `N` - The number of individuals
-/// * `R` - The number of individuals after individuals are reduced by selector
+use crate::{individual::Individual, initializer::InitializerTrait};
+
+/// A trait for evolutionary processes over a group of individuals.
+///
+/// This trait defines a method, `one_cycle_with_output`. When it is called, it should perform three steps.
+///
+/// 1. Fitness: Assign a fitness score to each individual. These scores depend on all individuals in the group.
+///
+/// 2. Select: Select individuals based on the fitness scores. Unselected individuals are removed from the group.
+///
+/// 3. Replenish: Replenish the group with new individuals. Create them from remaining ones.
+///
+/// Optionally, you can output data about this cycle. If you don't want to output any data, set `type Out = ();`.
+///
+/// * `T` - A type of individuals of this group.
+/// * `N` - The number of individuals.
+/// * `R` - The number of individuals after individuals are reduced by selector.
 ///
 /// # Example
 /// ```
@@ -22,15 +33,19 @@ use std::fmt::Debug;
 ///         IndividualWrapper(Rc::new(Individual::new_with_id(id, value)))
 ///     }
 /// }
+///
 /// impl<const N: usize, const R: usize> EachCrateIndividual for IndividualWrapper<N, R> {
 ///     type Item = u8;
+///
 ///     fn new(individual: &Rc<Individual<Self::Item>>) -> Self {
 ///         IndividualWrapper(Rc::clone(individual))
 ///     }
+///
 ///     fn get_individual(&self) -> &Individual<Self::Item> {
 ///         &self.0
 ///     }
 /// }
+///
 /// impl<const N: usize, const R: usize> FitnessIndividualTrait for IndividualWrapper<N, R> {
 ///     fn fitness(&self, other: &Self) -> usize {
 ///         if self.get_value() >= other.get_value() {
@@ -42,9 +57,10 @@ use std::fmt::Debug;
 /// }
 /// impl<const N: usize, const R: usize> SelectorIndividualTrait<R> for IndividualWrapper<N, R> {
 ///     type Err = String;
+///
 ///     fn selected_ids<'a, G>(
 ///         group: G,
-///         _fitnesses: std::collections::HashMap<usize, usize>,
+///         _scores: std::collections::HashMap<usize, usize>,
 ///     ) -> Result<std::collections::HashSet<usize>, Self::Err>
 ///         where
 ///             G: IntoIterator<Item = &'a Self>,
@@ -82,6 +98,7 @@ use std::fmt::Debug;
 /// impl<const N: usize, const R: usize> GroupTrait<u8, N, R> for Group<N, R> {
 ///     type Err = String;
 ///     type Out = ();
+///
 ///     fn new(data: [u8; N]) -> Self {
 ///         Group(
 ///             data
@@ -91,7 +108,8 @@ use std::fmt::Debug;
 ///                 .collect::<Vec<_>>()
 ///         )
 ///     }
-///     fn one_cycle(&mut self) -> Result<(), Self::Err> {
+///
+///     fn one_cycle_with_output(&mut self) -> Result<(), Self::Err> {
 ///         let scores: HashMap<usize, usize> = IndividualWrapper::fitness_group(self.0.iter());
 ///         self.0.sort_by_key(|v| -(*scores.get(&v.get_id()).unwrap() as isize));
 ///         let selector: HashSet<usize> = IndividualWrapper::selected_ids(self.0.iter(), scores)?;
@@ -116,13 +134,16 @@ use std::fmt::Debug;
 ///         self.reset_id();
 ///         Ok(())
 ///     }
+///
 ///     fn iter<'a>(&'a self) -> impl Iterator<Item = &'a Individual<u8>>
 ///         where
 ///             u8: 'a {
 ///         self.0.iter().map(|v| v.get_individual())
 ///     }
 /// }
+///
 /// struct Initializer {}
+///
 /// impl<const N: usize> InitializerTrait<u8, N> for Initializer {
 ///     fn initialize() -> [u8; N] {
 ///         let mut i: u8 = 0;
@@ -134,13 +155,15 @@ use std::fmt::Debug;
 /// }
 ///
 /// let mut group: Group<15, 12> = Group::init::<Initializer>();
-/// group.one_cycle().unwrap();
-/// let datas: Vec<u8> = group.clone_values();
-/// assert_eq!(datas, vec![14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 14, 13, 12]);
+///
+/// group.one_cycle_with_output().unwrap();
+///
+/// assert_eq!(group.clone_values(), vec![14u8, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 14, 13, 12]);
 /// ```
 pub trait GroupTrait<T, const N: usize, const R: usize> {
     /// An error of cycle.
     type Err: Debug;
+    /// An output of cycle.
     type Out: Serialize;
 
     /// Create `Self` from an array.
@@ -148,11 +171,11 @@ pub trait GroupTrait<T, const N: usize, const R: usize> {
     /// * `data` - An array of individuals
     fn new(data: [T; N]) -> Self;
 
-    /// Run one cycle and update individuals.
-    /// The elements of `self` must be already assigned a number.
-    fn one_cycle(&mut self) -> Result<(), Self::Err>;
+    /// Run one cycle with outputing and update individuals.
+    /// The elements of `self` must be already assigned a number before calling this method.
+    fn one_cycle_with_output(&mut self) -> Result<Self::Out, Self::Err>;
 
-    /// Create an iterator of indivuduals.
+    /// Create an iterator of individuals.
     /// * `'a` - A lifetime of `self`.
     fn iter<'a>(&'a self) -> impl Iterator<Item = &'a Individual<T>>
     where
@@ -174,17 +197,7 @@ pub trait GroupTrait<T, const N: usize, const R: usize> {
         self.iter().enumerate().for_each(|(i, v)| v.set_id(i));
     }
 
-    /// Run one cycle with outputing and update individuals.
-    /// The elements of `self` must be already assigned a number.
-    ///
-    /// By default, there is not outputing.(Run `one_cycle` simply.)
-    /// * `out` - A target of outputing.
-    fn one_cycle_out(&mut self) -> Result<Option<Self::Out>, Self::Err> {
-        <Self as GroupTrait<T, N, R>>::one_cycle(self)?;
-        Ok(None)
-    }
-
-    /// Clone individuals which are contained by this.
+    /// Clone individuals of this group.
     fn clone_values(&self) -> Vec<T>
     where
         T: Clone,
@@ -235,10 +248,9 @@ mod tests {
     }
     impl<const N: usize, const R: usize> SelectorIndividualTrait<R> for IndividualWrapper<N, R> {
         type Err = String;
-
         fn selected_ids<'a, G>(
             group: G,
-            _fitnesses: std::collections::HashMap<usize, usize>,
+            _scores: std::collections::HashMap<usize, usize>,
         ) -> Result<std::collections::HashSet<usize>, Self::Err>
         where
             G: IntoIterator<Item = &'a Self>,
@@ -285,7 +297,7 @@ mod tests {
                     .collect::<Vec<_>>(),
             )
         }
-        fn one_cycle(&mut self) -> Result<(), Self::Err> {
+        fn one_cycle_with_output(&mut self) -> Result<(), Self::Err> {
             let scores: HashMap<usize, usize> = IndividualWrapper::fitness_group(self.0.iter());
             self.0
                 .sort_by_key(|v| -(*scores.get(&v.get_id()).unwrap() as isize));
@@ -384,7 +396,7 @@ mod tests {
                 IndividualWrapper::<10, 8>::new_for_test(0, 80),
                 IndividualWrapper::<10, 8>::new_for_test(0, 90),
             ]);
-            let result_self = Group(vec![
+            let result_self: Group<10, 8> = Group(vec![
                 IndividualWrapper::<10, 8>::new_for_test(0, 0),
                 IndividualWrapper::<10, 8>::new_for_test(1, 10),
                 IndividualWrapper::<10, 8>::new_for_test(2, 20),

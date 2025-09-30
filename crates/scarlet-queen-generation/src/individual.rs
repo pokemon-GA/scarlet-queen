@@ -7,7 +7,7 @@ use std::{
     rc::Rc,
 };
 
-/// An individual which has all functions.
+/// An individual which has all functions of fitness, selector, and replenisher.
 ///
 /// This is implmented `FitnessIndividualTrait`, `SelectorIndividualTrait`, and `ReplenisherIndividualTrait` for same individuals.
 ///
@@ -38,7 +38,7 @@ use std::{
 ///     IndividualFunction::new(&Rc::new(Individual::new_with_id(8, 9))),
 ///     IndividualFunction::new(&Rc::new(Individual::new_with_id(9, 11)))
 /// ];
-/// let fitnesses: HashMap<usize, usize> = <IndividualFunction as FitnessIndividualTrait>::fitness_group(&group);
+/// let scores: HashMap<usize, usize> = <IndividualFunction as FitnessIndividualTrait>::fitness_group(&group);
 /// assert_eq!(<IndividualFunction as FitnessIndividualTrait>::fitness_group(&group), vec![
 ///     (0, 1),
 ///     (1, 2),
@@ -51,8 +51,8 @@ use std::{
 ///     (8, 7),
 ///     (9, 8),
 /// ].into_iter().collect::<HashMap<usize, usize>>());
-/// group.sort_by_key(|v| fitnesses.get(&v.get_id()).map(|&v| -(v as isize)));
-/// assert_eq!(<IndividualFunction as SelectorIndividualTrait<8>>::selected_ids(&group, fitnesses), Ok(vec![1, 2, 3, 4, 5, 7, 8, 9].into_iter().collect::<HashSet<usize>>()));
+/// group.sort_by_key(|v| scores.get(&v.get_id()).map(|&v| -(v as isize)));
+/// assert_eq!(<IndividualFunction as SelectorIndividualTrait<8>>::selected_ids(&group, scores), Ok(vec![1, 2, 3, 4, 5, 7, 8, 9].into_iter().collect::<HashSet<usize>>()));
 /// assert_eq!(<IndividualFunction as ReplenisherIndividualTrait<10, 8>>::replenish(&group), vec![13, 11]);
 /// ```
 #[derive(Clone, PartialEq, Eq, Debug)]

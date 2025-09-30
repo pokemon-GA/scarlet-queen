@@ -1,6 +1,11 @@
+//! Mod for `ReplenishIndividualTrait`
+
 use crate::each_crate_individual::EachCrateIndividual;
 
-/// A trait for individual defined by replenisher crate.
+/// A trait for a individual having a method for creating new individuals with which replenishing a group.
+///
+/// The process corresponds the "Replenish" step of `GroupTrait`.
+///
 /// * `N` - The number of individuals.
 /// * `R` - The number of individuals after individuals are reduced by selector.
 ///
@@ -63,11 +68,12 @@ use crate::each_crate_individual::EachCrateIndividual;
 /// assert_eq!(<Replenisher<15, 12> as ReplenisherIndividualTrait<15, 12>>::replenish(&sample), vec![20, 19, 17])
 /// ```
 pub trait ReplenisherIndividualTrait<const N: usize, const R: usize>: EachCrateIndividual {
-    /// Return values you want to replenish.
-    /// `group` must return values in order of the fitness.
+    /// Return individuals for replenishing a group.
+    /// `group` must return individuals in order of the fitness by a method `next`.
+    ///
     /// * `'a` - A lifetime of group.
     /// * `G` - A type of group.
-    /// * `group` - A value which you are able to get `Self` from. Return values in order of the fitness.
+    /// * `group` - A value which you are able to get `Self` from. Return values in order of the fitness by a method `next`.
     fn replenish<'a, G>(group: G) -> Vec<<Self as EachCrateIndividual>::Item>
     where
         G: IntoIterator<Item = &'a Self>,

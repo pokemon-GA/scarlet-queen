@@ -68,9 +68,8 @@ where
     res_groups.push(group.clone_values());
     for i in 1..(MAIN_LOOP + 1) {
         let result_out: <G as GroupTrait<T, N, R>>::Out = group
-            .one_cycle_out()
-            .map_err(|v| Error::LoopError(format!("{v:?}")))?
-            .unwrap();
+            .one_cycle_with_output()
+            .map_err(|v| Error::LoopError(format!("{v:?}")))?;
         outs.push(GenerationOut::new(i, result_out));
         res_groups.push(group.clone_values());
     }

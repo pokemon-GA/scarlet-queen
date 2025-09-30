@@ -3,11 +3,6 @@ use scarlet_queen_core::{
     EachCrateIndividual, FitnessIndividualTrait, GroupTrait, Individual,
     ReplenisherIndividualTrait, SelectorIndividualTrait,
 };
-use scarlet_queen_fitness::FitnessPokemonType;
-#[allow(unused_imports)]
-use scarlet_queen_replenisher::{RandomReplenisherIndividual, TournamentReplenisherIndividual};
-#[allow(unused_imports)]
-use scarlet_queen_selector::{RandomSelectorIndividual, TournamentSelectorIndividual};
 use serde::{ser::SerializeStruct, Serialize};
 use std::{
     collections::{HashMap, HashSet},
@@ -17,6 +12,9 @@ use std::{
     slice::Iter,
 };
 
+/// A group which contains individuals.
+///
+/// This is implmented `GroupTrait`
 pub struct Group<T, FI, SI, RI, const N: usize, const R: usize>
 where
     T: Clone,
@@ -48,78 +46,37 @@ where
         }
     }
 
-    fn one_cycle(&mut self) -> Result<(), Self::Err> {
-        // fitness
-        // get fitnesses
-        let fitnesses: HashMap<usize, usize> = GenerationIndividual::fitness_group(&*self);
-        // sort by fitnesses
-        self.data
-            .sort_by_key(|v| fitnesses.get(&v.get_id()).map(|&v| -(v as isize)));
-
-        // selector
-        // get selector
-        let selector: HashSet<usize> = GenerationIndividual::selected_ids(&*self, fitnesses)
-            .map_err(|v| GenerationError::SelectorError(format!("{v:?}")))?;
-        // swap data
-        let mut data_for_edit: Vec<GenerationIndividual<T, FI, SI, RI, N, R>> = Vec::new();
-        mem::swap(&mut data_for_edit, &mut self.data);
-        // select
-        self.data = data_for_edit
-            .into_iter()
-            .filter_map(|v| {
-                if selector.contains(&v.get_id()) {
-                    Some(v)
-                } else {
-                    None
-                }
-            })
-            .collect::<Vec<GenerationIndividual<T, FI, SI, RI, N, R>>>();
-
-        // replenish
-        // get new individuals
-        let new_individuals: Vec<T> = GenerationIndividual::replenish(&*self);
-        // extend
-        self.data.extend(
-            new_individuals
-                .into_iter()
-                .map(|v| GenerationIndividual::new(&Rc::new(Individual::new_with_id(0, v)))),
-        );
-
-        // assign numbers
-        self.reset_id();
-        Ok(())
-    }
-
-    fn one_cycle_out(&mut self) -> Result<Option<Self::Out>, Self::Err> {
+    fn one_cycle_with_output(&mut self) -> Result<Self::Out, Self::Err> {
         let mut out_json: ResultOut<T> = ResultOut {
             individuals_and_scores: Vec::new(),
             new_individuals: Vec::new(),
         };
 
         // fitness
-        // get fitnesses
-        let fitnesses: HashMap<usize, usize> = GenerationIndividual::fitness_group(&*self);
-        // sort by fitnesses
+        // get scores
+        let scores: HashMap<usize, usize> = GenerationIndividual::fitness_group(&*self);
+        // sort by scores
         self.data
-            .sort_by_key(|v| fitnesses.get(&v.get_id()).map(|&v| -(v as isize)));
+            .sort_by_key(|v| scores.get(&v.get_id()).map(|&v| -(v as isize)));
 
+        // output fitness scores
         out_json.individuals_and_scores = self
             .data
             .iter()
             .map(|v| IndividualAndScore {
                 individual: v.get_individual().clone(),
-                score: fitnesses.get(&v.get_id()).map(|&v| v),
+                score: scores.get(&v.get_id()).map(|&v| v),
             })
             .collect::<Vec<IndividualAndScore<T>>>();
 
         // selector
         // get selector
-        let selector: HashSet<usize> = GenerationIndividual::selected_ids(&*self, fitnesses)
+        let selector: HashSet<usize> = GenerationIndividual::selected_ids(&*self, scores)
             .map_err(|v| GenerationError::SelectorError(format!("{v:?}")))?;
-        // swap data
+        // swap the group data and the empty vector
         let mut data_for_edit: Vec<GenerationIndividual<T, FI, SI, RI, N, R>> = Vec::new();
         mem::swap(&mut data_for_edit, &mut self.data);
-        // select
+        // select individuals and remove unselected individuals
         self.data = data_for_edit
             .into_iter()
             .filter_map(|v| {
@@ -132,7 +89,7 @@ where
             .collect::<Vec<GenerationIndividual<T, FI, SI, RI, N, R>>>();
 
         // replenish
-        // get new individuals
+        // create new individuals
         let new_individuals: Vec<T> = GenerationIndividual::replenish(&*self);
         // extend
         self.data.extend(
@@ -141,15 +98,16 @@ where
                 .map(|v| GenerationIndividual::new(&Rc::new(Individual::new_with_id(0, v)))),
         );
 
+        // output the new group
         out_json.new_individuals = self
             .data
             .iter()
             .map(|v| v.get_individual().clone())
             .collect::<Vec<Individual<T>>>();
 
-        // assign numbers
+        // re-assign numbers
         self.reset_id();
-        Ok(Some(out_json))
+        Ok(out_json)
     }
 
     fn iter<'a>(&'a self) -> impl Iterator<Item = &'a Individual<T>>
@@ -175,6 +133,12 @@ where
         self.data.iter()
     }
 }
+
+use scarlet_queen_fitness::FitnessPokemonType;
+#[allow(unused_imports)]
+use scarlet_queen_replenisher::{RandomReplenisherIndividual, TournamentReplenisherIndividual};
+#[allow(unused_imports)]
+use scarlet_queen_selector::{RandomSelectorIndividual, TournamentSelectorIndividual};
 
 pub type PokemonTypeGroup<P, const N: usize, const R: usize> = Group<
     P,
