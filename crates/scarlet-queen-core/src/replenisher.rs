@@ -68,8 +68,10 @@ use crate::each_crate_individual::EachCrateIndividual;
 /// assert_eq!(<Replenisher<15, 12> as ReplenisherIndividualTrait<15, 12>>::replenish(&sample), vec![20, 19, 17])
 /// ```
 pub trait ReplenisherIndividualTrait<const N: usize, const R: usize>: EachCrateIndividual {
-    /// Return individuals for replenishing a group.
-    /// `group` must return individuals in order of the fitness by a method `next`.
+    /// Return individuals replenishing a group with.
+    ///
+    /// The elements of `group` must be assigned a number to.
+    /// Also, by a method `next`, `group` must return individuals in order of the fitness.
     ///
     /// * `'a` - A lifetime of group.
     /// * `G` - A type of group.

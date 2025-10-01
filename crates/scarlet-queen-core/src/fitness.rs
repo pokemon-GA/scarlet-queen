@@ -67,6 +67,8 @@ pub trait FitnessIndividualTrait: EachCrateIndividual {
     ///
     /// A fitness score to a group is the sum of fitness scores to other individuals of the group.
     ///
+    /// The elements of `group` must be assigned a number to.
+    ///
     /// * `'a` - A lifetime of group.
     /// * `G` - A type of group.
     /// * `group` - A value which you are able to get `Self` from.
@@ -130,10 +132,10 @@ mod tests {
                 vec![
                     Fitness::new_for_test(0, 10),
                     Fitness::new_for_test(1, 10),
-                    Fitness::new_for_test(2, 7),
-                    Fitness::new_for_test(3, 7),
-                    Fitness::new_for_test(4, 7),
-                    Fitness::new_for_test(5, 4),
+                    Fitness::new_for_test(2, 6),
+                    Fitness::new_for_test(3, 6),
+                    Fitness::new_for_test(4, 6),
+                    Fitness::new_for_test(5, 5),
                     Fitness::new_for_test(6, 3),
                     Fitness::new_for_test(7, 2),
                     Fitness::new_for_test(8, 2),

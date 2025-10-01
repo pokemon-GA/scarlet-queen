@@ -37,12 +37,12 @@ impl<T, const R: usize> EachCrateIndividual for TournamentSelectorIndividual<T, 
 impl<T, const R: usize> SelectorIndividualTrait<R> for TournamentSelectorIndividual<T, R> {
     type Err = SelectorError;
 
-    fn selected_ids<'a, U>(
-        group: U,
+    fn selected_ids<'a, G>(
+        group: G,
         scores: HashMap<usize, usize>,
     ) -> Result<HashSet<usize>, Self::Err>
     where
-        U: IntoIterator<Item = &'a Self>,
+        G: IntoIterator<Item = &'a Self>,
         Self: 'a,
     {
         let group: Vec<&Self> = group.into_iter().collect::<Vec<&Self>>();

@@ -106,7 +106,9 @@ pub trait SelectorIndividualTrait<const R: usize>: EachCrateIndividual {
     type Err: Debug;
 
     /// Select individuals. Return ids of selected individuals.
-    /// `group` must return values in order of the fitness by a method `next`.
+    ///
+    /// The elements of `group` must be assigned a number to.
+    /// Also, by a method `next`, `group` must return individuals in order of the fitness.
     ///
     /// * `'a` - A lifetime of group.
     /// * `G` - A type of group.

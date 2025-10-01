@@ -1,15 +1,18 @@
-use scarlet_queen_core::{
-    EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait,
-    SelectorIndividualTrait,
-};
+//! Mod for `GenerationIndividual`
+
 use std::{
     collections::{HashMap, HashSet},
     rc::Rc,
 };
 
+use scarlet_queen_core::{
+    EachCrateIndividual, FitnessIndividualTrait, Individual, ReplenisherIndividualTrait,
+    SelectorIndividualTrait,
+};
+
 /// An individual which has all functions of fitness, selector, and replenisher.
 ///
-/// This is implmented `FitnessIndividualTrait`, `SelectorIndividualTrait`, and `ReplenisherIndividualTrait` for same individuals.
+/// This is implmented `FitnessIndividualTrait`, `SelectorIndividualTrait`, and `ReplenisherIndividualTrait`.
 ///
 /// # Example
 /// ```
@@ -138,12 +141,12 @@ where
 {
     type Err = <SI as SelectorIndividualTrait<R>>::Err;
 
-    fn selected_ids<'a, U>(
-        group: U,
+    fn selected_ids<'a, G>(
+        group: G,
         score: HashMap<usize, usize>,
     ) -> Result<HashSet<usize>, Self::Err>
     where
-        U: IntoIterator<Item = &'a Self>,
+        G: IntoIterator<Item = &'a Self>,
         Self: 'a,
     {
         SI::selected_ids(
@@ -215,16 +218,15 @@ mod tests {
     }
     impl<const R: usize> SelectorIndividualTrait<R> for SITraitSample<R> {
         type Err = SelectorError;
-        fn selected_ids<'a, U>(
-            group: U,
+        fn selected_ids<'a, G>(
+            group: G,
             scores: HashMap<usize, usize>,
         ) -> Result<HashSet<usize>, Self::Err>
         where
-            U: IntoIterator<Item = &'a Self>,
+            G: IntoIterator<Item = &'a Self>,
             Self: 'a,
         {
-            let mut set: HashSet<usize> = HashSet::new();
-            let mut group_and_scores: Vec<(usize, usize)> = group
+            let mut id_and_score: Vec<(usize, usize)> = group
                 .into_iter()
                 .map(|v| {
                     let id: usize = v.get_id();
@@ -233,11 +235,12 @@ mod tests {
                         .map_or(Err(SelectorError::BadScoreDataError), |v| Ok((id, *v)))
                 })
                 .collect::<Result<Vec<(usize, usize)>, SelectorError>>()?;
-            group_and_scores.sort_by_key(|&(_, v)| -(v as isize));
-            for (id, _) in group_and_scores.iter().take(group_and_scores.len() / 2) {
-                set.insert(*id);
-            }
-            Ok(set)
+            id_and_score.sort_by_key(|&(_, v)| -(v as isize));
+            Ok(id_and_score
+                .into_iter()
+                .take(R)
+                .map(|(id, _)| id)
+                .collect::<HashSet<usize>>())
         }
     }
     #[derive(PartialEq, Eq, Debug)]
