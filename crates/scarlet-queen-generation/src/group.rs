@@ -326,11 +326,106 @@ mod tests {
         Group<u8, FITraitSample, SITraitSample<R>, RITraitSample<N, R>, N, R>;
 
     #[test]
+    fn test_group_newfromvec() {
+        {
+            let arg: Vec<GenerationIndividualSample<10, 8>> = vec![
+                GenerationIndividualSample::<10, 8>::new_for_test(0, 10),
+                GenerationIndividualSample::<10, 8>::new_for_test(1, 10),
+                GenerationIndividualSample::<10, 8>::new_for_test(2, 6),
+                GenerationIndividualSample::<10, 8>::new_for_test(3, 6),
+                GenerationIndividualSample::<10, 8>::new_for_test(4, 6),
+                GenerationIndividualSample::<10, 8>::new_for_test(5, 5),
+                GenerationIndividualSample::<10, 8>::new_for_test(6, 3),
+                GenerationIndividualSample::<10, 8>::new_for_test(7, 2),
+                GenerationIndividualSample::<10, 8>::new_for_test(8, 2),
+                GenerationIndividualSample::<10, 8>::new_for_test(9, 1),
+            ];
+            assert_eq!(
+                GroupSample::<10, 8>::new_from_vec(arg),
+                GroupSample::<10, 8> {
+                    individuals: vec![
+                        GenerationIndividualSample::<10, 8>::new_for_test(0, 10),
+                        GenerationIndividualSample::<10, 8>::new_for_test(1, 10),
+                        GenerationIndividualSample::<10, 8>::new_for_test(2, 6),
+                        GenerationIndividualSample::<10, 8>::new_for_test(3, 6),
+                        GenerationIndividualSample::<10, 8>::new_for_test(4, 6),
+                        GenerationIndividualSample::<10, 8>::new_for_test(5, 5),
+                        GenerationIndividualSample::<10, 8>::new_for_test(6, 3),
+                        GenerationIndividualSample::<10, 8>::new_for_test(7, 2),
+                        GenerationIndividualSample::<10, 8>::new_for_test(8, 2),
+                        GenerationIndividualSample::<10, 8>::new_for_test(9, 1),
+                    ]
+                }
+            )
+        }
+        {
+            let arg: Vec<GenerationIndividualSample<20, 15>> = vec![
+                GenerationIndividualSample::<20, 15>::new_for_test(0, 17),
+                GenerationIndividualSample::<20, 15>::new_for_test(1, 2),
+                GenerationIndividualSample::<20, 15>::new_for_test(2, 20),
+                GenerationIndividualSample::<20, 15>::new_for_test(3, 20),
+                GenerationIndividualSample::<20, 15>::new_for_test(4, 16),
+                GenerationIndividualSample::<20, 15>::new_for_test(5, 16),
+                GenerationIndividualSample::<20, 15>::new_for_test(6, 12),
+                GenerationIndividualSample::<20, 15>::new_for_test(7, 19),
+                GenerationIndividualSample::<20, 15>::new_for_test(8, 1),
+                GenerationIndividualSample::<20, 15>::new_for_test(9, 4),
+                GenerationIndividualSample::<20, 15>::new_for_test(10, 14),
+                GenerationIndividualSample::<20, 15>::new_for_test(11, 10),
+                GenerationIndividualSample::<20, 15>::new_for_test(12, 8),
+                GenerationIndividualSample::<20, 15>::new_for_test(13, 2),
+                GenerationIndividualSample::<20, 15>::new_for_test(14, 8),
+                GenerationIndividualSample::<20, 15>::new_for_test(15, 16),
+                GenerationIndividualSample::<20, 15>::new_for_test(16, 16),
+                GenerationIndividualSample::<20, 15>::new_for_test(17, 10),
+                GenerationIndividualSample::<20, 15>::new_for_test(18, 4),
+                GenerationIndividualSample::<20, 15>::new_for_test(19, 1),
+            ];
+            assert_eq!(
+                GroupSample::<20, 15>::new_from_vec(arg),
+                GroupSample::<20, 15> {
+                    individuals: vec![
+                        GenerationIndividualSample::<20, 15>::new_for_test(0, 17),
+                        GenerationIndividualSample::<20, 15>::new_for_test(1, 2),
+                        GenerationIndividualSample::<20, 15>::new_for_test(2, 20),
+                        GenerationIndividualSample::<20, 15>::new_for_test(3, 20),
+                        GenerationIndividualSample::<20, 15>::new_for_test(4, 16),
+                        GenerationIndividualSample::<20, 15>::new_for_test(5, 16),
+                        GenerationIndividualSample::<20, 15>::new_for_test(6, 12),
+                        GenerationIndividualSample::<20, 15>::new_for_test(7, 19),
+                        GenerationIndividualSample::<20, 15>::new_for_test(8, 1),
+                        GenerationIndividualSample::<20, 15>::new_for_test(9, 4),
+                        GenerationIndividualSample::<20, 15>::new_for_test(10, 14),
+                        GenerationIndividualSample::<20, 15>::new_for_test(11, 10),
+                        GenerationIndividualSample::<20, 15>::new_for_test(12, 8),
+                        GenerationIndividualSample::<20, 15>::new_for_test(13, 2),
+                        GenerationIndividualSample::<20, 15>::new_for_test(14, 8),
+                        GenerationIndividualSample::<20, 15>::new_for_test(15, 16),
+                        GenerationIndividualSample::<20, 15>::new_for_test(16, 16),
+                        GenerationIndividualSample::<20, 15>::new_for_test(17, 10),
+                        GenerationIndividualSample::<20, 15>::new_for_test(18, 4),
+                        GenerationIndividualSample::<20, 15>::new_for_test(19, 1),
+                    ]
+                }
+            )
+        }
+        {
+            let arg: Vec<GenerationIndividualSample<0, 0>> = vec![];
+            assert_eq!(
+                GroupSample::<0, 0>::new_from_vec(arg),
+                GroupSample::<0, 0> {
+                    individuals: vec![]
+                }
+            )
+        }
+    }
+
+    #[test]
     fn test_group_grouptrait_new() {
         {
             let arg: [u8; 10] = [10, 10, 6, 6, 6, 5, 3, 2, 2, 1];
             assert_eq!(
-                GroupSample::<10, 8>::new(arg),
+                <GroupSample::<10, 8> as GroupTrait<u8, 10, 8>>::new(arg),
                 GroupSample::<10, 8>::new_from_vec(vec![
                     GenerationIndividualSample::<10, 8>::new_for_test(0, 10),
                     GenerationIndividualSample::<10, 8>::new_for_test(1, 10),
@@ -350,7 +445,7 @@ mod tests {
                 17, 2, 20, 20, 16, 16, 12, 19, 1, 4, 14, 10, 8, 2, 8, 16, 16, 10, 4, 1,
             ];
             assert_eq!(
-                GroupSample::<20, 15>::new(arg),
+                <GroupSample::<20, 15> as GroupTrait<u8, 20, 15>>::new(arg),
                 GroupSample::<20, 15>::new_from_vec(vec![
                     GenerationIndividualSample::<20, 15>::new_for_test(0, 17),
                     GenerationIndividualSample::<20, 15>::new_for_test(1, 2),
@@ -378,7 +473,7 @@ mod tests {
         {
             let arg: [u8; 0] = [];
             assert_eq!(
-                GroupSample::<0, 0>::new(arg),
+                <GroupSample::<0, 0> as GroupTrait<u8, 0, 0>>::new(arg),
                 GroupSample::<0, 0>::new_from_vec(vec![])
             )
         }
@@ -468,7 +563,7 @@ mod tests {
                 GenerationIndividualSample::<10, 8>::new_for_test(9, 10),
             ]);
             let return_value: Result<ResultOut<u8>, crate::error::GenerationError> =
-                arg.one_cycle_with_output();
+                <GroupSample<10, 8> as GroupTrait<u8, 10, 8>>::one_cycle_with_output(&mut arg);
             assert!(return_value.is_ok());
             assert_eq!(return_value.unwrap(), result);
             assert_eq!(arg, result_self);
@@ -625,7 +720,7 @@ mod tests {
                 GenerationIndividualSample::new_for_test(19, 16),
             ]);
             let return_value: Result<ResultOut<u8>, crate::error::GenerationError> =
-                arg.one_cycle_with_output();
+                <GroupSample<20, 15> as GroupTrait<u8, 20, 15>>::one_cycle_with_output(&mut arg);
             assert!(return_value.is_ok());
             assert_eq!(return_value.unwrap(), result);
             assert_eq!(arg, result_self);
@@ -638,10 +733,108 @@ mod tests {
             };
             let result_self: GroupSample<0, 0> = GroupSample::new_from_vec(vec![]);
             let return_value: Result<ResultOut<u8>, crate::error::GenerationError> =
-                arg.one_cycle_with_output();
+                <GroupSample<0, 0> as GroupTrait<u8, 0, 0>>::one_cycle_with_output(&mut arg);
             assert!(return_value.is_ok());
             assert_eq!(return_value.unwrap(), result);
             assert_eq!(arg, result_self);
+        }
+    }
+
+    #[test]
+    fn test_group_grouptrait_iter() {
+        {
+            let arg: GroupSample<10, 8> = GroupSample::<10, 8>::new_from_vec(vec![
+                GenerationIndividualSample::<10, 8>::new_for_test(0, 10),
+                GenerationIndividualSample::<10, 8>::new_for_test(1, 10),
+                GenerationIndividualSample::<10, 8>::new_for_test(2, 6),
+                GenerationIndividualSample::<10, 8>::new_for_test(3, 6),
+                GenerationIndividualSample::<10, 8>::new_for_test(4, 6),
+                GenerationIndividualSample::<10, 8>::new_for_test(5, 5),
+                GenerationIndividualSample::<10, 8>::new_for_test(6, 3),
+                GenerationIndividualSample::<10, 8>::new_for_test(7, 2),
+                GenerationIndividualSample::<10, 8>::new_for_test(8, 2),
+                GenerationIndividualSample::<10, 8>::new_for_test(9, 1),
+            ]);
+            let tmp: Vec<Individual<u8>> = vec![
+                Individual::new_with_id(0, 10),
+                Individual::new_with_id(1, 10),
+                Individual::new_with_id(2, 6),
+                Individual::new_with_id(3, 6),
+                Individual::new_with_id(4, 6),
+                Individual::new_with_id(5, 5),
+                Individual::new_with_id(6, 3),
+                Individual::new_with_id(7, 2),
+                Individual::new_with_id(8, 2),
+                Individual::new_with_id(9, 1),
+            ];
+            let result: Vec<&Individual<u8>> = tmp.iter().collect::<Vec<&Individual<u8>>>();
+            assert_eq!(
+                <GroupSample<10, 8> as GroupTrait<u8, 10, 8>>::iter(&arg)
+                    .collect::<Vec<&Individual<u8>>>(),
+                result
+            );
+        }
+        {
+            let arg: GroupSample<20, 15> = GroupSample::<20, 15>::new_from_vec(vec![
+                GenerationIndividualSample::<20, 15>::new_for_test(0, 17),
+                GenerationIndividualSample::<20, 15>::new_for_test(1, 2),
+                GenerationIndividualSample::<20, 15>::new_for_test(2, 20),
+                GenerationIndividualSample::<20, 15>::new_for_test(3, 20),
+                GenerationIndividualSample::<20, 15>::new_for_test(4, 16),
+                GenerationIndividualSample::<20, 15>::new_for_test(5, 16),
+                GenerationIndividualSample::<20, 15>::new_for_test(6, 12),
+                GenerationIndividualSample::<20, 15>::new_for_test(7, 19),
+                GenerationIndividualSample::<20, 15>::new_for_test(8, 1),
+                GenerationIndividualSample::<20, 15>::new_for_test(9, 4),
+                GenerationIndividualSample::<20, 15>::new_for_test(10, 14),
+                GenerationIndividualSample::<20, 15>::new_for_test(11, 10),
+                GenerationIndividualSample::<20, 15>::new_for_test(12, 8),
+                GenerationIndividualSample::<20, 15>::new_for_test(13, 2),
+                GenerationIndividualSample::<20, 15>::new_for_test(14, 8),
+                GenerationIndividualSample::<20, 15>::new_for_test(15, 16),
+                GenerationIndividualSample::<20, 15>::new_for_test(16, 16),
+                GenerationIndividualSample::<20, 15>::new_for_test(17, 10),
+                GenerationIndividualSample::<20, 15>::new_for_test(18, 4),
+                GenerationIndividualSample::<20, 15>::new_for_test(19, 1),
+            ]);
+            let tmp: Vec<Individual<u8>> = vec![
+                Individual::new_with_id(0, 17),
+                Individual::new_with_id(1, 2),
+                Individual::new_with_id(2, 20),
+                Individual::new_with_id(3, 20),
+                Individual::new_with_id(4, 16),
+                Individual::new_with_id(5, 16),
+                Individual::new_with_id(6, 12),
+                Individual::new_with_id(7, 19),
+                Individual::new_with_id(8, 1),
+                Individual::new_with_id(9, 4),
+                Individual::new_with_id(10, 14),
+                Individual::new_with_id(11, 10),
+                Individual::new_with_id(12, 8),
+                Individual::new_with_id(13, 2),
+                Individual::new_with_id(14, 8),
+                Individual::new_with_id(15, 16),
+                Individual::new_with_id(16, 16),
+                Individual::new_with_id(17, 10),
+                Individual::new_with_id(18, 4),
+                Individual::new_with_id(19, 1),
+            ];
+            let result: Vec<&Individual<u8>> = tmp.iter().collect::<Vec<&Individual<u8>>>();
+            assert_eq!(
+                <GroupSample<20, 15> as GroupTrait<u8, 20, 15>>::iter(&arg)
+                    .collect::<Vec<&Individual<u8>>>(),
+                result
+            );
+        }
+        {
+            let arg: GroupSample<10, 8> = GroupSample::<10, 8>::new_from_vec(vec![]);
+            let tmp: Vec<Individual<u8>> = vec![];
+            let result: Vec<&Individual<u8>> = tmp.iter().collect::<Vec<&Individual<u8>>>();
+            assert_eq!(
+                <GroupSample<10, 8> as GroupTrait<u8, 10, 8>>::iter(&arg)
+                    .collect::<Vec<&Individual<u8>>>(),
+                result
+            );
         }
     }
 }
