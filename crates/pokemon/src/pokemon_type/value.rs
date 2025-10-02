@@ -10,8 +10,8 @@ use std::hash::Hash;
 ///
 /// # Example
 /// ```
-/// use scarlet_queen_core::{PokemonTypeTrait, PokemonTypeAll};
 /// use plotters::style::Color;
+/// use pokemon::pokemon_type::{PokemonTypeTrait, PokemonTypeAll};
 ///
 /// #[derive(Clone, PartialEq, Eq, Hash)]
 /// enum PTTraitSample {
@@ -90,7 +90,7 @@ pub trait PokemonTypeTrait:
     /// An error may be occured if all of `Self::ALL[..Self::ALL_LEN]` is not `Some`.
     fn sample<R>(rng: &mut R) -> Self
     where
-        R: rand::Rng + Sized,
+        R: rand::Rng + ?Sized,
     {
         let rand_int: usize = rng.random_range(0..Self::ALL_LEN);
         match Self::ALL.get(rand_int).cloned().flatten() {
@@ -107,9 +107,11 @@ pub trait PokemonTypeTrait:
 
 #[cfg(test)]
 mod tests {
-    use super::{PokemonTypeAll, PokemonTypeTrait};
     use plotters::style::Color;
+    use rand::distr::{Distribution, StandardUniform};
     use std::collections::HashMap;
+
+    use super::{PokemonTypeAll, PokemonTypeTrait};
 
     #[derive(Clone, PartialEq, Eq, Hash)]
     enum PTTraitSample {
@@ -132,6 +134,11 @@ mod tests {
                 PokemonTypeAll::Water => Ok(PTTraitSample::Water),
                 _ => Err(()),
             }
+        }
+    }
+    impl Distribution<PTTraitSample> for StandardUniform {
+        fn sample<R: rand::Rng + ?Sized>(&self, rng: &mut R) -> PTTraitSample {
+            <PTTraitSample as PokemonTypeTrait>::sample(rng)
         }
     }
     impl PokemonTypeTrait for PTTraitSample {
@@ -193,10 +200,12 @@ mod tests {
 }
 
 mod pokemon_type_all {
-    use crate::{error::CoreError, pokemon_type::PokemonTypeTrait};
     use plotters::style::{Color, RGBColor};
     use rand::distr::{Distribution, StandardUniform};
     use std::str::FromStr;
+
+    use super::PokemonTypeTrait;
+    use crate::pokemon_type::error::PokemonTypeError;
 
     /// All of pokemon type.
     #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -278,9 +287,9 @@ mod pokemon_type_all {
 
     // Convert `&str`` to `PokemonTypeAll`
     impl FromStr for PokemonTypeAll {
-        type Err = CoreError;
+        type Err = PokemonTypeError;
 
-        fn from_str(s: &str) -> Result<Self, CoreError> {
+        fn from_str(s: &str) -> Result<Self, PokemonTypeError> {
             let pokemon_type: PokemonTypeAll = match s {
                 "None" | "なし" => PokemonTypeAll::None,
                 "Normal" | "無" | "ノーマル" => PokemonTypeAll::Normal,
@@ -301,7 +310,7 @@ mod pokemon_type_all {
                 "Dark" | "悪" | "あく" => PokemonTypeAll::Dark,
                 "Steel" | "鋼" | "はがね" => PokemonTypeAll::Steel,
                 "Fairy" | "妖" | "フェアリー" => PokemonTypeAll::Fairy,
-                _ => return Err(CoreError::StringToPokemonTypeConvertError),
+                _ => return Err(PokemonTypeError::StringToPokemonTypeConvertError),
             };
             Ok(pokemon_type)
         }
@@ -338,11 +347,12 @@ mod pokemon_type_all {
 
     #[cfg(test)]
     mod tests {
-        use super::PokemonTypeAll;
-        use crate::error::CoreError;
         use plotters::style::Color;
         use rand::{distr::StandardUniform, Rng};
         use std::{collections::HashMap, str::FromStr};
+
+        use super::PokemonTypeAll;
+        use crate::pokemon_type::error::PokemonTypeError;
 
         #[test]
         fn test_pokemontypeall_colormap() {
@@ -375,7 +385,7 @@ mod pokemon_type_all {
 
         #[test]
         fn test_pokemontypeall_fromstr_fromstr() {
-            let testcases: Vec<(&str, Result<PokemonTypeAll, CoreError>)> = vec![
+            let testcases: Vec<(&str, Result<PokemonTypeAll, PokemonTypeError>)> = vec![
                 ("None", Ok(PokemonTypeAll::None)),
                 ("なし", Ok(PokemonTypeAll::None)),
                 ("Normal", Ok(PokemonTypeAll::Normal)),
@@ -432,8 +442,14 @@ mod pokemon_type_all {
                 ("Fairy", Ok(PokemonTypeAll::Fairy)),
                 ("妖", Ok(PokemonTypeAll::Fairy)),
                 ("フェアリー", Ok(PokemonTypeAll::Fairy)),
-                ("Dummy", Err(CoreError::StringToPokemonTypeConvertError)),
-                ("ダミー", Err(CoreError::StringToPokemonTypeConvertError)),
+                (
+                    "Dummy",
+                    Err(PokemonTypeError::StringToPokemonTypeConvertError),
+                ),
+                (
+                    "ダミー",
+                    Err(PokemonTypeError::StringToPokemonTypeConvertError),
+                ),
             ];
 
             for (arg, result) in testcases {
@@ -481,8 +497,10 @@ mod pokemon_type_all {
 }
 
 mod pokemon_type_fwg {
-    use super::PokemonTypeAll;
-    use crate::{error::CoreError, pokemon_type::PokemonTypeTrait};
+    use rand::distr::{Distribution, StandardUniform};
+
+    use super::{PokemonTypeAll, PokemonTypeTrait};
+    use crate::pokemon_type::error::PokemonTypeError;
 
     /// A set of Fire, Water, and Grass.
     #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -505,15 +523,21 @@ mod pokemon_type_fwg {
 
     // Try to convert `PokemonTypeAll` to `PokemonTypeFWG`.
     impl TryFrom<PokemonTypeAll> for PokemonTypeFWG {
-        type Error = CoreError;
+        type Error = PokemonTypeError;
 
         fn try_from(value: PokemonTypeAll) -> Result<Self, Self::Error> {
             match value {
                 PokemonTypeAll::Fire => Ok(PokemonTypeFWG::Fire),
                 PokemonTypeAll::Water => Ok(PokemonTypeFWG::Water),
                 PokemonTypeAll::Grass => Ok(PokemonTypeFWG::Grass),
-                _ => Err(CoreError::PokemonTypeConvertError),
+                _ => Err(PokemonTypeError::PokemonTypeConvertError),
             }
+        }
+    }
+
+    impl Distribution<PokemonTypeFWG> for StandardUniform {
+        fn sample<R: rand::Rng + ?Sized>(&self, rng: &mut R) -> PokemonTypeFWG {
+            <PokemonTypeFWG as PokemonTypeTrait>::sample(rng)
         }
     }
 
@@ -545,15 +569,11 @@ mod pokemon_type_fwg {
 
     #[cfg(test)]
     mod tests {
+        use plotters::style::Color;
         use std::collections::HashMap;
 
-        use plotters::style::Color;
-
-        use super::PokemonTypeFWG;
-        use crate::{
-            error::CoreError,
-            pokemon_type::{PokemonTypeAll, PokemonTypeTrait},
-        };
+        use super::{PokemonTypeAll, PokemonTypeFWG, PokemonTypeTrait};
+        use crate::pokemon_type::error::PokemonTypeError;
 
         #[test]
         fn test_pokemontypefwg_into_pokemontypeall_into() {
@@ -570,13 +590,13 @@ mod pokemon_type_fwg {
 
         #[test]
         fn test_pokemontypefwg_tryfrom_pokemontypeall_tryfrom() {
-            let testcases: Vec<(PokemonTypeAll, Result<PokemonTypeFWG, CoreError>)> = vec![
+            let testcases: Vec<(PokemonTypeAll, Result<PokemonTypeFWG, PokemonTypeError>)> = vec![
                 (PokemonTypeAll::Fire, Ok(PokemonTypeFWG::Fire)),
                 (PokemonTypeAll::Water, Ok(PokemonTypeFWG::Water)),
                 (PokemonTypeAll::Grass, Ok(PokemonTypeFWG::Grass)),
                 (
                     PokemonTypeAll::Normal,
-                    Err(CoreError::PokemonTypeConvertError),
+                    Err(PokemonTypeError::PokemonTypeConvertError),
                 ),
             ];
 

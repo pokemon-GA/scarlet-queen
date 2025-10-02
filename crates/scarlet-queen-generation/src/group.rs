@@ -298,22 +298,6 @@ where
     }
 }
 
-#[allow(unused_imports)]
-use scarlet_queen_fitness::FitnessPokemonType;
-#[allow(unused_imports)]
-use scarlet_queen_replenisher::{RandomReplenisherIndividual, TournamentReplenisherIndividual};
-#[allow(unused_imports)]
-use scarlet_queen_selector::{RandomSelectorIndividual, TournamentSelectorIndividual};
-
-pub type PokemonTypeGroup<P, const N: usize, const R: usize> = Group<
-    P,
-    FitnessPokemonType<P>,
-    TournamentSelectorIndividual<P, R>,
-    TournamentReplenisherIndividual<P, N, R>,
-    N,
-    R,
->;
-
 #[cfg(test)]
 mod tests {
     use crate::{

@@ -538,6 +538,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "pokemon"
+version = "0.0.1"
+dependencies = [
+ "plotters",
+ "rand",
+ "scarlet-queen-core",
+ "scarlet-queen-entrypoint",
+ "thiserror",
+]
+
+[[package]]
 name = "ppv-lite86"
 version = "0.2.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -644,10 +655,7 @@ dependencies = [
 name = "scarlet-queen-core"
 version = "0.0.1"
 dependencies = [
- "plotters",
- "rand",
  "serde",
- "thiserror",
 ]
 
 [[package]]

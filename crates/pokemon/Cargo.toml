@@ -1,0 +1,11 @@
+[package]
+name = "pokemon"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+scarlet-queen-core = { path = "../scarlet-queen-core" }
+scarlet-queen-entrypoint = { path = "../scarlet-queen-entrypoint" }
+rand.workspace = true
+plotters.workspace = true
+thiserror.workspace = true
