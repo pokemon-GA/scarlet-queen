@@ -19,6 +19,98 @@ use scarlet_queen_core::{
 ///
 /// This is implmented `GroupTrait`.
 /// Process three steps of `one_cycle_with_output` based on `FitnessIndividual`, `SelectorIndividual`, and `ReplenisherIndividual` of `GenerationIndividual`.
+///
+/// # Example
+/// ```
+/// use scarlet_queen_core::{GroupTrait, InitializerTrait};
+/// use scarlet_queen_fitness::ord::GeFitness;
+/// use scarlet_queen_replenisher::TournamentReplenisherIndividual;
+/// use scarlet_queen_selector::TournamentSelectorIndividual;
+/// use scarlet_queen_generation::{Group, ResultOut};
+///
+/// struct InitializerSample {}
+/// impl<const N: usize> InitializerTrait<u8, N> for InitializerSample {
+///     fn initialize() -> [u8; N] {
+///         let mut i: u8 = 0;
+///         [0; N]
+///             .map(|_| {
+///                 i += 2;
+///                 i - 2
+///             })
+///     }
+/// }
+///
+/// type GroupSample<const N: usize, const R: usize> = Group<u8, GeFitness<u8>, TournamentSelectorIndividual<u8, R>, TournamentReplenisherIndividual<u8, N, R>, N, R>;
+/// let mut group: GroupSample<5, 4> = GroupSample::init::<InitializerSample>();
+///
+/// let output: ResultOut<u8> = group.one_cycle_with_output().unwrap();
+///
+/// assert_eq!(serde_json::to_string(&output).unwrap(), r#"{
+///     "individuals_and_scores": [
+///         {
+///             "individual": {
+///                 "id": 4,
+///                 "value": "8"
+///             },
+///             "score": 4
+///         },
+///         {
+///             "individual": {
+///                 "id": 3,
+///                 "value": "6"
+///             },
+///             "score": 3
+///         },
+///         {
+///             "individual": {
+///                 "id": 2,
+///                 "value": "4"
+///             },
+///             "score": 2
+///         },
+///         {
+///             "individual": {
+///                 "id": 1,
+///                 "value": "2"
+///             },
+///             "score": 1
+///         },
+///         {
+///             "individual": {
+///                 "id": 0,
+///                 "value": "0"
+///             },
+///             "score": 0
+///         }
+///     ],
+///     "new_individuals": [
+///         {
+///             "id": 4,
+///             "value": "8"
+///         },
+///         {
+///             "id": 3,
+///             "value": "6"
+///         },
+///         {
+///             "id": 2,
+///             "value": "4"
+///         },
+///         {
+///             "id": 1,
+///             "value": "2"
+///         },
+///         {
+///             "id": 0,
+///             "value": "8"
+///         }
+///     ]
+/// }"#.to_string().chars().filter_map(|c| if c.is_whitespace() { None } else { Some(c) }).collect::<String>());
+/// assert_eq!(
+///     group.clone_values(),
+///     vec![8u8, 6, 4, 2, 8]
+/// );
+/// ```
 #[derive(PartialEq, Eq, Debug)]
 pub struct Group<T, FI, SI, RI, const N: usize, const R: usize>
 where
@@ -37,6 +129,9 @@ where
     SI: EachCrateIndividual<Item = T> + SelectorIndividualTrait<R>,
     RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
 {
+    /// Get `Group` from a vector of individuals.
+    ///
+    /// * `individuals` - A vector of individuals.
     fn new_from_vec(
         individuals: Vec<GenerationIndividual<T, FI, SI, RI, N, R>>,
     ) -> Group<T, FI, SI, RI, N, R> {
