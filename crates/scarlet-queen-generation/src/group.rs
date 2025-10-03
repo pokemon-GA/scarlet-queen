@@ -186,7 +186,6 @@ where
         // get selector
         let selector: HashSet<usize> = GenerationIndividual::selected_ids(&*self, scores)
             .map_err(|v| GenerationError::SelectorError(format!("{v:?}")))?;
-        println!("selector: {:?}", selector);
         // swap the group data and the empty vector
         let mut data_for_edit: Vec<GenerationIndividual<T, FI, SI, RI, N, R>> = Vec::new();
         mem::swap(&mut data_for_edit, &mut self.individuals);
