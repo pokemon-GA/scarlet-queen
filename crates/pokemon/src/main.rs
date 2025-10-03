@@ -1,10 +1,10 @@
 use pokemon::pokemon_type::{test_and_draw, PokemonTypeFWG};
 
 fn main() {
-    // let test_name = "N=100_R=75_001";
-    // test_and_draw::<PokemonTypeFWG, 100, 75>(test_name).unwrap();
     const N: usize = 100;
-    const R: usize = 90;
+    const R: usize = 75;
+    // let test_name: String = format!("N={}_R={}_000", N, R);
+    // test_and_draw::<PokemonTypeFWG, N, R>(&test_name).unwrap();
     for i in 0..5 {
         let test_name: String = format!("N={}_R={}_{i:03}", N, R);
         test_and_draw::<PokemonTypeFWG, N, R>(&test_name).unwrap();
