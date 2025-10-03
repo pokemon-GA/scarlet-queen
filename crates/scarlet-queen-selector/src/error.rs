@@ -8,4 +8,6 @@ pub enum SelectorError {
     BadScoreDataError,
     #[error("TooFewGroupError: The len of group is less than R")]
     TooFewGroupError,
+    #[error(transparent)]
+    WeightError(#[from] rand::seq::WeightError),
 }
