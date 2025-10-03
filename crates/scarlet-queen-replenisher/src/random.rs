@@ -34,9 +34,9 @@ impl<T, const N: usize, const R: usize> ReplenisherIndividualTrait<N, R>
 where
     T: Clone + PokemonTypeTrait,
 {
-    fn replenish<'a, U>(_group: U) -> Vec<T>
+    fn replenish<'a, G>(_group: G) -> Vec<T>
     where
-        U: IntoIterator<Item = &'a Self>,
+        G: IntoIterator<Item = &'a Self>,
         Self: 'a,
     {
         let mut rng = rng();

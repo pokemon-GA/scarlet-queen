@@ -1,3 +1,5 @@
+//! Mod for `SelectorIndividualTrait`
+
 use std::{
     collections::{HashMap, HashSet},
     fmt::Debug,
@@ -5,7 +7,10 @@ use std::{
 
 use crate::each_crate_individual::EachCrateIndividual;
 
-/// A trait for individual defined by selector crate.
+/// A trait for a individual having a method for selecting individuals based on fitness scores.
+///
+/// The process corresponds the "Select" step of `GroupTrait`.
+///
 /// * `R` - The number of individuals after individuals are reduced by selector.
 ///
 /// # Example
@@ -38,7 +43,7 @@ use crate::each_crate_individual::EachCrateIndividual;
 ///
 ///     fn selected_ids<'a, G>(
 ///         group: G,
-///         _fitnesses: std::collections::HashMap<usize, usize>,
+///         _scores: std::collections::HashMap<usize, usize>,
 ///     ) -> Result<std::collections::HashSet<usize>, Self::Err>
 ///         where
 ///             G: IntoIterator<Item = &'a Self>,
@@ -76,7 +81,7 @@ use crate::each_crate_individual::EachCrateIndividual;
 ///     Selector::<12>::new_for_test(7, 1),
 ///     Selector::<12>::new_for_test(3, 0),
 /// ];
-/// let fitnesses: HashMap<usize, usize> = vec![
+/// let scores: HashMap<usize, usize> = vec![
 ///     (0, 4),
 ///     (1, 12),
 ///     (2, 5),
@@ -93,22 +98,25 @@ use crate::each_crate_individual::EachCrateIndividual;
 ///     (13, 6),
 ///     (14, 10),
 /// ].into_iter().collect::<HashMap<usize, usize>>();
-/// assert_eq!(<Selector<12> as SelectorIndividualTrait<12>>::selected_ids(&sample, fitnesses), Ok(vec![0, 1, 2, 4, 6, 8, 9, 10, 11, 12, 13, 14].into_iter().collect::<HashSet<usize>>()));
+/// assert_eq!(<Selector<12> as SelectorIndividualTrait<12>>::selected_ids(&sample, scores), Ok(vec![0usize, 1, 2, 4, 6, 8, 9, 10, 11, 12, 13, 14].into_iter().collect::<HashSet<usize>>()));
 /// ```
 pub trait SelectorIndividualTrait<const R: usize>: EachCrateIndividual {
     /// An error of selector.
     /// This is occurred when bad scores are given to this.
     type Err: Debug;
 
-    /// Select individuals.
-    /// `group` must return values in order of the fitness.
+    /// Select individuals. Return ids of selected individuals.
+    ///
+    /// The elements of `group` must be assigned a number to.
+    /// Also, by a method `next`, `group` must return individuals in order of the fitness.
+    ///
     /// * `'a` - A lifetime of group.
     /// * `G` - A type of group.
-    /// * `group` - A value which you are able to get `Self` from.
-    /// * `fitnesses` - Scores of fitness crate. Return values in order of the fitness.
+    /// * `group` - A value which you are able to get `Self` from. Return values in order of the fitnes by a method `next`s.
+    /// * `scores` - Fitness scores. The key is an id of individual, and the value is a fitness score.
     fn selected_ids<'a, G>(
         group: G,
-        fitnesses: HashMap<usize, usize>,
+        scores: HashMap<usize, usize>,
     ) -> Result<HashSet<usize>, Self::Err>
     where
         G: IntoIterator<Item = &'a Self>,

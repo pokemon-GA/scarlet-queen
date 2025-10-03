@@ -1,9 +1,12 @@
 //! Mod for `FitnessIndividualTrait`.
+
 use std::collections::HashMap;
 
 use crate::each_crate_individual::EachCrateIndividual;
 
-/// A trait for individual defined by fitness crate.
+/// A trait for a individual having a method for assigning a fitness score to a individual.
+///
+/// The process corresponds the "Fitness" step of `GroupTrait`.
 ///
 /// # Example
 /// ```
@@ -52,17 +55,21 @@ use crate::each_crate_individual::EachCrateIndividual;
 ///     Fitness::new(&Rc::new(Individual::new_with_id(2, 15)))
 /// ];
 ///
-/// assert_eq!(Fitness::fitness_group(&sample), vec![(0, 1), (1, 0), (2, 2)].into_iter().collect::<HashMap<usize, usize>>());
+/// assert_eq!(Fitness::fitness_group(&sample), vec![(0usize, 1usize), (1, 0), (2, 2)].into_iter().collect::<HashMap<usize, usize>>());
 /// ```
 pub trait FitnessIndividualTrait: EachCrateIndividual {
-    /// Calculate a fitness to an other individual.
+    /// Calculate a fitness score to an other individual.
+    ///
     /// * `other` - A target of fitness.
     fn fitness(&self, other: &Self) -> usize;
 
     /// Calculate a fitness to a group.
     ///
-    /// A fitness to a group is the sum of fitnesses to other individuals.
-    /// * `'a` - A Lifetime of group.
+    /// A fitness score to a group is the sum of fitness scores to other individuals of the group.
+    ///
+    /// The elements of `group` must be assigned a number to.
+    ///
+    /// * `'a` - A lifetime of group.
     /// * `G` - A type of group.
     /// * `group` - A value which you are able to get `Self` from.
     fn fitness_group<'a, G>(group: G) -> HashMap<usize, usize>
@@ -73,7 +80,7 @@ pub trait FitnessIndividualTrait: EachCrateIndividual {
         // get group
         let group_vec: Vec<&Self> = group.into_iter().collect::<Vec<&Self>>();
 
-        // calculate a sum of fitnesses to other individuals
+        // calculate a sum of fitness scores to other individuals
         group_vec
             .iter()
             .map(|v| {
@@ -125,10 +132,10 @@ mod tests {
                 vec![
                     Fitness::new_for_test(0, 10),
                     Fitness::new_for_test(1, 10),
-                    Fitness::new_for_test(2, 7),
-                    Fitness::new_for_test(3, 7),
-                    Fitness::new_for_test(4, 7),
-                    Fitness::new_for_test(5, 4),
+                    Fitness::new_for_test(2, 6),
+                    Fitness::new_for_test(3, 6),
+                    Fitness::new_for_test(4, 6),
+                    Fitness::new_for_test(5, 5),
                     Fitness::new_for_test(6, 3),
                     Fitness::new_for_test(7, 2),
                     Fitness::new_for_test(8, 2),
