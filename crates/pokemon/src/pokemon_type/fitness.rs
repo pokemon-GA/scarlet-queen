@@ -1,8 +1,10 @@
-use crate::effective::TypeEffectiveness;
-use scarlet_queen_core::{
-    EachCrateIndividual, FitnessIndividualTrait, Individual, PokemonTypeAll, PokemonTypeTrait,
-};
+use scarlet_queen_core::{EachCrateIndividual, FitnessIndividualTrait, Individual};
 use std::{ops::Deref, rc::Rc};
+
+use crate::pokemon_type::{
+    effective::TypeEffectiveness,
+    value::{PokemonTypeAll, PokemonTypeTrait},
+};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FitnessPokemonType<P>
@@ -89,11 +91,11 @@ where
 mod tests {
     use std::rc::Rc;
 
-    use scarlet_queen_core::{
-        EachCrateIndividual, FitnessIndividualTrait, Individual, PokemonTypeAll,
-    };
+    use scarlet_queen_core::{EachCrateIndividual, FitnessIndividualTrait, Individual};
 
-    use crate::{effective::TypeEffectiveness, pokemon_type::FitnessPokemonType};
+    use crate::pokemon_type::{
+        effective::TypeEffectiveness, fitness::FitnessPokemonType, value::PokemonTypeAll,
+    };
 
     #[test]
     fn test_fitnesspokemontype_attackeffectiveness() {

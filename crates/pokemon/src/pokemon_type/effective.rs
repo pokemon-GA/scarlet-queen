@@ -1,6 +1,4 @@
-use scarlet_queen_core::PokemonTypeTrait;
-
-use crate::pokemon_type::FitnessPokemonType;
+use crate::pokemon_type::{fitness::FitnessPokemonType, value::PokemonTypeTrait};
 
 // タイプ相性
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -461,9 +459,12 @@ impl TypeEffectiveness {
 
 #[cfg(test)]
 mod tests {
-    use crate::{effective::TypeEffectiveness, pokemon_type::FitnessPokemonType};
-    use scarlet_queen_core::{EachCrateIndividual, Individual, PokemonTypeAll};
+    use scarlet_queen_core::{EachCrateIndividual, Individual};
     use std::rc::Rc;
+
+    use crate::pokemon_type::{
+        effective::TypeEffectiveness, fitness::FitnessPokemonType, value::PokemonTypeAll,
+    };
 
     // タイプ相性のチェック
     #[test]

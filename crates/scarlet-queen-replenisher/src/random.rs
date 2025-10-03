@@ -1,9 +1,10 @@
 use std::rc::Rc;
 
-use rand::rng;
-use scarlet_queen_core::{
-    EachCrateIndividual, Individual, PokemonTypeTrait, ReplenisherIndividualTrait,
+use rand::{
+    distr::{Distribution, StandardUniform},
+    rng, Rng,
 };
+use scarlet_queen_core::{EachCrateIndividual, Individual, ReplenisherIndividualTrait};
 
 pub struct RandomReplenisherIndividual<T, const N: usize, const R: usize>
 where
@@ -32,7 +33,8 @@ where
 impl<T, const N: usize, const R: usize> ReplenisherIndividualTrait<N, R>
     for RandomReplenisherIndividual<T, N, R>
 where
-    T: Clone + PokemonTypeTrait,
+    T: Clone,
+    StandardUniform: Distribution<T>,
 {
     fn replenish<'a, G>(_group: G) -> Vec<T>
     where
@@ -41,8 +43,6 @@ where
     {
         let mut rng = rng();
 
-        (0..(N - R))
-            .map(|_| <T as PokemonTypeTrait>::sample(&mut rng))
-            .collect::<Vec<T>>()
+        (0..(N - R)).map(|_| rng.random::<T>()).collect::<Vec<T>>()
     }
 }

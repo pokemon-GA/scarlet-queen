@@ -5,17 +5,17 @@ use std::{
     io::BufWriter,
 };
 
+use crate::pokemon_type::{
+    group::PokemonTypeGroup, initializer::PokemonTypeInitializer, value::PokemonTypeTrait,
+};
 use plotters::{
     chart::{ChartBuilder, ChartContext},
     prelude::{BitMapBackend, Cartesian2d, Circle, DrawingArea, IntoDrawingArea},
     series::LineSeries,
     style::{IntoFont, ShapeStyle, WHITE},
 };
-use scarlet_queen_core::PokemonTypeTrait;
-use scarlet_queen_generation::PokemonTypeGroup;
-use scarlet_queen_initializer::group::InitializerSample;
 
-use crate::{
+use scarlet_queen_entrypoint::{
     error::Error,
     find_cycle::find_tail_cycle,
     function::{main_loop, MAIN_LOOP},
@@ -94,11 +94,15 @@ where
         "{}/analyze_{}.json",
         &dir_path, test_name
     ))?);
-    let result: Vec<Vec<P>> =
-        main_loop::<P, InitializerSample<N>, PokemonTypeGroup<P, N, R>, BufWriter<File>, N, R>(
-            &mut result_json_file,
-        )
-        .unwrap();
+    let result: Vec<Vec<P>> = main_loop::<
+        P,
+        PokemonTypeInitializer<N>,
+        PokemonTypeGroup<P, N, R>,
+        BufWriter<File>,
+        N,
+        R,
+    >(&mut result_json_file)
+    .unwrap();
     let count: Vec<HashMap<P, usize>> = count(result);
     draw_graph(&count, &format!("{}/img_{}.png", &dir_path, test_name));
     find_tail_cycle(&count, &mut analyze_json_file).unwrap();
