@@ -1,12 +1,13 @@
-use crate::pokemon_type::{
-    group::PokemonTypeGroup, initializer::PokemonTypeInitializer, value::PokemonTypeTrait,
-};
+use crate::pokemon_type::{group::PokemonTypeGroup, value::PokemonTypeTrait};
 use plotters::{
     chart::{ChartBuilder, ChartContext},
     prelude::{BitMapBackend, Cartesian2d, Circle, DrawingArea, IntoDrawingArea},
-    series::{AreaSeries, LineSeries},
+    series::LineSeries,
     style::{IntoFont, ShapeStyle, WHITE},
 };
+use plotters::{prelude::Polygon, style::Color};
+use rand::distr::{Distribution, StandardUniform};
+use scarlet_queen_entrypoint::RandomInitializer;
 use scarlet_queen_entrypoint::{
     error::Error,
     find_cycle::find_tail_cycle,
@@ -34,7 +35,7 @@ where
         .collect::<Vec<HashMap<P, usize>>>()
 }
 
-pub fn draw_line_graph<P>(loop_result_count: &[HashMap<P, usize>], img_name: &str)
+pub fn draw_line_graph<P>(loop_result_count: &[HashMap<P, usize>], test_name: &str, img_name: &str)
 where
     P: PokemonTypeTrait,
 {
@@ -65,7 +66,7 @@ where
         BitMapBackend<'_>,
         Cartesian2d<plotters::coord::types::RangedCoordi32, plotters::coord::types::RangedCoordi32>,
     > = ChartBuilder::on(&root)
-        .caption(img_name, ("sans-serif", 20).into_font())
+        .caption(test_name, ("sans-serif", 20).into_font())
         .x_label_area_size(40)
         .y_label_area_size(40)
         .build_cartesian_2d(0..((MAIN_LOOP as i32) + 1), 0..(y_max + 1))
@@ -83,7 +84,7 @@ where
     }
 }
 
-pub fn draw_area_graph<P>(loop_result_count: &[HashMap<P, usize>], img_name: &str)
+pub fn draw_area_graph<P>(loop_result_count: &[HashMap<P, usize>], test_name: &str, img_name: &str)
 where
     P: PokemonTypeTrait,
 {
@@ -132,33 +133,40 @@ where
         BitMapBackend<'_>,
         Cartesian2d<plotters::coord::types::RangedCoordi32, plotters::coord::types::RangedCoordi32>,
     > = ChartBuilder::on(&root)
-        .caption(img_name, ("sans-serif", 20).into_font())
+        .caption(test_name, ("sans-serif", 20).into_font())
         .x_label_area_size(40)
         .y_label_area_size(40)
         .build_cartesian_2d(0..((MAIN_LOOP as i32) + 1), 0..(y_max + 1))
         .unwrap();
     chart.configure_mesh().draw().unwrap();
 
-    for (p, data) in graph_data.into_iter().rev() {
-        let area: AreaSeries<BitMapBackend, i32, i32> =
-            AreaSeries::new(data.iter().map(|&(x, (_, y))| (x, y)), 0, p.color_map());
-        // let area_lower: AreaSeries<BitMapBackend, i32, i32> = AreaSeries::new(
-        //     data.iter().map(|&(x, (pre_sum_y, _))| (x, pre_sum_y)),
-        //     0,
-        //     WHITE
-        // );
-        chart.draw_series(area).unwrap();
-        // chart.draw_series(area_lower).unwrap();
-        // let points = data
-        //     .iter()
-        //     .map(|&(x, (_, y))| Circle::new((x, y), 4, ShapeStyle::from(p.color_map()).filled()));
-        // chart.draw_series(points).unwrap();
+    for (p, data) in graph_data.into_iter() {
+        let bars = data.iter().zip(data.iter().skip(1)).map(
+            |(&(x_1, (low_y_1, high_y_1)), &(x_2, (low_y_2, high_y_2)))| {
+                let area = Polygon::new(
+                    vec![
+                        (x_1, high_y_1),
+                        (x_1, low_y_1),
+                        (x_2, low_y_2),
+                        (x_2, high_y_2),
+                    ],
+                    ShapeStyle {
+                        color: p.color_map().mix(0.6),
+                        filled: true,
+                        stroke_width: 0,
+                    },
+                );
+                area
+            },
+        );
+        chart.draw_series(bars).unwrap();
     }
 }
 
 pub fn test_and_draw<P, const N: usize, const R: usize>(test_name: &str) -> Result<(), Error>
 where
     P: PokemonTypeTrait + Debug,
+    StandardUniform: Distribution<P>,
 {
     let dir_path: String = format!("./out/{test_name}");
     fs::create_dir_all(&dir_path)?;
@@ -170,18 +178,22 @@ where
         "{}/analyze_{}.json",
         &dir_path, test_name
     ))?);
-    let result: Vec<Vec<P>> = main_loop::<
-        P,
-        PokemonTypeInitializer<N>,
-        PokemonTypeGroup<P, N, R>,
-        BufWriter<File>,
-        N,
-        R,
-    >(&mut result_json_file)
-    .unwrap();
+    let result: Vec<Vec<P>> =
+        main_loop::<P, RandomInitializer<N>, PokemonTypeGroup<P, N, R>, BufWriter<File>, N, R>(
+            &mut result_json_file,
+        )
+        .unwrap();
     let count: Vec<HashMap<P, usize>> = count(result);
-    draw_line_graph(&count, &format!("{}/img_line_{}.png", &dir_path, test_name));
-    draw_area_graph(&count, &format!("{}/img_area_{}.png", &dir_path, test_name));
+    draw_line_graph(
+        &count,
+        test_name,
+        &format!("{}/img_line_{}.png", &dir_path, test_name),
+    );
+    draw_area_graph(
+        &count,
+        test_name,
+        &format!("{}/img_area_{}.png", &dir_path, test_name),
+    );
     find_tail_cycle(&count, &mut analyze_json_file).unwrap();
     Ok(())
 }

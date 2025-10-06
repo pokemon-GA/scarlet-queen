@@ -6,3 +6,4 @@ pub use scarlet_queen_generation::{
     GeFitness, Group, GtFitness, RandomReplenisherIndividual, RandomSelectorIndividual,
     TournamentReplenisherIndividual, TournamentSelectorIndividual,
 };
+pub use scarlet_queen_initializer::RandomInitializer;
