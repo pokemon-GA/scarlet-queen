@@ -6,8 +6,6 @@ use serde_derive::Serialize;
 
 use crate::error::Error;
 
-pub const MAIN_LOOP: usize = 100;
-
 #[derive(Serialize)]
 struct GenerationOut<T>
 where
@@ -53,6 +51,7 @@ where
 }
 
 pub fn main_loop<T, I, G, W, const N: usize, const R: usize>(
+    main_loop: usize,
     result_file: &mut W,
 ) -> Result<Vec<Vec<T>>, Error>
 where
@@ -66,7 +65,7 @@ where
         GenerationsOut::<<G as GroupTrait<T, N, R>>::Out>::new();
     let mut group: G = G::init::<I>();
     res_groups.push(group.clone_values());
-    for i in 1..(MAIN_LOOP + 1) {
+    for i in 1..(main_loop + 1) {
         let result_out: <G as GroupTrait<T, N, R>>::Out = group
             .one_cycle_with_output()
             .map_err(|v| Error::LoopError(format!("{v:?}")))?;
