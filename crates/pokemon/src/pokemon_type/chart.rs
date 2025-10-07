@@ -1,4 +1,7 @@
-use crate::pokemon_type::{group::PokemonTypeGroup, value::PokemonTypeTrait};
+use crate::{
+    global_const::MAIN_LOOP,
+    pokemon_type::{group::PokemonTypeGroup, value::PokemonTypeTrait},
+};
 use plotters::{
     chart::{ChartBuilder, ChartContext},
     prelude::{BitMapBackend, Cartesian2d, Circle, DrawingArea, IntoDrawingArea},
@@ -8,11 +11,7 @@ use plotters::{
 use plotters::{prelude::Polygon, style::Color};
 use rand::distr::{Distribution, StandardUniform};
 use scarlet_queen_entrypoint::RandomInitializer;
-use scarlet_queen_entrypoint::{
-    error::Error,
-    find_cycle::find_tail_cycle,
-    function::{main_loop, MAIN_LOOP},
-};
+use scarlet_queen_entrypoint::{error::Error, find_cycle, function};
 use std::{
     collections::HashMap,
     fmt::Debug,
@@ -39,128 +38,179 @@ pub fn draw_line_graph<P>(loop_result_count: &[HashMap<P, usize>], test_name: &s
 where
     P: PokemonTypeTrait,
 {
-    let graph_data: Vec<(P, Vec<(i32, i32)>)> = P::ALL
+    // データを世代ごとから各種類ごとに変換
+    let each_kind_datas: Vec<(P, Vec<usize>)> = P::ALL
         .into_iter()
         .flatten()
-        .map(|v| {
-            let data: Vec<(i32, i32)> = loop_result_count
+        .map(|p| {
+            let data: Vec<usize> = loop_result_count
                 .iter()
-                .enumerate()
-                .map(|(i, hash_map)| {
-                    (
-                        i as i32,
-                        hash_map.get(&v).copied().unwrap_or_default() as i32,
-                    )
+                .map(|each_generation_data| {
+                    each_generation_data.get(&p).copied().unwrap_or_default()
                 })
-                .collect::<Vec<(i32, i32)>>();
-            (v, data)
+                .collect::<Vec<usize>>();
+            (p, data)
         })
-        .collect::<Vec<(P, Vec<(i32, i32)>)>>();
+        .collect::<Vec<(P, Vec<usize>)>>();
 
-    let y_max: i32 = 100;
+    // yの最大値
+    let y_max: usize = loop_result_count
+        .iter()
+        .map(|v| v.values().max())
+        .flatten()
+        .max()
+        .copied()
+        .unwrap_or_default();
+
+    // 描画領域の生成
     let root: DrawingArea<BitMapBackend<'_>, plotters::coord::Shift> =
         BitMapBackend::new(img_name, (1080, 720)).into_drawing_area();
+    // 背景色
     root.fill(&WHITE).unwrap();
+
+    // xy平面の生成
     let mut chart: ChartContext<
         '_,
         BitMapBackend<'_>,
-        Cartesian2d<plotters::coord::types::RangedCoordi32, plotters::coord::types::RangedCoordi32>,
+        Cartesian2d<
+            plotters::coord::types::RangedCoordusize,
+            plotters::coord::types::RangedCoordusize,
+        >,
     > = ChartBuilder::on(&root)
         .caption(test_name, ("sans-serif", 20).into_font())
         .x_label_area_size(40)
         .y_label_area_size(40)
-        .build_cartesian_2d(0..((MAIN_LOOP as i32) + 1), 0..(y_max + 1))
+        .build_cartesian_2d(0..(loop_result_count.len() + 1), 0..(y_max + 1))
         .unwrap();
     chart.configure_mesh().draw().unwrap();
 
-    for (p, data) in graph_data.into_iter() {
-        let line: LineSeries<BitMapBackend, (i32, i32)> =
-            LineSeries::new(data.iter().map(|&(x, y)| (x, y)), p.color_map());
+    for (p, data) in each_kind_datas.into_iter() {
+        let line: LineSeries<BitMapBackend, (usize, usize)> =
+            LineSeries::new(data.iter().enumerate().map(|(x, &y)| (x, y)), p.color_map());
         chart.draw_series(line).unwrap();
-        let points = data
-            .iter()
-            .map(|&(x, y)| Circle::new((x, y), 4, ShapeStyle::from(p.color_map()).filled()));
+
+        let points = data.iter().enumerate().map(|(x, &y)| {
+            Circle::new(
+                (x, y),
+                4,
+                ShapeStyle {
+                    color: p.color_map().to_rgba(),
+                    filled: true,
+                    stroke_width: 1,
+                },
+            )
+        });
         chart.draw_series(points).unwrap();
     }
 }
 
-pub fn draw_area_graph<P>(loop_result_count: &[HashMap<P, usize>], test_name: &str, img_name: &str)
-where
+pub fn draw_stackarea_graph<P>(
+    loop_result_count: &[HashMap<P, usize>],
+    test_name: &str,
+    img_name: &str,
+) where
     P: PokemonTypeTrait,
 {
-    let loop_result_count: Vec<Vec<(usize, usize)>> = loop_result_count
+    // P順に累積和を取る
+    let count_scansum: Vec<HashMap<P, (usize, usize)>> = loop_result_count
         .iter()
-        .map(|hash_map| {
-            P::ALL
+        .map(|each_generation_data| {
+            let data_vec: Vec<(P, usize)> = P::ALL
                 .into_iter()
                 .flatten()
-                .map(|p| hash_map.get(&p).copied().unwrap_or_default())
-                .scan(0, |state, v| {
-                    *state += v;
-                    Some((*state - v, *state))
+                .map(|p| {
+                    let each_generation_scansum_data: usize =
+                        each_generation_data.get(&p).copied().unwrap_or_default();
+                    (p, each_generation_scansum_data)
                 })
-                .collect::<Vec<(usize, usize)>>()
+                .collect::<Vec<(P, usize)>>();
+            data_vec
+                .into_iter()
+                .scan(0, |state, (p, v)| {
+                    *state += v;
+                    Some((p, (*state, v)))
+                })
+                .collect::<HashMap<P, (usize, usize)>>()
         })
-        .collect::<Vec<Vec<(usize, usize)>>>();
-    let graph_data: Vec<(P, Vec<(i32, (i32, i32))>)> = P::ALL
+        .collect::<Vec<HashMap<P, (usize, usize)>>>();
+    // データを世代ごとから各種類ごとに変換
+    let each_kind_datas: Vec<(P, Vec<(usize, usize)>)> = P::ALL
         .into_iter()
         .flatten()
-        .enumerate()
-        .map(|(p_i, p)| {
-            let data: Vec<(i32, (i32, i32))> = loop_result_count
+        .map(|p| {
+            let each_kind_scansum_data = count_scansum
                 .iter()
-                .enumerate()
-                .map(|(i, each_geberation_data)| {
-                    (
-                        i as i32,
-                        each_geberation_data
-                            .get(p_i)
-                            .map(|&(pre_sum_v, v)| (pre_sum_v as i32, v as i32))
-                            .unwrap(),
-                    )
+                .map(|each_generation_scansum_data| {
+                    match each_generation_scansum_data.get(&p).copied() {
+                        Some(v) => v,
+                        None => unreachable!(),
+                    }
                 })
-                .collect::<Vec<(i32, (i32, i32))>>();
-            (p, data)
+                .collect::<Vec<(usize, usize)>>();
+            (p, each_kind_scansum_data)
         })
-        .collect::<Vec<(P, Vec<(i32, (i32, i32))>)>>();
+        .collect::<Vec<(P, Vec<(usize, usize)>)>>();
 
-    let y_max: i32 = 100;
+    // データの最大値
+    let y_max: usize = count_scansum
+        .iter()
+        .map(|each_generation_scansum_data| {
+            each_generation_scansum_data.values().map(|(v, _)| v).max()
+        })
+        .flatten()
+        .max()
+        .copied()
+        .unwrap_or_default();
+
+    // 描画領域の生成
     let root: DrawingArea<BitMapBackend<'_>, plotters::coord::Shift> =
         BitMapBackend::new(img_name, (1080, 720)).into_drawing_area();
+    // 背景色
     root.fill(&WHITE).unwrap();
+
+    // xy平面の生成
     let mut chart: ChartContext<
         '_,
         BitMapBackend<'_>,
-        Cartesian2d<plotters::coord::types::RangedCoordi32, plotters::coord::types::RangedCoordi32>,
+        Cartesian2d<
+            plotters::coord::types::RangedCoordusize,
+            plotters::coord::types::RangedCoordusize,
+        >,
     > = ChartBuilder::on(&root)
         .caption(test_name, ("sans-serif", 20).into_font())
         .x_label_area_size(40)
         .y_label_area_size(40)
-        .build_cartesian_2d(0..((MAIN_LOOP as i32) + 1), 0..(y_max + 1))
+        .build_cartesian_2d(0..(loop_result_count.len() + 1), 0..(y_max + 1))
         .unwrap();
     chart.configure_mesh().draw().unwrap();
 
-    for (p, data) in graph_data.into_iter() {
-        let bars = data.iter().zip(data.iter().skip(1)).map(
-            |(&(x_1, (low_y_1, high_y_1)), &(x_2, (low_y_2, high_y_2)))| {
-                let area = Polygon::new(
-                    vec![
-                        (x_1, high_y_1),
-                        (x_1, low_y_1),
-                        (x_2, low_y_2),
-                        (x_2, high_y_2),
-                    ],
-                    ShapeStyle {
-                        color: p.color_map().mix(0.6),
-                        filled: true,
-                        stroke_width: 0,
-                    },
-                );
-                area
-            },
+    for (p, data) in each_kind_datas.iter() {
+        let line: LineSeries<BitMapBackend, (usize, usize)> = LineSeries::new(
+            data.iter().enumerate().map(|(x, &(y, _))| (x, y)),
+            p.color_map(),
         );
-        chart.draw_series(bars).unwrap();
+        chart.draw_series(line).unwrap();
     }
+    let areas = each_kind_datas.into_iter().map(|(p, data)| {
+        Polygon::new(
+            data.iter()
+                .enumerate()
+                .map(|(i, &(scansum, v))| (i, scansum - v))
+                .chain(
+                    data.iter()
+                        .enumerate()
+                        .rev()
+                        .map(|(i, &(scansum, _))| (i, scansum)),
+                )
+                .collect::<Vec<(usize, usize)>>(),
+            ShapeStyle {
+                color: p.color_map().mix(0.6),
+                filled: true,
+                stroke_width: 0,
+            },
+        )
+    });
+    chart.draw_series(areas).unwrap();
 }
 
 pub fn test_and_draw<P, const N: usize, const R: usize>(test_name: &str) -> Result<(), Error>
@@ -178,22 +228,26 @@ where
         "{}/analyze_{}.json",
         &dir_path, test_name
     ))?);
-    let result: Vec<Vec<P>> =
-        main_loop::<P, RandomInitializer<N>, PokemonTypeGroup<P, N, R>, BufWriter<File>, N, R>(
-            &mut result_json_file,
-        )
-        .unwrap();
+    let result: Vec<Vec<P>> = function::main_loop::<
+        P,
+        RandomInitializer<N>,
+        PokemonTypeGroup<P, N, R>,
+        BufWriter<File>,
+        N,
+        R,
+    >(MAIN_LOOP, &mut result_json_file)
+    .unwrap();
     let count: Vec<HashMap<P, usize>> = count(result);
     draw_line_graph(
         &count,
         test_name,
         &format!("{}/img_line_{}.png", &dir_path, test_name),
     );
-    draw_area_graph(
+    draw_stackarea_graph(
         &count,
         test_name,
         &format!("{}/img_area_{}.png", &dir_path, test_name),
     );
-    find_tail_cycle(&count, &mut analyze_json_file).unwrap();
+    find_cycle::find_tail_cycle(&count, &mut analyze_json_file).unwrap();
     Ok(())
 }
