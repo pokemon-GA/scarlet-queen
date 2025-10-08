@@ -1,7 +1,10 @@
-use crate::{
-    global_const::MAIN_LOOP,
-    pokemon_type::{group::PokemonTypeGroup, value::PokemonTypeTrait},
+use std::{
+    collections::HashMap,
+    fmt::Debug,
+    fs::{self, File},
+    io::BufWriter,
 };
+
 use plotters::{
     chart::{ChartBuilder, ChartContext},
     prelude::{BitMapBackend, Cartesian2d, Circle, DrawingArea, IntoDrawingArea},
@@ -10,13 +13,12 @@ use plotters::{
 };
 use plotters::{prelude::Polygon, style::Color};
 use rand::distr::{Distribution, StandardUniform};
-use scarlet_queen_entrypoint::RandomInitializer;
+use scarlet_queen_entrypoint::initializer::RandomInitializer;
 use scarlet_queen_entrypoint::{error::Error, find_cycle, function};
-use std::{
-    collections::HashMap,
-    fmt::Debug,
-    fs::{self, File},
-    io::BufWriter,
+
+use crate::{
+    global_const::MAIN_LOOP,
+    pokemon_type::{group::PokemonTypeGroup, value::PokemonTypeTrait},
 };
 
 pub fn count<P>(loop_result: Vec<Vec<P>>) -> Vec<HashMap<P, usize>>
@@ -218,7 +220,7 @@ where
     P: PokemonTypeTrait + Debug,
     StandardUniform: Distribution<P>,
 {
-    let dir_path: String = format!("./out/{test_name}");
+    let dir_path: String = format!("./p_out/{test_name}");
     fs::create_dir_all(&dir_path)?;
     let mut result_json_file: BufWriter<File> = BufWriter::new(File::create(format!(
         "{}/result_{}.json",
@@ -228,8 +230,7 @@ where
         "{}/analyze_{}.json",
         &dir_path, test_name
     ))?);
-    let result: Vec<Vec<P>> = function::main_loop::<
-        P,
+    let result_out = function::main_loop::<
         RandomInitializer<N>,
         PokemonTypeGroup<P, N, R>,
         BufWriter<File>,
@@ -237,6 +238,7 @@ where
         R,
     >(MAIN_LOOP, &mut result_json_file)
     .unwrap();
+    let result: Vec<Vec<P>> = result_out.groups().collect::<Vec<Vec<P>>>();
     let count: Vec<HashMap<P, usize>> = count(result);
     draw_line_graph(
         &count,

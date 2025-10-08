@@ -1,7 +1,7 @@
 //! Mod for `GroupTrait`.
 
 use serde::Serialize;
-use std::fmt::Debug;
+use std::{fmt::Debug, iter};
 
 use crate::{individual::Individual, initializer::InitializerTrait};
 
@@ -95,7 +95,8 @@ use crate::{individual::Individual, initializer::InitializerTrait};
 /// }
 /// #[derive(PartialEq, Eq, Debug)]
 /// struct Group<const N: usize, const R: usize>(Vec<IndividualWrapper<N, R>>);
-/// impl<const N: usize, const R: usize> GroupTrait<u8, N, R> for Group<N, R> {
+/// impl<const N: usize, const R: usize> GroupTrait<N, R> for Group<N, R> {
+///     type Item = u8;
 ///     type Err = String;
 ///     type Out = ();
 ///
@@ -160,16 +161,17 @@ use crate::{individual::Individual, initializer::InitializerTrait};
 ///
 /// assert_eq!(group.clone_values(), vec![14u8, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 14, 13, 12]);
 /// ```
-pub trait GroupTrait<T, const N: usize, const R: usize> {
+pub trait GroupTrait<const N: usize, const R: usize> {
+    type Item;
     /// An error of cycle.
     type Err: Debug;
     /// An output of cycle.
-    type Out: Serialize;
+    type Out: GroupOut<Self, N, R>;
 
     /// Create `Self` from an array.
     /// The return value is already assigned a number.
     /// * `data` - An array of individuals
-    fn new(data: [T; N]) -> Self;
+    fn new(data: [Self::Item; N]) -> Self;
 
     /// Run one cycle with outputing and update individuals.
     /// The elements of `self` must be already assigned a number before calling this method.
@@ -177,16 +179,16 @@ pub trait GroupTrait<T, const N: usize, const R: usize> {
 
     /// Create an iterator of individuals.
     /// * `'a` - A lifetime of `self`.
-    fn iter<'a>(&'a self) -> impl Iterator<Item = &'a Individual<T>>
+    fn iter<'a>(&'a self) -> impl Iterator<Item = &'a Individual<Self::Item>>
     where
-        T: 'a;
+        Self::Item: 'a;
 
     /// Initialize `Self` by `I` algorithm.
     /// The elements of `self` must be already assigned a number.
     /// * `I` - An algorithm of initializing.(The type which has the algorithm)
     fn init<I>() -> Self
     where
-        I: InitializerTrait<T, N>,
+        I: InitializerTrait<Self::Item, N>,
         Self: Sized,
     {
         GroupTrait::new(I::initialize())
@@ -198,14 +200,35 @@ pub trait GroupTrait<T, const N: usize, const R: usize> {
     }
 
     /// Clone individuals of this group.
-    fn clone_values(&self) -> Vec<T>
+    fn clone_values(&self) -> Vec<Self::Item>
     where
-        T: Clone,
+        Self::Item: Clone,
     {
         self.iter()
             .map(|v| v.get_value())
             .cloned()
-            .collect::<Vec<T>>()
+            .collect::<Vec<Self::Item>>()
+    }
+}
+
+pub trait GroupOut<G, const N: usize, const R: usize>: Serialize
+where
+    G: GroupTrait<N, R> + ?Sized,
+{
+    fn values<'a>(&'a self) -> impl Iterator<Item = &'a <G as GroupTrait<N, R>>::Item>
+    where
+        <G as GroupTrait<N, R>>::Item: 'a;
+}
+
+impl<G, const N: usize, const R: usize> GroupOut<G, N, R> for ()
+where
+    G: GroupTrait<N, R>,
+{
+    fn values<'a>(&self) -> impl Iterator<Item = &'a <G as GroupTrait<N, R>>::Item>
+    where
+        <G as GroupTrait<N, R>>::Item: 'a,
+    {
+        iter::empty()
     }
 }
 
@@ -286,7 +309,8 @@ mod tests {
     }
     #[derive(PartialEq, Eq, Debug)]
     struct Group<const N: usize, const R: usize>(Vec<IndividualWrapper<N, R>>);
-    impl<const N: usize, const R: usize> GroupTrait<u8, N, R> for Group<N, R> {
+    impl<const N: usize, const R: usize> GroupTrait<N, R> for Group<N, R> {
+        type Item = u8;
         type Err = String;
         type Out = ();
         fn new(data: [u8; N]) -> Self {

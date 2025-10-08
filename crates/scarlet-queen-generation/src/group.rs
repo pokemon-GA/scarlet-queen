@@ -11,7 +11,7 @@ use std::{
 
 use crate::{error::GenerationError, individual::GenerationIndividual};
 use scarlet_queen_core::{
-    EachCrateIndividual, FitnessIndividualTrait, GroupTrait, Individual,
+    EachCrateIndividual, FitnessIndividualTrait, GroupOut, GroupTrait, Individual,
     ReplenisherIndividualTrait, SelectorIndividualTrait,
 };
 
@@ -26,7 +26,7 @@ use scarlet_queen_core::{
 /// use scarlet_queen_fitness::ord::GeFitness;
 /// use scarlet_queen_replenisher::TournamentReplenisherIndividual;
 /// use scarlet_queen_selector::TournamentSelectorIndividual;
-/// use scarlet_queen_generation::{Group, ResultOut};
+/// use scarlet_queen_generation::group::{Group, ResultOut};
 ///
 /// struct InitializerSample {}
 /// impl<const N: usize> InitializerTrait<u8, N> for InitializerSample {
@@ -115,9 +115,9 @@ use scarlet_queen_core::{
 pub struct Group<T, FI, SI, RI, const N: usize, const R: usize>
 where
     T: Clone,
-    FI: EachCrateIndividual<Item = T> + FitnessIndividualTrait,
-    SI: EachCrateIndividual<Item = T> + SelectorIndividualTrait<R>,
-    RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
+    FI: FitnessIndividualTrait<Item = T>,
+    SI: SelectorIndividualTrait<R, Item = T>,
+    RI: ReplenisherIndividualTrait<N, R, Item = T>,
 {
     individuals: Vec<GenerationIndividual<T, FI, SI, RI, N, R>>,
 }
@@ -125,9 +125,9 @@ where
 impl<T, FI, SI, RI, const N: usize, const R: usize> Group<T, FI, SI, RI, N, R>
 where
     T: Clone + Debug,
-    FI: EachCrateIndividual<Item = T> + FitnessIndividualTrait,
-    SI: EachCrateIndividual<Item = T> + SelectorIndividualTrait<R>,
-    RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
+    FI: FitnessIndividualTrait<Item = T>,
+    SI: SelectorIndividualTrait<R, Item = T>,
+    RI: ReplenisherIndividualTrait<N, R, Item = T>,
 {
     /// Get `Group` from a vector of individuals.
     ///
@@ -139,14 +139,14 @@ where
     }
 }
 
-impl<T, FI, SI, RI, const N: usize, const R: usize> GroupTrait<T, N, R>
-    for Group<T, FI, SI, RI, N, R>
+impl<T, FI, SI, RI, const N: usize, const R: usize> GroupTrait<N, R> for Group<T, FI, SI, RI, N, R>
 where
     T: Clone + Debug,
-    FI: EachCrateIndividual<Item = T> + FitnessIndividualTrait,
-    SI: EachCrateIndividual<Item = T> + SelectorIndividualTrait<R>,
-    RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
+    FI: FitnessIndividualTrait<Item = T>,
+    SI: SelectorIndividualTrait<R, Item = T>,
+    RI: ReplenisherIndividualTrait<N, R, Item = T>,
 {
+    type Item = T;
     type Err = GenerationError;
     type Out = ResultOut<T>;
 
@@ -235,9 +235,9 @@ impl<'a, T, FI, SI, RI, const N: usize, const R: usize> IntoIterator
     for &'a Group<T, FI, SI, RI, N, R>
 where
     T: Clone,
-    FI: EachCrateIndividual<Item = T> + FitnessIndividualTrait,
-    SI: EachCrateIndividual<Item = T> + SelectorIndividualTrait<R>,
-    RI: EachCrateIndividual<Item = T> + ReplenisherIndividualTrait<N, R>,
+    FI: FitnessIndividualTrait<Item = T>,
+    SI: SelectorIndividualTrait<R, Item = T>,
+    RI: ReplenisherIndividualTrait<N, R, Item = T>,
 {
     type IntoIter = Iter<'a, GenerationIndividual<T, FI, SI, RI, N, R>>;
     type Item = &'a GenerationIndividual<T, FI, SI, RI, N, R>;
@@ -272,6 +272,22 @@ where
     }
 }
 
+impl<T, FI, SI, RI, const N: usize, const R: usize> GroupOut<Group<T, FI, SI, RI, N, R>, N, R>
+    for ResultOut<T>
+where
+    T: Clone + Debug,
+    FI: FitnessIndividualTrait<Item = T>,
+    SI: SelectorIndividualTrait<R, Item = T>,
+    RI: ReplenisherIndividualTrait<N, R, Item = T>,
+{
+    fn values<'a>(&'a self) -> impl Iterator<Item = &'a T>
+    where
+        T: 'a,
+    {
+        self.new_individuals.iter().map(|v| v.get_value())
+    }
+}
+
 #[derive(PartialEq, Eq, Debug)]
 struct IndividualAndScore<T>
 where
@@ -300,9 +316,9 @@ where
 #[cfg(test)]
 mod tests {
     use crate::{
+        group::Group,
         group::{IndividualAndScore, ResultOut},
         individual::GenerationIndividual,
-        Group,
     };
     use scarlet_queen_core::{
         EachCrateIndividual, FitnessIndividualTrait, GroupTrait, Individual,
@@ -503,7 +519,7 @@ mod tests {
         {
             let arg: [u8; 10] = [10, 10, 6, 6, 6, 5, 3, 2, 2, 1];
             assert_eq!(
-                <GroupSample::<10, 8> as GroupTrait<u8, 10, 8>>::new(arg),
+                <GroupSample::<10, 8> as GroupTrait<10, 8>>::new(arg),
                 GroupSample::<10, 8>::new_from_vec(vec![
                     GenerationIndividualSample::<10, 8>::new_for_test(0, 10),
                     GenerationIndividualSample::<10, 8>::new_for_test(1, 10),
@@ -523,7 +539,7 @@ mod tests {
                 17, 2, 20, 20, 16, 16, 12, 19, 1, 4, 14, 10, 8, 2, 8, 16, 16, 10, 4, 1,
             ];
             assert_eq!(
-                <GroupSample::<20, 15> as GroupTrait<u8, 20, 15>>::new(arg),
+                <GroupSample::<20, 15> as GroupTrait<20, 15>>::new(arg),
                 GroupSample::<20, 15>::new_from_vec(vec![
                     GenerationIndividualSample::<20, 15>::new_for_test(0, 17),
                     GenerationIndividualSample::<20, 15>::new_for_test(1, 2),
@@ -551,7 +567,7 @@ mod tests {
         {
             let arg: [u8; 0] = [];
             assert_eq!(
-                <GroupSample::<0, 0> as GroupTrait<u8, 0, 0>>::new(arg),
+                <GroupSample::<0, 0> as GroupTrait<0, 0>>::new(arg),
                 GroupSample::<0, 0>::new_from_vec(vec![])
             )
         }
@@ -641,7 +657,7 @@ mod tests {
                 GenerationIndividualSample::<10, 8>::new_for_test(9, 10),
             ]);
             let return_value: Result<ResultOut<u8>, crate::error::GenerationError> =
-                <GroupSample<10, 8> as GroupTrait<u8, 10, 8>>::one_cycle_with_output(&mut arg);
+                <GroupSample<10, 8> as GroupTrait<10, 8>>::one_cycle_with_output(&mut arg);
             assert!(return_value.is_ok());
             assert_eq!(return_value.unwrap(), result);
             assert_eq!(arg, result_self);
@@ -798,7 +814,7 @@ mod tests {
                 GenerationIndividualSample::new_for_test(19, 16),
             ]);
             let return_value: Result<ResultOut<u8>, crate::error::GenerationError> =
-                <GroupSample<20, 15> as GroupTrait<u8, 20, 15>>::one_cycle_with_output(&mut arg);
+                <GroupSample<20, 15> as GroupTrait<20, 15>>::one_cycle_with_output(&mut arg);
             assert!(return_value.is_ok());
             assert_eq!(return_value.unwrap(), result);
             assert_eq!(arg, result_self);
@@ -811,7 +827,7 @@ mod tests {
             };
             let result_self: GroupSample<0, 0> = GroupSample::new_from_vec(vec![]);
             let return_value: Result<ResultOut<u8>, crate::error::GenerationError> =
-                <GroupSample<0, 0> as GroupTrait<u8, 0, 0>>::one_cycle_with_output(&mut arg);
+                <GroupSample<0, 0> as GroupTrait<0, 0>>::one_cycle_with_output(&mut arg);
             assert!(return_value.is_ok());
             assert_eq!(return_value.unwrap(), result);
             assert_eq!(arg, result_self);
@@ -847,7 +863,7 @@ mod tests {
             ];
             let result: Vec<&Individual<u8>> = tmp.iter().collect::<Vec<&Individual<u8>>>();
             assert_eq!(
-                <GroupSample<10, 8> as GroupTrait<u8, 10, 8>>::iter(&arg)
+                <GroupSample<10, 8> as GroupTrait<10, 8>>::iter(&arg)
                     .collect::<Vec<&Individual<u8>>>(),
                 result
             );
@@ -899,7 +915,7 @@ mod tests {
             ];
             let result: Vec<&Individual<u8>> = tmp.iter().collect::<Vec<&Individual<u8>>>();
             assert_eq!(
-                <GroupSample<20, 15> as GroupTrait<u8, 20, 15>>::iter(&arg)
+                <GroupSample<20, 15> as GroupTrait<20, 15>>::iter(&arg)
                     .collect::<Vec<&Individual<u8>>>(),
                 result
             );
@@ -909,7 +925,7 @@ mod tests {
             let tmp: Vec<Individual<u8>> = vec![];
             let result: Vec<&Individual<u8>> = tmp.iter().collect::<Vec<&Individual<u8>>>();
             assert_eq!(
-                <GroupSample<10, 8> as GroupTrait<u8, 10, 8>>::iter(&arg)
+                <GroupSample<10, 8> as GroupTrait<10, 8>>::iter(&arg)
                     .collect::<Vec<&Individual<u8>>>(),
                 result
             );

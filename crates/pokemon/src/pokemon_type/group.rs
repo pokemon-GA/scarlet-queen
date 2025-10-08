@@ -2,8 +2,9 @@
 use crate::pokemon_type::fitness::FitnessPokemonType;
 #[allow(unused_imports)]
 use scarlet_queen_entrypoint::{
-    Group, RandomReplenisherIndividual, RandomSelectorIndividual, TournamentReplenisherIndividual,
-    TournamentSelectorIndividual,
+    group::Group,
+    replenisher::{RandomReplenisherIndividual, TournamentReplenisherIndividual},
+    selector::{RandomSelectorIndividual, TournamentSelectorIndividual},
 };
 
 pub type PokemonTypeGroup<P, const N: usize, const R: usize> = Group<

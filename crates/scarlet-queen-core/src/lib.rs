@@ -8,7 +8,7 @@ mod selector;
 
 pub use each_crate_individual::EachCrateIndividual;
 pub use fitness::FitnessIndividualTrait;
-pub use group::GroupTrait;
+pub use group::{GroupOut, GroupTrait};
 pub use individual::Individual;
 pub use initializer::InitializerTrait;
 pub use replenisher::ReplenisherIndividualTrait;

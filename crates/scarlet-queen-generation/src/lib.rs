@@ -1,9 +1,15 @@
 pub mod error;
-mod group;
-mod individual;
+pub mod group;
+pub mod individual;
 
-pub use group::{Group, ResultOut};
-pub use individual::GenerationIndividual;
-pub use scarlet_queen_fitness::ord::{GeFitness, GtFitness};
-pub use scarlet_queen_replenisher::{RandomReplenisherIndividual, TournamentReplenisherIndividual};
-pub use scarlet_queen_selector::{RandomSelectorIndividual, TournamentSelectorIndividual};
+pub mod fitness {
+    pub use scarlet_queen_fitness::ord::{GeFitness, GtFitness};
+}
+pub mod selector {
+    pub use scarlet_queen_selector::{RandomSelectorIndividual, TournamentSelectorIndividual};
+}
+pub mod replenisher {
+    pub use scarlet_queen_replenisher::{
+        RandomReplenisherIndividual, TournamentReplenisherIndividual,
+    };
+}

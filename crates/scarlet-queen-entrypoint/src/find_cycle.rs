@@ -5,7 +5,7 @@ use serde_derive::Serialize;
 pub fn find_tail_cycle<T, W>(
     count_data: &[HashMap<T, usize>],
     analyze_file: &mut W,
-) -> Result<(), std::io::Error>
+) -> Result<CycleType, std::io::Error>
 where
     T: Clone + Eq + Hash,
     W: Write,
@@ -32,7 +32,9 @@ where
 
     let analyze_out: AnalyzeOut = AnalyzeOut { cycle: result };
     let analyze_string: String = serde_json::to_string(&analyze_out)?;
-    analyze_file.write_all(analyze_string.as_bytes())
+    analyze_file.write_all(analyze_string.as_bytes())?;
+
+    Ok(analyze_out.cycle)
 }
 
 pub fn tail_cycle<T>(data: &[T]) -> (usize, usize)
@@ -83,7 +85,7 @@ where
 }
 
 #[derive(Serialize)]
-enum CycleType {
+pub enum CycleType {
     TailCycle(TailCycle),
     Divergence,
     NotEnoughLoop,
@@ -91,7 +93,7 @@ enum CycleType {
 }
 
 #[derive(Serialize)]
-struct TailCycle {
+pub struct TailCycle {
     header_len: usize,
     cycle_len: usize,
 }
@@ -103,9 +105,17 @@ impl TailCycle {
             cycle_len,
         }
     }
+
+    pub fn get_header_len(&self) -> usize {
+        self.header_len
+    }
+
+    pub fn get_cycle_len(&self) -> usize {
+        self.cycle_len
+    }
 }
 
 #[derive(Serialize)]
-struct AnalyzeOut {
+pub struct AnalyzeOut {
     cycle: CycleType,
 }
