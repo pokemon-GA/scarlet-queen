@@ -1,7 +1,7 @@
 //! Mod for `EachCrateIndividual`.
 
-use std::rc::Rc;
 use crate::individual::Individual;
+use std::rc::Rc;
 
 /// A trait for inividual defined by each crete.
 ///
