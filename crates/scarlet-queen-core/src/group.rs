@@ -145,7 +145,8 @@ use crate::{individual::Individual, initializer::InitializerTrait};
 ///
 /// struct Initializer {}
 ///
-/// impl<const N: usize> InitializerTrait<u8, N> for Initializer {
+/// impl<const N: usize> InitializerTrait<N> for Initializer {
+///     type Item = u8;
 ///     fn initialize() -> [u8; N] {
 ///         let mut i: u8 = 0;
 ///         [0; N].map(|_| {

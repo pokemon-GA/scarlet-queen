@@ -29,7 +29,8 @@ use scarlet_queen_core::{
 /// use scarlet_queen_generation::group::{Group, ResultOut};
 ///
 /// struct InitializerSample {}
-/// impl<const N: usize> InitializerTrait<u8, N> for InitializerSample {
+/// impl<const N: usize> InitializerTrait<N> for InitializerSample {
+///     type Item = u8;
 ///     fn initialize() -> [u8; N] {
 ///         let mut i: u8 = 0;
 ///         [0; N]

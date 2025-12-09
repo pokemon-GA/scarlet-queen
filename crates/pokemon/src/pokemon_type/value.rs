@@ -43,7 +43,6 @@ mod pokemon_type_trait {
     ///     }
     /// }
     /// impl PokemonTypeTrait for PTTraitSample {
-    ///     const ALL_LEN: usize = 2;
     ///     const ALL: [Option<Self>; 19] = [
     ///         Some(PTTraitSample::Normal),
     ///         Some(PTTraitSample::Water),
@@ -111,7 +110,78 @@ mod pokemon_type_trait {
         }
     }
 
+    /// Implment the type whose values belong to a pokemon type.
+    ///
+    /// # Usage
+    /// ```text
+    /// pokemontype_type_subset!({type name}, {pokemon type}, [pokemon type] ...);
+    /// (pokemon type := None | Normal | Fire | Water | Electric | Grass | Ice | Fighting | Poison | Ground | Flying | Psychic | Bug | Rock | Ghost | Dragon | Dark | Steel | Fairy)
+    /// ```
+    ///
+    /// # Example
+    /// ```ignore
+    /// pokemon_type_subset!(PokemonTypeSubset, Normal, Water);
+    /// ```
+    ///
+    /// # Expand
+    /// ```
+    /// use rand::distr::{Distribution, StandardUniform};
+    /// use pokemon::pokemon_type::{{PokemonTypeTrait, PokemonTypeAll}, error::PokemonTypeError};
+    /// #[derive(Debug, Clone, PartialEq, Eq, Hash)]
+    /// pub enum PokemonTypeSubset {
+    ///     Normal,
+    ///     Water
+    /// }
+    /// impl From<PokemonTypeSubset> for PokemonTypeAll {
+    ///     fn from(value: PokemonTypeSubset) -> Self {
+    ///         match value {
+    ///             PokemonTypeSubset::Normal => PokemonTypeAll::Normal,
+    ///             PokemonTypeSubset::Water => PokemonTypeAll::Water,
+    ///         }
+    ///     }
+    /// }
+    /// impl TryFrom<PokemonTypeAll> for PokemonTypeSubset {
+    ///     type Error = PokemonTypeError;
+    ///
+    ///     fn try_from(value: PokemonTypeAll) -> Result<Self, Self::Error> {
+    ///         match value {
+    ///             PokemonTypeAll::Normal => Ok(PokemonTypeSubset::Normal),
+    ///             PokemonTypeAll::Water => Ok(PokemonTypeSubset::Water),
+    ///             _ => Err(PokemonTypeError::PokemonTypeConvertError),
+    ///         }
+    ///     }
+    /// }
+    /// impl Distribution<PokemonTypeSubset> for StandardUniform {
+    ///     fn sample<R: rand::Rng + ?Sized>(&self, rng: &mut R) -> PokemonTypeSubset {
+    ///         <PokemonTypeSubset as PokemonTypeTrait>::sample(rng)
+    ///     }
+    /// }
+    /// impl PokemonTypeTrait for PokemonTypeSubset {
+    ///     const ALL: [Option<Self>; 19] = [
+    ///         Some(PokemonTypeSubset::Normal),
+    ///         Some(PokemonTypeSubset::Water),
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///         None,
+    ///     ];
+    /// }
+    /// ```
     macro_rules! pokemon_type_subset {
+        // pokemon_type_subset!(PokemonTypeFWG, Fire, Water, Grass);
         ( $t:ident, $( $x:ident ), + ) => {
             #[derive(Debug, Clone, PartialEq, Eq, Hash)]
             pub enum $t {
@@ -121,8 +191,8 @@ mod pokemon_type_trait {
             }
 
             impl From<$t> for PokemonTypeAll {
-                fn from(val: $t) -> Self {
-                    match val {
+                fn from(value: $t) -> Self {
+                    match value {
                         $(
                             $t::$x => PokemonTypeAll::$x,
                         )*
@@ -143,19 +213,16 @@ mod pokemon_type_trait {
                 }
             }
 
-
             impl Distribution<$t> for StandardUniform {
                 fn sample<R: rand::Rng + ?Sized>(&self, rng: &mut R) -> $t {
                     <$t as PokemonTypeTrait>::sample(rng)
                 }
             }
 
-            pokemon_type_trait_impl!($t,; $( $x ),*);
+            pokemon_type_subset!(@pokemon_type_trait, $t,; $( $x ),*);
         };
-    }
-
-    macro_rules! pokemon_type_trait_impl {
-        ( $t:ident, $y1: expr, $y2: expr, $y3: expr, $y4: expr, $y5: expr, $y6: expr, $y7: expr, $y8: expr, $y9: expr, $y10: expr, $y11: expr, $y12: expr, $y13: expr, $y14: expr, $y15: expr, $y16: expr, $y17: expr, $y18: expr, $y19: expr; ) => {
+        // pokemon_type_subset!(@pokemon_type_trait, PokemonTypeFWG, Some(Fire), Some(Water), Some(Grass), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None);
+        ( @pokemon_type_trait, $t:ident, $y1: expr, $y2: expr, $y3: expr, $y4: expr, $y5: expr, $y6: expr, $y7: expr, $y8: expr, $y9: expr, $y10: expr, $y11: expr, $y12: expr, $y13: expr, $y14: expr, $y15: expr, $y16: expr, $y17: expr, $y18: expr, $y19: expr; ) => {
             impl PokemonTypeTrait for $t {
                 const ALL: [Option<Self>; 19] = [
                     $y1,
@@ -180,14 +247,13 @@ mod pokemon_type_trait {
                 ];
             }
         };
-        ( $t:ident, $( $y:expr ), *; $x1:ident, $( $x:ident ), * ) => {
-            pokemon_type_trait_impl!($t, $( $y, )* Some($t::$x1); $( $x ),*);
+        // pokemon_type_subset!(@pokemon_type_trait, PokemonTypeFWG, Some(Fire); Water, Grass);
+        ( @pokemon_type_trait, $t:ident, $( $y:expr ), *; $x1:ident $(, $( $x:ident ), *)? ) => {
+            pokemon_type_subset!(@pokemon_type_trait, $t, $( $y, )* Some($t::$x1); $($( $x ),*)*);
         };
-        ( $t:ident, $( $y:expr ), *; $x1:ident ) => {
-            pokemon_type_trait_impl!($t, $( $y, )* Some($t::$x1););
-        };
-        ( $t:ident, $( $y:expr ), *; ) => {
-            pokemon_type_trait_impl!($t, $( $y, )* None;);
+        // pokemon_type_subset!(@pokemon_type_trait, PokemonTypeFWG, Some(Fire), Some(Water), Some(Grass), None, None;);
+        ( @pokemon_type_trait, $t:ident, $( $y:expr ), *; ) => {
+            pokemon_type_subset!(@pokemon_type_trait, $t, $( $y, )* None;);
         };
     }
 
