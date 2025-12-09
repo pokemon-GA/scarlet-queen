@@ -5,7 +5,7 @@ use serde::{ser::SerializeStruct, Serialize};
 
 use crate::error::Error;
 
-pub struct GenerationOut<G, const N: usize, const R: usize>
+pub struct GenerationRecord<G, const N: usize, const R: usize>
 where
     G: GroupTrait<N, R>,
     <G as GroupTrait<N, R>>::Item: Clone,
@@ -14,20 +14,23 @@ where
     result_out: <G as GroupTrait<N, R>>::Out,
 }
 
-impl<G, const N: usize, const R: usize> GenerationOut<G, N, R>
+impl<G, const N: usize, const R: usize> GenerationRecord<G, N, R>
 where
     G: GroupTrait<N, R>,
     <G as GroupTrait<N, R>>::Item: Clone,
 {
-    fn new(generation: usize, result_out: <G as GroupTrait<N, R>>::Out) -> GenerationOut<G, N, R> {
-        GenerationOut {
+    fn new(
+        generation: usize,
+        result_out: <G as GroupTrait<N, R>>::Out,
+    ) -> GenerationRecord<G, N, R> {
+        GenerationRecord {
             generation,
             result_out,
         }
     }
 }
 
-impl<G, const N: usize, const R: usize> Serialize for GenerationOut<G, N, R>
+impl<G, const N: usize, const R: usize> Serialize for GenerationRecord<G, N, R>
 where
     G: GroupTrait<N, R>,
     <G as GroupTrait<N, R>>::Item: Clone,
@@ -44,37 +47,41 @@ where
     }
 }
 
-pub struct GenerationsOut<G, const N: usize, const R: usize>
+pub struct LoopRecord<G, const N: usize, const R: usize>
 where
     G: GroupTrait<N, R>,
     <G as GroupTrait<N, R>>::Item: Clone,
 {
-    init: Vec<<G as GroupTrait<N, R>>::Item>,
-    results_out: Vec<GenerationOut<G, N, R>>,
+    init_group: Vec<<G as GroupTrait<N, R>>::Item>,
+    results_out: Vec<GenerationRecord<G, N, R>>,
 }
 
-impl<G, const N: usize, const R: usize> GenerationsOut<G, N, R>
+impl<G, const N: usize, const R: usize> LoopRecord<G, N, R>
 where
     G: GroupTrait<N, R>,
     <G as GroupTrait<N, R>>::Item: Clone,
 {
-    fn init(init: &G) -> GenerationsOut<G, N, R> {
-        GenerationsOut {
-            init: init.clone_values(),
+    fn init(init: &G) -> LoopRecord<G, N, R> {
+        LoopRecord {
+            init_group: init.clone_values(),
             results_out: Vec::new(),
         }
     }
 
-    fn push(&mut self, value: GenerationOut<G, N, R>) {
+    pub fn get_init(&self) -> &Vec<<G as GroupTrait<N, R>>::Item> {
+        &self.init_group
+    }
+
+    fn push(&mut self, value: GenerationRecord<G, N, R>) {
         self.results_out.push(value);
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = &GenerationOut<G, N, R>> {
+    pub fn iter(&self) -> impl Iterator<Item = &GenerationRecord<G, N, R>> {
         self.results_out.iter()
     }
 
     pub fn groups(&self) -> impl Iterator<Item = Vec<<G as GroupTrait<N, R>>::Item>> {
-        iter::once(self.init.clone())
+        iter::once(self.init_group.clone())
             .chain(self.results_out.iter().map(|v| {
                 v.result_out
                     .values()
@@ -86,7 +93,7 @@ where
     }
 }
 
-impl<G, const N: usize, const R: usize> Serialize for GenerationsOut<G, N, R>
+impl<G, const N: usize, const R: usize> Serialize for LoopRecord<G, N, R>
 where
     G: GroupTrait<N, R>,
     <G as GroupTrait<N, R>>::Item: Clone + Debug,
@@ -100,7 +107,7 @@ where
         s.serialize_field(
             "init",
             &self
-                .init
+                .init_group
                 .iter()
                 .map(|v| format!("{:?}", v))
                 .collect::<Vec<String>>(),
@@ -113,20 +120,20 @@ where
 pub fn main_loop<I, G, W, const N: usize, const R: usize>(
     main_loop: usize,
     result_file: &mut W,
-) -> Result<GenerationsOut<G, N, R>, Error>
+) -> Result<LoopRecord<G, N, R>, Error>
 where
-    I: InitializerTrait<<G as GroupTrait<N, R>>::Item, N>,
+    I: InitializerTrait<N, Item = <G as GroupTrait<N, R>>::Item>,
     G: GroupTrait<N, R>,
     <G as GroupTrait<N, R>>::Item: Hash + Clone + Debug,
     W: Write,
 {
     let mut group: G = G::init::<I>();
-    let mut outs: GenerationsOut<G, N, R> = GenerationsOut::<G, N, R>::init(&group);
+    let mut outs: LoopRecord<G, N, R> = LoopRecord::<G, N, R>::init(&group);
     for i in 1..(main_loop + 1) {
         let result_out: <G as GroupTrait<N, R>>::Out = group
             .one_cycle_with_output()
             .map_err(|v| Error::LoopError(format!("{v:?}")))?;
-        outs.push(GenerationOut::new(i, result_out));
+        outs.push(GenerationRecord::new(i, result_out));
     }
     let generations_json: String = serde_json::to_string(&outs)?;
     result_file.write_all(generations_json.as_bytes())?;

@@ -9,3 +9,6 @@ scarlet-queen-entrypoint = { path = "../scarlet-queen-entrypoint" }
 rand.workspace = true
 plotters.workspace = true
 thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_derive.workspace = true

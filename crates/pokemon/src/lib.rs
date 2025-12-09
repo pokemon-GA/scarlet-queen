@@ -1,2 +1,3 @@
-pub mod global_const;
+pub mod function;
+pub mod general;
 pub mod pokemon_type;

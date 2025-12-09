@@ -1,3 +1,5 @@
+use std::marker::PhantomData;
+
 use rand::{
     distr::{Distribution, StandardUniform},
     rng, Rng,
@@ -5,12 +7,14 @@ use rand::{
 use scarlet_queen_core::InitializerTrait;
 
 #[derive(Debug)]
-pub struct RandomInitializer<const N: usize> {}
+pub struct RandomInitializer<T, const N: usize>(PhantomData<T>);
 
-impl<T, const N: usize> InitializerTrait<T, N> for RandomInitializer<N>
+impl<T, const N: usize> InitializerTrait<N> for RandomInitializer<T, N>
 where
     StandardUniform: Distribution<T>,
 {
+    type Item = T;
+
     fn initialize() -> [T; N] {
         let mut rng = rng();
         [0; N].map(|_| rng.random::<T>())
@@ -26,7 +30,7 @@ mod tests {
     #[test]
     fn test_initializer() {
         let initialized: [u8; 10] =
-            <RandomInitializer<10> as InitializerTrait<u8, 10>>::initialize();
+            <RandomInitializer<u8, 10> as InitializerTrait<10>>::initialize();
         assert_eq!(initialized.len(), 10);
     }
 }

@@ -188,7 +188,7 @@ pub trait GroupTrait<const N: usize, const R: usize> {
     /// * `I` - An algorithm of initializing.(The type which has the algorithm)
     fn init<I>() -> Self
     where
-        I: InitializerTrait<Self::Item, N>,
+        I: InitializerTrait<N, Item = Self::Item>,
         Self: Sized,
     {
         GroupTrait::new(I::initialize())
@@ -355,7 +355,9 @@ mod tests {
         }
     }
     struct Initializer {}
-    impl<const N: usize> InitializerTrait<u8, N> for Initializer {
+    impl<const N: usize> InitializerTrait<N> for Initializer {
+        type Item = u8;
+
         fn initialize() -> [u8; N] {
             let mut i: u8 = 0;
             [0; N].map(|_| {
