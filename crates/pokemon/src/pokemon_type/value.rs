@@ -110,7 +110,9 @@ mod pokemon_type_trait {
         }
     }
 
-    /// Implment the type whose values belong to a pokemon type.
+    /// Define the type whose values belong to a pokemon type.
+    ///
+    /// The defined type is implmented `Into<PokemonTypeAll>`, `TryFrom<PokemonTypeAll>`, `PokemonTypeTrait`, and others.
     ///
     /// # Usage
     /// ```text
@@ -182,6 +184,8 @@ mod pokemon_type_trait {
     /// ```
     macro_rules! pokemon_type_subset {
         // pokemon_type_subset!(PokemonTypeFWG, Fire, Water, Grass);
+        // $t - type name
+        // $($x),+ - pokemon types(at least one)
         ( $t:ident, $( $x:ident ), + ) => {
             #[derive(Debug, Clone, PartialEq, Eq, Hash)]
             pub enum $t {
@@ -219,9 +223,25 @@ mod pokemon_type_trait {
                 }
             }
 
-            pokemon_type_subset!(@pokemon_type_trait, $t,; $( $x ),*);
+            pokemon_type_subset!(@pokemon_type_trait, $t; $( $x ),*);
         };
-        // pokemon_type_subset!(@pokemon_type_trait, PokemonTypeFWG, Some(Fire), Some(Water), Some(Grass), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None);
+        // @pokemon_type_trait: implment `PokemonTypeTrait`
+        // expand this marco by one step
+        // pokemon_type_subset!(@pokemon_type_trait, PokemonTypeFWG; Normal, Water);
+        // v
+        // pokemon_type_subset!(@pokemon_type_trait, PokemonTypeFWG, Some(Normal); Water);
+        // v
+        // pokemon_type_subset!(@pokemon_type_trait, PokemonTypeFWG, Some(Normal), Some(Water););
+        // v
+        // pokemon_type_subset!(@pokemon_type_trait, PokemonTypeFWG, Some(Normal), Some(Water), None;);
+        // v
+        // ...
+        // v
+        // pokemon_type_subset!(@pokemon_type_trait, PokemonTypeFWG, Some(Normal), Some(Water), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None;);
+        //
+        // pokemon_type_subset!(@pokemon_type_trait, PokemonTypeFWG, Some(Fire), Some(Water), Some(Grass), None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None;);
+        // $t - type name
+        // $y1, $y2, ... $y19 - Some with a pokemon type or None
         ( @pokemon_type_trait, $t:ident, $y1: expr, $y2: expr, $y3: expr, $y4: expr, $y5: expr, $y6: expr, $y7: expr, $y8: expr, $y9: expr, $y10: expr, $y11: expr, $y12: expr, $y13: expr, $y14: expr, $y15: expr, $y16: expr, $y17: expr, $y18: expr, $y19: expr; ) => {
             impl PokemonTypeTrait for $t {
                 const ALL: [Option<Self>; 19] = [
@@ -248,10 +268,16 @@ mod pokemon_type_trait {
             }
         };
         // pokemon_type_subset!(@pokemon_type_trait, PokemonTypeFWG, Some(Fire); Water, Grass);
-        ( @pokemon_type_trait, $t:ident, $( $y:expr ), *; $x1:ident $(, $( $x:ident ), *)? ) => {
-            pokemon_type_subset!(@pokemon_type_trait, $t, $( $y, )* Some($t::$x1); $($( $x ),*)*);
+        // $t - type name
+        // $(,$($y),*)? - Somes with a pokemon type or Nones (match "", ",", ", Some(Normal)", ", Some(Normal), Some(Water)")
+        // $x1 - pokemon type (not in Some)
+        // $(,$($x),*)? - pokemon types (not in Some)
+        ( @pokemon_type_trait, $t:ident $(, $( $y:expr ), *)?; $x1:ident $(, $( $x:ident ), *)? ) => {
+            pokemon_type_subset!(@pokemon_type_trait, $t, $($( $y, )*)* Some($t::$x1); $($( $x ),*)*);
         };
         // pokemon_type_subset!(@pokemon_type_trait, PokemonTypeFWG, Some(Fire), Some(Water), Some(Grass), None, None;);
+        // $t - type name
+        // $(,$($y),*)? - Somes with a pokemon type or Nones (match "", ",", ", Some(Normal)", ", Some(Normal), Some(Water)")
         ( @pokemon_type_trait, $t:ident, $( $y:expr ), *; ) => {
             pokemon_type_subset!(@pokemon_type_trait, $t, $( $y, )* None;);
         };

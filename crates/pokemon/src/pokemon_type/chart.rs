@@ -88,7 +88,7 @@ where
         &format!("{}/img_area_{}.png", &dir_path, test_name),
     );
     loop_record_wrapper
-        .strict_find_tail_loop(&mut analyze_json_file)
+        .strict_find_tail_cycle(&mut analyze_json_file)
         .unwrap();
 
     Ok(())

@@ -131,7 +131,7 @@ where
         chart.draw_stackarea_graphs_by_index(count_scansum);
     }
 
-    pub fn strict_find_tail_loop<W>(
+    pub fn strict_find_tail_cycle<W>(
         &self,
         mut analyze_json_file: W,
     ) -> Result<CycleType, std::io::Error>

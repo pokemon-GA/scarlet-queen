@@ -15,7 +15,7 @@ pub fn codetest_all() {
     const N: usize = 100;
     const MAIN_LOOP: usize = 100;
 
-    macro_rules! r_loop {
+    macro_rules! r_tests {
         ($( $x:expr ), *) => {
             $(
                 for i in 0..5 {
@@ -26,5 +26,5 @@ pub fn codetest_all() {
         };
     }
 
-    r_loop!(70, 80, 90);
+    r_tests!(70, 80, 90);
 }
