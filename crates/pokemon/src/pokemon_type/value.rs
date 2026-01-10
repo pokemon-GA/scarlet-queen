@@ -7,7 +7,7 @@ pub use pokemon_type_trait::PokemonTypeTrait;
 mod pokemon_type_trait {
     use plotters::style::Color;
     use rand::distr::{Distribution, StandardUniform};
-    use std::hash::Hash;
+    use std::{fmt::Debug, hash::Hash};
 
     use super::PokemonTypeAll;
     use crate::pokemon_type::error::PokemonTypeError;
@@ -82,7 +82,7 @@ mod pokemon_type_trait {
     /// )
     /// ```
     pub trait PokemonTypeTrait:
-        Into<PokemonTypeAll> + TryFrom<PokemonTypeAll> + Clone + Eq + Hash
+        Into<PokemonTypeAll> + TryFrom<PokemonTypeAll> + Debug + Clone + Eq + Hash
     {
         /// All of this values.
         const ALL: [Option<Self>; 19];
@@ -293,7 +293,7 @@ mod pokemon_type_trait {
 
         use super::{PokemonTypeAll, PokemonTypeTrait};
 
-        #[derive(Clone, PartialEq, Eq, Hash)]
+        #[derive(Debug, Clone, PartialEq, Eq, Hash)]
         enum PTTraitSample {
             Normal,
             Water,

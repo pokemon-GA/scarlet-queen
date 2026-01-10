@@ -87,6 +87,26 @@ where
         });
         self.chart.draw_series(points).unwrap();
     }
+
+    pub fn draw_points_graph<'b, T>(&mut self, data: T, color: impl Color)
+    where
+        T: IntoIterator<Item = (X, Y)>,
+    {
+        let data: Vec<(X, Y)> = data.into_iter().collect::<Vec<(X, Y)>>();
+
+        let points = data.into_iter().map(|(x, y)| {
+            Circle::new(
+                (x.clone(), y.clone()),
+                4,
+                ShapeStyle {
+                    color: color.to_rgba(),
+                    filled: true,
+                    stroke_width: 1,
+                },
+            )
+        });
+        self.chart.draw_series(points).unwrap();
+    }
 }
 
 impl<'a, Y> Chart<'a, usize, Y>

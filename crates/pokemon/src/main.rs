@@ -1,6 +1,6 @@
 #[allow(unused_imports)]
-use pokemon::execution::{codetest_all, experiment_1};
+use pokemon::execution::{codetest_all, experiment};
 
 fn main() {
-    experiment_1();
+    experiment::experiment_2();
 }
