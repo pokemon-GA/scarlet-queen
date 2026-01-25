@@ -55,7 +55,7 @@ flowchart LR
 
 https://scarlet-queen.netlify.app/doc/scarlet_queen_core/
 
-Contains the core type definition and logic.
+Contains the core definition.
 
 ### `scarlet-queen-initializer` (library crate)
 
