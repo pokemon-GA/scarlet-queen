@@ -47,7 +47,7 @@ jobs:
           cp -r ./target/doc ./netlify
       # Deploy to Netlify
       - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v1
+        uses: nwtgck/actions-netlify@v4
         with:
           publish-dir: './netlify'
           production-branch: dev
